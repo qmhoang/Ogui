@@ -6,7 +6,9 @@ using Ogui.Core;
 using libtcod;
 
 namespace Ogui.UI {
+
 	#region ListBox Helper Classes
+
 	/// <summary>
 	/// Contains the label and tooltip text for each Listitem that will be added
 	/// to a Listbox.
@@ -38,7 +40,9 @@ namespace Ogui.UI {
 
 		private List<TreeNode> nodes;
 
-		public IEnumerable<TreeNode> Nodes { get { return nodes; } }
+		public IEnumerable<TreeNode> Nodes {
+			get { return nodes; }
+		}
 
 		public TreeNode Parent { get; protected set; }
 
@@ -71,12 +75,13 @@ namespace Ogui.UI {
 				if (HasChildren)
 					expanded = value;
 			}
-		}        
+		}
 	}
+
 	#endregion
 
-
 	#region TreeViewTemplate
+
 	/// <summary>
 	/// This class builds on the Control Template, and adds options specific to a ListBox.
 	/// </summary>
@@ -162,18 +167,16 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <returns></returns>
 		public override Size CalculateSize() {
-			if (AutoSizeOverride.Width > 0 && AutoSizeOverride.Height > 0) {
+			if (AutoSizeOverride.Width > 0 && AutoSizeOverride.Height > 0)
 				return AutoSizeOverride;
-			}
 
 			int width = Title.Length;
 			int height = 1;
 
 			Queue<TreeNode> nodesToProcess = new Queue<TreeNode>();
 
-			foreach (var node in Items) {
+			foreach (var node in Items)
 				nodesToProcess.Enqueue(node);
-			}
 
 			while (nodesToProcess.Count > 0) {
 				var treeNode = nodesToProcess.Dequeue();
@@ -185,9 +188,8 @@ namespace Ogui.UI {
 					width = Canvas.TextLength(treeNode.Label) + treeNode.Depth + 1;
 
 				if (treeNode.HasChildren)
-					foreach (var node in treeNode.Nodes) {
+					foreach (var node in treeNode.Nodes)
 						nodesToProcess.Enqueue(node);
-					}
 				height++;
 			}
 
@@ -198,7 +200,6 @@ namespace Ogui.UI {
 				width = MinimumListBoxWidth;
 
 
-
 			if (HasFrameBorder)
 				if (FrameTitle)
 					height += 1;
@@ -207,12 +208,12 @@ namespace Ogui.UI {
 
 			return new Size(width, height);
 		}
-
 	}
+
 	#endregion
 
-
 	#region TreeView
+
 	/// <summary>
 	/// A ListBox control allows the selection of a single option among a list of
 	/// options presented in rows.  The selection state of an item is persistant, and
@@ -227,6 +228,7 @@ namespace Ogui.UI {
 		public event EventHandler<EventArgs<TreeNode>> ItemSelected;
 
 		#endregion
+
 		#region Constructors
 
 		/// <summary>
@@ -234,16 +236,15 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <param name="template"></param>
 		public TreeView(TreeViewTemplate template)
-			: base(template) {
+				: base(template) {
 			Items = template.Items;
 			Title = template.Title ?? "";
 
 			CurrentSelected = -1;
 			OwnerDraw = template.OwnerDraw;
 
-			if (this.Size.Width < 3 || this.Size.Height < 3) {
+			if (this.Size.Width < 3 || this.Size.Height < 3)
 				template.HasFrameBorder = false;
-			}
 
 			HasFrame = template.HasFrameBorder;
 			useSmallVersion = template.FrameTitle;
@@ -260,26 +261,24 @@ namespace Ogui.UI {
 
 			numOfItems = 0;
 
-			foreach (var node in Items) {
+			foreach (var node in Items)
 				nodesToProcess.Enqueue(node);
-			}
 
 			while (nodesToProcess.Count > 0) {
 				var treeNode = nodesToProcess.Dequeue();
 
 				if (treeNode.HasChildren)
-					foreach (var node in treeNode.Nodes) {
+					foreach (var node in treeNode.Nodes)
 						nodesToProcess.Enqueue(node);
-					}
 
 				numOfItems++;
 			}
 
 			CalcMetrics(template);
-
 		}
 
 		#endregion
+
 		#region Public Properties
 
 		/// <summary>
@@ -310,6 +309,7 @@ namespace Ogui.UI {
 		}
 
 		#endregion
+
 		#region Public Methods
 
 		/// <summary>
@@ -325,40 +325,37 @@ namespace Ogui.UI {
 		}
 
 		#endregion
+
 		#region Protected Methods
 
 		/// <summary>
 		/// Draws the title and title frame.
 		/// </summary>
 		protected void DrawTitle() {
-			if (useSmallVersion && HasFrame) {
-
-			} else {
-				if (!string.IsNullOrEmpty(Title)) {
+			if (useSmallVersion && HasFrame) {} else {
+				if (!string.IsNullOrEmpty(Title))
 					Canvas.PrintStringAligned(titleRect, Title, TitleAlignment,
-						VerticalAlignment.Center);
-				}
+					                          VerticalAlignment.Center);
 
 				if (HasFrame &&
-					this.Size.Width > 2 &&
-					this.Size.Height > 2) {
+				    this.Size.Width > 2 &&
+				    this.Size.Height > 2) {
 					int fy = titleRect.Bottom + 1;
 
 					Canvas.SetDefaultPigment(DetermineFramePigment());
 					Canvas.DrawHLine(1, fy, Size.Width - 2);
-					Canvas.PrintChar(0, fy, (int)TCODSpecialCharacter.TeeEast);
-					Canvas.PrintChar(Size.Width - 1, fy, (int)TCODSpecialCharacter.TeeWest);
+					Canvas.PrintChar(0, fy, (int) TCODSpecialCharacter.TeeEast);
+					Canvas.PrintChar(Size.Width - 1, fy, (int) TCODSpecialCharacter.TeeWest);
 				}
-			}           
+			}
 		}
 
 		private void NagivateNodes(TreeNode root, Action<TreeNode> action) {
 			action(root);
 
 			if (root.Expanded)
-				foreach (var treeNode in root.Nodes) {
+				foreach (var treeNode in root.Nodes)
 					NagivateNodes(treeNode, action);
-				}
 		}
 
 		/// <summary>
@@ -393,16 +390,14 @@ namespace Ogui.UI {
 //                index++;
 //            }
 
-			foreach (var treeNode in Items) {
+			foreach (var treeNode in Items)
 				NagivateNodes(treeNode, node => DrawItem(index++, node));
-			}
 		}
-		
+
 		/// <summary>
 		/// Draws a single item with the given index.
 		/// </summary>
 		protected void DrawItem(int index, TreeNode item) {
-			
 			//string label = item.HasChildren ? (item.Expanded ? "-" : "+").PadRight(item.Depth + 1) + item.Label;
 			StringBuilder str = new StringBuilder();
 			if (!item.HasChildren)
@@ -412,28 +407,27 @@ namespace Ogui.UI {
 
 			str.Append(item.Label);
 
-			if (index == CurrentSelected) {
+			if (index == CurrentSelected)
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-					itemsRect.TopLeft.Y + index,
-					str.ToString(),
-					LabelAlignment,
-					itemsRect.Size.Width,
-					Pigments[PigmentType.ViewSelected]);
-			} else if (index == mouseOverIndex) {
+				                          itemsRect.TopLeft.Y + index,
+				                          str.ToString(),
+				                          LabelAlignment,
+				                          itemsRect.Size.Width,
+				                          Pigments[PigmentType.ViewSelected]);
+			else if (index == mouseOverIndex)
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-					itemsRect.TopLeft.Y + index,
-					str.ToString(),
-					LabelAlignment,
-					itemsRect.Size.Width,
-					Pigments[PigmentType.ViewHilight]);
-			} else {
+				                          itemsRect.TopLeft.Y + index,
+				                          str.ToString(),
+				                          LabelAlignment,
+				                          itemsRect.Size.Width,
+				                          Pigments[PigmentType.ViewHilight]);
+			else
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-					itemsRect.TopLeft.Y + index,
-					str.ToString(),
-					LabelAlignment,
-					itemsRect.Size.Width,
-					Pigments[PigmentType.ViewNormal]);
-			}
+				                          itemsRect.TopLeft.Y + index,
+				                          str.ToString(),
+				                          LabelAlignment,
+				                          itemsRect.Size.Width,
+				                          Pigments[PigmentType.ViewNormal]);
 		}
 
 		/// <summary>
@@ -450,13 +444,13 @@ namespace Ogui.UI {
 				index = i;
 			}
 
-			if (index < 0 || index >= numOfItems) {
+			if (index < 0 || index >= numOfItems)
 				index = -1;
-			}
 			return index;
 		}
 
 		#endregion
+
 		#region Message Handlers
 
 		/// <summary>
@@ -489,12 +483,11 @@ namespace Ogui.UI {
 			if (mouseOverIndex != -1) {
 				var node = GetNode(mouseOverIndex);
 				TooltipText = node != null ? node.TooltipText : null;
-			} else {
+			} else
 				TooltipText = null;
-			}
 		}
 
-		
+
 		/// <summary>
 		/// Detects which, if any, item has been selected by a left mouse button.  Override
 		/// to add custom handling.
@@ -508,9 +501,8 @@ namespace Ogui.UI {
 				if (node.HasChildren)
 					node.Expanded = !node.Expanded;
 
-				if (CurrentSelected == mouseOverIndex) {                        
+				if (CurrentSelected == mouseOverIndex)
 					OnItemSelected(node);
-				}
 
 				CurrentSelected = mouseOverIndex;
 			}
@@ -521,12 +513,12 @@ namespace Ogui.UI {
 		/// button.  Base method triggers appropriate event.  Override to add custom handling.
 		/// </summary>        
 		protected virtual void OnItemSelected(TreeNode node) {
-			if (ItemSelected != null) {
+			if (ItemSelected != null)
 				ItemSelected(this, new EventArgs<TreeNode>(node));
-			}
 		}
 
 		#endregion
+
 		#region Private
 
 		private List<TreeNode> Items;
@@ -546,41 +538,36 @@ namespace Ogui.UI {
 				delta -= 3;
 
 			numberItemsDisplayed = numOfItems;
-			if (delta < 0) {
+			if (delta < 0)
 				numberItemsDisplayed += delta;
-			} else if (delta > 0) {
+			else if (delta > 0)
 				expandTitle = delta;
-			}
 
 			int titleWidth = Size.Width;
 
 			int titleHeight = 1 + expandTitle;
 
-			if (Title != "") {
-				if (template.HasFrameBorder) {
+			if (Title != "")
+				if (template.HasFrameBorder)
 					titleRect = new Rect(Point.One,
-											new Size(titleWidth - 2, titleHeight));
-
-				} else {
+					                     new Size(titleWidth - 2, titleHeight));
+				else
 					titleRect = new Rect(Point.Origin,
-						new Size(titleWidth, titleHeight));
-				}
-			}
+					                     new Size(titleWidth, titleHeight));
 
 			int itemsWidth = Size.Width;
 			int itemsHeight = numberItemsDisplayed;
 
-			if (template.HasFrameBorder) {
-				if (template.FrameTitle) {
+			if (template.HasFrameBorder)
+				if (template.FrameTitle)
 					itemsRect = new Rect(Point.One, new Size(itemsWidth - 2, itemsHeight));
-				} else
+				else
 					itemsRect = new Rect(titleRect.BottomLeft.Shift(0, 2), new Size(itemsWidth - 2, itemsHeight));
-			} else {
+			else
 				itemsRect = new Rect(titleRect.BottomLeft.Shift(0, 1),
-					new Size(itemsWidth, itemsHeight));
-			}
-		}    
-	
+				                     new Size(itemsWidth, itemsHeight));
+		}
+
 		private TreeNode GetNode(int index) {
 			if (index == 0)
 				return Items[index];
@@ -590,11 +577,13 @@ namespace Ogui.UI {
 			TreeNode target = null;
 			int[] i = {0};
 
-			foreach (var treeNode in Items) {
-				NagivateNodes(treeNode, node => { if (index == i[0]) target = node;
-													i[0]++;
-				});
-			}
+			foreach (var treeNode in Items)
+				NagivateNodes(treeNode, node =>
+				                        {
+				                        	if (index == i[0])
+				                        		target = node;
+				                        	i[0]++;
+				                        });
 
 //            int i = 0;
 //            Queue<TreeNode> nodes = new Queue<TreeNode>();
@@ -621,5 +610,6 @@ namespace Ogui.UI {
 
 		#endregion
 	}
+
 	#endregion
 }

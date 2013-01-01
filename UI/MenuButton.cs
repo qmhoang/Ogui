@@ -5,7 +5,6 @@ using DEngine.Core;
 
 namespace Ogui.UI {
 	public class MenuButtonTemplate : ButtonTemplate {
-
 		public List<string> Items { get; set; }
 
 		/// <summary>
@@ -49,11 +48,9 @@ namespace Ogui.UI {
 				}
 
 				return new Size(Math.Max(width, MinimumWidth), height);
-			} else {
+			} else
 				return AutoSizeOverride;
-			}
 		}
-
 	}
 
 	public class MenuButton : Button {
@@ -80,57 +77,54 @@ namespace Ogui.UI {
 
 
 		public MenuButton(MenuButtonTemplate template)
-			: base(template) {
+				: base(template) {
 			rightclickMenu = template.RightClickMenu;
 			leftclickMenu = template.LeftClickMenu;
 
 			items = template.Items;
 			menu = new Menu(new MenuTemplate()
-			{
-				TopLeftPos = template.CalculateRect().BottomLeft.Shift(0, 1),
-				Items = items.Select(buttonLabel => new MenuItemData(buttonLabel)).ToList()
-			});
+			                {
+			                		TopLeftPos = template.CalculateRect().BottomLeft.Shift(0, 1),
+			                		Items = items.Select(buttonLabel => new MenuItemData(buttonLabel)).ToList()
+			                });
 
 			menu.ItemSelected += menu_ItemSelected;
-			
+
 			CurrentSelected = template.InitialSelection;
 			labelSelection = Label + ": " + items[CurrentSelected];
 
 			labelSelectionRect = new Rect(Point.Origin, Size);
 
 			if (template.HasFrameBorder &&
-				Size.Width > 2 &&
-				Size.Height > 2) {
+			    Size.Width > 2 &&
+			    Size.Height > 2)
 				labelSelectionRect = Rect.Inflate(labelSelectionRect, -1, -1);
-			}            
 		}
 
 		protected override void Redraw() {
 			base.Redraw();
-			if (!OwnerDraw) {
+			if (!OwnerDraw)
 				Canvas.PrintStringAligned(labelSelectionRect,
-					labelSelection,
-					LabelAlignment,
-					VAlignment);
-			}
+				                          labelSelection,
+				                          LabelAlignment,
+				                          VAlignment);
 		}
 
 		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
-			if (mouseData.MouseButton == MouseButton.LeftButton) {
+			if (mouseData.MouseButton == MouseButton.LeftButton)
 				if (leftclickMenu) {
 					if (!ParentWindow.ContainsControl(menu))
 						ParentWindow.AddControl(menu);
 				} else {
 					CurrentSelected = (CurrentSelected + 1) % items.Count;
 					menu_ItemSelected(this, new MenuItemSelectedEventArgs(CurrentSelected));
-				}                
-			} else if (mouseData.MouseButton == MouseButton.RightButton)
+				}
+			else if (mouseData.MouseButton == MouseButton.RightButton)
 				if (rightclickMenu)
 					if (!ParentWindow.ContainsControl(menu))
 						ParentWindow.AddControl(menu);
-
 		}
 
 		private void menu_ItemSelected(object sender, MenuItemSelectedEventArgs e) {

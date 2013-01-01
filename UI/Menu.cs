@@ -23,21 +23,20 @@ using System;
 using System.Collections.Generic;
 using DEngine.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region Menu Helper Classes
+
 	/// <summary>
 	/// Argument for a Menu.ItemSelected event.
 	/// </summary>
-	public class MenuItemSelectedEventArgs : EventArgs
-	{
+	public class MenuItemSelectedEventArgs : EventArgs {
 		/// <summary>
 		/// Construct a MenuItemSelectedEventArgs instance given the index number of the
 		/// menu item that has been selected.
 		/// </summary>
 		/// <param name="index"></param>
-		public MenuItemSelectedEventArgs(int index)
-		{
+		public MenuItemSelectedEventArgs(int index) {
 			Index = index;
 		}
 
@@ -50,16 +49,14 @@ namespace Ogui.UI
 	/// <summary>
 	/// Represents a single menu choice.
 	/// </summary>
-	public class MenuItemData
-	{
+	public class MenuItemData {
 		/// <summary>
 		/// Construct a MenuItemData instance given the label for this menu item
 		/// and an optional tooltip text.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="toolTip"></param>
-		public MenuItemData(string label, string toolTip = null)
-		{
+		public MenuItemData(string label, string toolTip = null) {
 			this.Label = label;
 			this.TooltipText = toolTip;
 		}
@@ -77,26 +74,22 @@ namespace Ogui.UI
 
 	#endregion
 
-
 	#region MenuTemplate Class
+
 	/// <summary>
 	/// This class builds on the Control Template, and adds options specific to a Menu.
 	/// </summary>
-	public class MenuTemplate : ControlTemplate
-	{
-
+	public class MenuTemplate : ControlTemplate {
 		/// <summary>
 		/// Default constructor initializes properties to their defaults.
 		/// </summary>
-		public MenuTemplate()
-		{
+		public MenuTemplate() {
 			Items = new List<MenuItemData>();
 			LabelAlignment = HorizontalAlignment.Left;
 			HilightWhenMouseOver = false;
 			CanHaveKeyboardFocus = false;
 			HasFrameBorder = true;
 		}
-
 
 
 		/// <summary>
@@ -140,16 +133,12 @@ namespace Ogui.UI
 		/// calculated based on the other properties.
 		/// </summary>
 		/// <returns></returns>
-		public override Size CalculateSize()
-		{
+		public override Size CalculateSize() {
 			if (AutoSizeOverride.Width > 1 && AutoSizeOverride.Height > 2)
-			{
 				return AutoSizeOverride;
-			}
 
 			int width = 0;
-			foreach (MenuItemData data in Items)
-			{
+			foreach (MenuItemData data in Items) {
 				if (data.Label == null)
 					data.Label = "";
 
@@ -159,27 +148,25 @@ namespace Ogui.UI
 
 			int height = Items.Count;
 
-			if (HasFrameBorder)
-			{
+			if (HasFrameBorder) {
 				width += 2;
 				height += 2;
 			}
 
 			return new Size(width, height);
 		}
-
 	}
+
 	#endregion
 
-
 	#region Menu Class
+
 	/// <summary>
 	/// A menu is similar to a list box, except it does not have a title and item selection
 	/// immediately closes the menu.  A menu is also automatically closed (removed from
 	/// parent window) when the mouse leaves the menu region.
 	/// </summary>
-	public class Menu : Control
-	{
+	public class Menu : Control {
 		#region Events
 
 		/// <summary>
@@ -188,6 +175,7 @@ namespace Ogui.UI
 		public event EventHandler<MenuItemSelectedEventArgs> ItemSelected;
 
 		#endregion
+
 		#region Constructors
 
 		/// <summary>
@@ -195,13 +183,10 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="template"></param>
 		public Menu(MenuTemplate template)
-			: base(template)
-		{
+				: base(template) {
 			HasFrame = template.HasFrameBorder;
 			if (Size.Width < 3 || Size.Height < 3)
-			{
 				HasFrame = false;
-			}
 
 			HilightWhenMouseOver = template.HilightWhenMouseOver;
 			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
@@ -214,6 +199,7 @@ namespace Ogui.UI
 		}
 
 		#endregion
+
 		#region Public Properties
 
 		/// <summary>
@@ -222,6 +208,7 @@ namespace Ogui.UI
 		public HorizontalAlignment LabelAlignment { get; set; }
 
 		#endregion
+
 		#region Public Methods
 
 		/// <summary>
@@ -229,8 +216,7 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		public string GetItemLabel(int index)
-		{
+		public string GetItemLabel(int index) {
 			if (index < 0 || index >= Items.Count)
 				throw new ArgumentOutOfRangeException("index");
 
@@ -238,49 +224,40 @@ namespace Ogui.UI
 		}
 
 		#endregion
+
 		#region Protected Methods
 
 		/// <summary>
 		/// Draws all of the menu items.
 		/// </summary>
-		protected void DrawItems()
-		{
+		protected void DrawItems() {
 			for (int i = 0; i < numberItemsDisplayed; i++)
-			{
 				DrawItem(i);
-			}
 		}
-
 
 
 		/// <summary>
 		/// Draws the specified menu item.
 		/// </summary>
 		/// <param name="index"></param>
-		protected void DrawItem(int index)
-		{
+		protected void DrawItem(int index) {
 			MenuItemData item = Items[index];
 
 			if (index == mouseOverIndex)
-			{
-				Canvas.PrintStringAligned(itemsRect.TopLeft.X, 
-					itemsRect.TopLeft.Y + index, 
-					item.Label, 
-					LabelAlignment,
-					itemsRect.Size.Width, 
-					Pigments[PigmentType.ViewHilight]);
-			}
-			else
-			{
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-					itemsRect.TopLeft.Y + index, 
-					item.Label, 
-					LabelAlignment,
-					itemsRect.Size.Width, 
-					Pigments[PigmentType.ViewNormal]);
-			}
+				                          itemsRect.TopLeft.Y + index,
+				                          item.Label,
+				                          LabelAlignment,
+				                          itemsRect.Size.Width,
+				                          Pigments[PigmentType.ViewHilight]);
+			else
+				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
+				                          itemsRect.TopLeft.Y + index,
+				                          item.Label,
+				                          LabelAlignment,
+				                          itemsRect.Size.Width,
+				                          Pigments[PigmentType.ViewNormal]);
 		}
-
 
 
 		/// <summary>
@@ -289,34 +266,28 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="lPos"></param>
 		/// <returns></returns>
-		protected int GetItemAt(Point lPos)
-		{
+		protected int GetItemAt(Point lPos) {
 			int index = -1;
 
 			if (itemsRect.Contains(lPos))
-			{
 				index = lPos.Y - itemsRect.Top;
-			}
 			if (index < 0 || index >= Items.Count)
-			{
 				index = -1;
-			}
 			return index;
 		}
 
 		#endregion
+
 		#region Message Hanglers
 
 		/// <summary>
 		/// Draws the menu items.  Override to add custom drawing code.
 		/// </summary>
-		protected override void Redraw()
-		{
+		protected override void Redraw() {
 			base.Redraw();
 
 			DrawItems();
 		}
-
 
 
 		/// <summary>
@@ -324,8 +295,7 @@ namespace Ogui.UI
 		/// sets the state accordingly.  Override to add custom handling.
 		/// </summary>
 		/// <param name="mouseData"></param>
-		protected internal override void OnMouseMoved(MouseData mouseData)
-		{
+		protected internal override void OnMouseMoved(MouseData mouseData) {
 			base.OnMouseMoved(mouseData);
 
 			Point lPos = ScreenToLocal(mouseData.Position);
@@ -333,15 +303,10 @@ namespace Ogui.UI
 			mouseOverIndex = GetItemAt(lPos);
 
 			if (mouseOverIndex != -1)
-			{
 				TooltipText = Items[mouseOverIndex].TooltipText;
-			}
 			else
-			{
 				TooltipText = null;
-			}
 		}
-
 
 
 		/// <summary>
@@ -349,16 +314,12 @@ namespace Ogui.UI
 		/// is the case.  Override to add custom handling.
 		/// </summary>
 		/// <param name="mouseData"></param>
-		protected internal override void OnMouseButtonDown(MouseData mouseData)
-		{
+		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
 			if (mouseOverIndex != -1)
-			{
 				OnItemSelected(mouseOverIndex);
-			}
 		}
-
 
 
 		/// <summary>
@@ -366,13 +327,11 @@ namespace Ogui.UI
 		/// handling (but any code placed after calling this base method will come after
 		/// this menu has been removed from the window).
 		/// </summary>
-		protected internal override void OnMouseLeave()
-		{
+		protected internal override void OnMouseLeave() {
 			base.OnMouseLeave();
 
 			ParentWindow.RemoveControl(this);
 		}
-
 
 
 		/// <summary>
@@ -380,17 +339,15 @@ namespace Ogui.UI
 		/// to add custom handling.
 		/// </summary>
 		/// <param name="index"></param>
-		protected virtual void OnItemSelected(int index)
-		{
+		protected virtual void OnItemSelected(int index) {
 			if (ItemSelected != null)
-			{
 				ItemSelected(this, new MenuItemSelectedEventArgs(index));
-			}
 
 			ParentWindow.RemoveControl(this);
 		}
 
 		#endregion
+
 		#region Private
 
 		private List<MenuItemData> Items;
@@ -398,25 +355,21 @@ namespace Ogui.UI
 		private Rect itemsRect;
 		private int numberItemsDisplayed;
 
-		private void CalcMetrics(MenuTemplate template)
-		{
+		private void CalcMetrics(MenuTemplate template) {
 			itemsRect = this.LocalRect;
 			if (HasFrame)
-			{
 				itemsRect = Rect.Inflate(itemsRect, -1, -1);
-			}
 
 			int delta = itemsRect.Size.Height - Items.Count;
 
 			numberItemsDisplayed = Items.Count;
 
 			if (delta < 0)
-			{
 				numberItemsDisplayed += delta;
-			}
 		}
 
 		#endregion
 	}
+
 	#endregion
 }

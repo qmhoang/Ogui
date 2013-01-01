@@ -41,9 +41,7 @@ namespace Ogui.UI {
 		NorthWest
 	};
 
-	public enum RectPosition {
-		
-	}
+	public enum RectPosition {}
 
 	#endregion
 
@@ -118,7 +116,7 @@ namespace Ogui.UI {
 		/// <param name="bottomRight"></param>
 		public void SetBottomRight(Point bottomRight) {
 			TopLeftPos = bottomRight.Shift(1 - CalculateSize().Width,
-											1 - CalculateSize().Height);
+			                               1 - CalculateSize().Height);
 		}
 
 
@@ -372,7 +370,7 @@ namespace Ogui.UI {
 		/// <summary>
 		/// True if this control will draw itself hilighted when the mouse is over it.
 		/// </summary>
-		public bool HilightWhenMouseOver { get; set; }        
+		public bool HilightWhenMouseOver { get; set; }
 
 		/// <summary>
 		/// True if the mouse pointer is currently over this control, and the control

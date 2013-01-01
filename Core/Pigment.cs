@@ -8,6 +8,7 @@ namespace Ogui.Core {
 	/// </summary>
 	public class Pigment : IDisposable {
 		#region Constructors
+
 		/// <summary>
 		/// Construct a Pigment given foreground and background colors and background flag
 		/// </summary>
@@ -19,32 +20,36 @@ namespace Ogui.Core {
 			bgColor = background;
 			this.bgFlag = bgFlag;
 		}
+
 		/// <summary>
 		/// BGFlag defaults to TCODBackgroundFlag.Set
 		/// </summary>
 		public Pigment(Color foreground, Color background)
-			: this(foreground, background, TCODBackgroundFlag.Set) {
-		}
+				: this(foreground, background, TCODBackgroundFlag.Set) {}
+
 		/// <summary>
 		/// Construct a Pigment given foreground and background colors and background flag.
 		/// </summary>
 		public Pigment(long foreground, long background, TCODBackgroundFlag bgFlag)
-			: this(new Color(foreground), new Color(background), bgFlag) {
-		}
+				: this(new Color(foreground), new Color(background), bgFlag) {}
+
 		/// <summary>
 		/// BGFlag defaults to TCODBackgroundFlag.Set
 		/// </summary>
 		public Pigment(long foreground, long background)
-			: this(foreground, background, TCODBackgroundFlag.Set) {
-		}
+				: this(foreground, background, TCODBackgroundFlag.Set) {}
+
 		#endregion
+
 		#region Public Properties
+
 		/// <summary>
 		/// Get the foreground color
 		/// </summary>
 		public Color Foreground {
 			get { return fgColor; }
 		}
+
 		/// <summary>
 		/// Get the background color
 		/// </summary>
@@ -60,7 +65,9 @@ namespace Ogui.Core {
 		}
 
 		#endregion
+
 		#region Public Methods
+
 		/// <summary>
 		/// Swaps a Pigments's foreground and background.  Returns a new Pigment instance,
 		/// this instance is unchanged.
@@ -107,8 +114,8 @@ namespace Ogui.Core {
 		/// <returns></returns>
 		public string GetCode() {
 			string str = string.Format("{0}{1}",
-									   Foreground.ForegroundCodeString,
-									   Background.BackgroundCodeString);
+			                           Foreground.ForegroundCodeString,
+			                           Background.BackgroundCodeString);
 
 			return str;
 		}
@@ -116,13 +123,19 @@ namespace Ogui.Core {
 		public override string ToString() {
 			return string.Format("{0},{1}", Foreground.ToString(), Background.ToString());
 		}
+
 		#endregion
+
 		#region Private Fields
+
 		private readonly Color fgColor;
 		private readonly Color bgColor;
 		private readonly TCODBackgroundFlag bgFlag;
+
 		#endregion
+
 		#region Dispose
+
 		private bool alreadyDisposed;
 
 		/// <summary>
@@ -153,7 +166,7 @@ namespace Ogui.Core {
 			}
 			alreadyDisposed = true;
 		}
-		#endregion
 
+		#endregion
 	}
 }

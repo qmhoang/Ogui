@@ -16,12 +16,10 @@ namespace Ogui.UI {
 			double fraction = ((double) CurrentValue / MaximumValue);
 			int barValue = (int) Math.Round(fraction * Size.Width);
 
-			for (int x = 0; x < barValue; x++) {
+			for (int x = 0; x < barValue; x++)
 				Canvas.PrintChar(x, 0,
-								 (int)block,
-								 DetermineMainPigment());
-			}
-
+				                 (int) block,
+				                 DetermineMainPigment());
 		}
 	}
 }

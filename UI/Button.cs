@@ -2,8 +2,8 @@
 using DEngine.Core;
 using Ogui.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region Button Template class
 
 	/// <summary>
@@ -12,14 +12,11 @@ namespace Ogui.UI
 	/// have a height of 3 (1 space for the label and 2 spaces for the borders).  Otherwise,
 	/// specify a custom size using the AutoSizeOverride property.
 	/// </summary>
-	public class ButtonTemplate : ControlTemplate
-	{
-
+	public class ButtonTemplate : ControlTemplate {
 		/// <summary>
 		/// Default constructor initializes properties to their defaults.
 		/// </summary>
-		public ButtonTemplate()
-		{
+		public ButtonTemplate() {
 			this.LabelAlignment = HorizontalAlignment.Left;
 			this.Label = "";
 			this.MinimumWidth = 0;
@@ -28,7 +25,6 @@ namespace Ogui.UI
 			HasFrameBorder = true;
 			VAlignment = VerticalAlignment.Center;
 		}
-
 
 
 		/// <summary>
@@ -79,58 +75,52 @@ namespace Ogui.UI
 		public VerticalAlignment VAlignment { get; set; }
 
 
-
 		/// <summary>
 		/// Auto generates the size of the button based on the other options.
 		/// </summary>
 		/// <returns></returns>
-		public override Size CalculateSize()
-		{
-			if (AutoSizeOverride.IsEmpty)
-			{
+		public override Size CalculateSize() {
+			if (AutoSizeOverride.IsEmpty) {
 				int len = Canvas.TextLength(Label);
 				int width = len;
 				int height = 1;
 
-				if (HasFrameBorder)
-				{
+				if (HasFrameBorder) {
 					width += 2;
 					height += 2;
 				}
 
 				return new Size(Math.Max(width, MinimumWidth), height);
-			}
-			else
-			{
+			} else
 				return AutoSizeOverride;
-			}
 		}
-
 	}
+
 	#endregion
 
-
 	#region Button Class
+
 	/// <summary>
 	/// Represents a button control.  A button can be pushed, which happens when the left mouse button is 
 	/// pressed then subsequently released while over the button.
 	/// </summary>
-	public class Button : Control
-	{
+	public class Button : Control {
 		#region Events
+
 		/// <summary>
 		/// Raised when a button has been pushed (mouse button down then up over control).
 		/// </summary>
 		public event EventHandler ButtonPushed;
 
 		#endregion
+
 		#region Constructors
+
 		/// <summary>
 		/// Constructs a Button instance given the template.
 		/// </summary>
 		public Button(ButtonTemplate template)
-			:base(template)
-		{
+				: base(template) {
 			this.Label = template.Label;
 			this.LabelAlignment = template.LabelAlignment;
 			HilightWhenMouseOver = template.HilightWhenMouseOver;
@@ -141,16 +131,15 @@ namespace Ogui.UI
 			VAlignment = template.VAlignment;
 
 			if (template.HasFrameBorder &&
-				this.Size.Width > 2 &&
-				this.Size.Height > 2)
-			{
+			    this.Size.Width > 2 &&
+			    this.Size.Height > 2)
 				LabelRect = Rect.Inflate(LabelRect, -1, -1);
-				
-			}
 		}
 
 		#endregion
+
 		#region Public Properties
+
 		/// <summary>
 		/// Get the button Label.
 		/// </summary>
@@ -167,7 +156,9 @@ namespace Ogui.UI
 		/// property of the creating template.
 		/// </summary>
 		protected VerticalAlignment VAlignment { get; set; }
+
 		#endregion
+
 		#region  Protected Methods
 
 		/// <summary>
@@ -175,18 +166,14 @@ namespace Ogui.UI
 		/// OwnerDraw is set to true in which case the base methods do nothing.  Override to add custom
 		/// drawing code here.
 		/// </summary>
-		protected override void Redraw()
-		{
+		protected override void Redraw() {
 			base.Redraw();
 			if (!OwnerDraw)
-			{
 				Canvas.PrintStringAligned(LabelRect,
-					Label,
-					LabelAlignment,
-					VAlignment);
-			}
+				                          Label,
+				                          LabelAlignment,
+				                          VAlignment);
 		}
-
 
 
 		/// <summary>
@@ -194,12 +181,9 @@ namespace Ogui.UI
 		/// Override to return a custom color for the main drawing area of the button, or to add
 		/// additional colors for the button based on custom states.
 		/// </summary>
-		protected override Pigment DetermineMainPigment()
-		{
+		protected override Pigment DetermineMainPigment() {
 			if (IsActive && IsBeingPushed)
-			{
 				return Pigments[PigmentType.ViewDepressed];
-			}
 			return base.DetermineMainPigment();
 		}
 
@@ -209,16 +193,14 @@ namespace Ogui.UI
 		/// for the button based on custom states.
 		/// </summary>
 		/// <returns></returns>
-		protected override Pigment DetermineFramePigment()
-		{
+		protected override Pigment DetermineFramePigment() {
 			if (IsActive && IsBeingPushed)
-			{
 				return Pigments[PigmentType.FrameDepressed];
-			}
 			return base.DetermineFramePigment();
 		}
 
 		#endregion
+
 		#region Message Handlers
 
 		/// <summary>
@@ -226,18 +208,14 @@ namespace Ogui.UI
 		/// events.  Override to add custom handling.
 		/// </summary>
 		/// <param name="mouseData"></param>
-		protected internal override void OnMouseButtonUp(MouseData mouseData)
-		{
+		protected internal override void OnMouseButtonUp(MouseData mouseData) {
 			bool wasBeingPushed = IsBeingPushed; // store, since base call will reset this to false
 
 			base.OnMouseButtonUp(mouseData);
 
 			if (mouseData.MouseButton == MouseButton.LeftButton && wasBeingPushed)
-			{
 				OnButtonPushed();
-			}
 		}
-
 
 
 		/// <summary>
@@ -245,18 +223,19 @@ namespace Ogui.UI
 		/// action is performed.  Triggers proper
 		/// events.  Override to add custom handling.
 		/// </summary>
-		protected virtual void OnButtonPushed()
-		{
+		protected virtual void OnButtonPushed() {
 			if (ButtonPushed != null)
-			{
 				ButtonPushed(this, EventArgs.Empty);
-			}
 		}
 
 		#endregion
+
 		#region Private
+
 		private Rect LabelRect { get; set; }
+
 		#endregion
 	}
+
 	#endregion
 }

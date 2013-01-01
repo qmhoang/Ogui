@@ -8,15 +8,15 @@ namespace Ogui.Core {
 	/// </summary>
 	public class Color : IDisposable {
 		#region Constructors
+
 		/// <summary>
 		/// Constructs a Color from specified tcodColor.  Makes a copy of the tcodColor instead
 		/// of keeping a reference.
 		/// </summary>
 		/// <param name="tcodColor"></param>
 		public Color(TCODColor tcodColor) {
-			if (tcodColor == null) {
+			if (tcodColor == null)
 				throw new ArgumentNullException("tcodColor");
-			}
 
 			red = tcodColor.Red;
 			green = tcodColor.Green;
@@ -24,6 +24,7 @@ namespace Ogui.Core {
 
 			color = new TCODColor(red, green, blue);
 		}
+
 		/// <summary>
 		/// Constructs a Color from the provided reg, green and blue values (0-255 for each)
 		/// </summary>
@@ -37,6 +38,7 @@ namespace Ogui.Core {
 
 			color = new TCODColor(red, green, blue);
 		}
+
 		/// <summary>
 		/// Construct color given 3 byte integer (ex. 0xFFFFFF = white)
 		/// </summary>
@@ -52,34 +54,42 @@ namespace Ogui.Core {
 			g = g >> 8;
 
 
-			this.red = (byte)r;
-			this.green = (byte)g;
-			this.blue = (byte)b;
+			this.red = (byte) r;
+			this.green = (byte) g;
+			this.blue = (byte) b;
 
 			color = new TCODColor(red, green, blue);
 		}
+
 		#endregion
+
 		#region Public Properties
+
 		/// <summary>
 		/// Get the red value of color, 0-255
 		/// </summary>
 		public byte Red {
 			get { return red; }
 		}
+
 		/// <summary>
 		/// Get the green value of color, 0-255
 		/// </summary>
 		public byte Green {
 			get { return green; }
 		}
+
 		/// <summary>
 		/// Get the blue value of the color, 0-255
 		/// </summary>
 		public byte Blue {
 			get { return blue; }
 		}
+
 		#endregion
+
 		#region Public Methods
+
 		/// <summary>
 		/// Scales saturation by given amount (0.0 --> 1.0)
 		/// Returns new instance - original instance is unchanged
@@ -94,6 +104,7 @@ namespace Ogui.Core {
 
 			return new Color(ret);
 		}
+
 		/// <summary>
 		/// Scales value (brightness) by given amount (0.0 --> 1.0)
 		/// Returns new instance - original instance is unchanged
@@ -200,9 +211,7 @@ namespace Ogui.Core {
 		/// </summary>
 		/// <returns></returns>
 		public TCODColor TCODColor {
-			get {
-				return new TCODColor(color.Red, color.Green, color.Blue);
-			}
+			get { return new TCODColor(color.Red, color.Green, color.Blue); }
 		}
 
 		/// <summary>
@@ -231,9 +240,9 @@ namespace Ogui.Core {
 
 		private string CodeString {
 			get {
-				char r = (char)(Math.Max(this.red, (byte)1));
-				char g = (char)(Math.Max(this.green, (byte)1));
-				char b = (char)(Math.Max(this.blue, (byte)1));
+				char r = (char) (Math.Max(this.red, (byte) 1));
+				char g = (char) (Math.Max(this.green, (byte) 1));
+				char b = (char) (Math.Max(this.blue, (byte) 1));
 
 				string str = r.ToString() + g.ToString() + b.ToString();
 
@@ -253,13 +262,16 @@ namespace Ogui.Core {
 		public override string ToString() {
 			return red.ToString("x2") + green.ToString("x2") + blue.ToString("x2");
 		}
+
 		#endregion
+
 		#region Private Fields
 
 		private readonly byte red, green, blue;
 		private readonly TCODColor color;
 
 		#endregion
+
 		#region Public Static
 
 		/// <summary>
@@ -271,14 +283,15 @@ namespace Ogui.Core {
 		/// <returns></returns>
 		public static Color Lerp(Color sourceColor, Color destinationColor, float coefficient) {
 			TCODColor color = TCODColor.Interpolate(sourceColor.TCODColor,
-				destinationColor.TCODColor, coefficient);
+			                                        destinationColor.TCODColor, coefficient);
 
 			return new Color(color);
 		}
 
-
 		#endregion
+
 		#region Dispose
+
 		private bool alreadyDisposed;
 
 		/// <summary>
@@ -303,9 +316,8 @@ namespace Ogui.Core {
 		protected virtual void Dispose(bool isDisposing) {
 			if (alreadyDisposed)
 				return;
-			if (isDisposing) {
+			if (isDisposing)
 				color.Dispose();
-			}
 			alreadyDisposed = true;
 		}
 
