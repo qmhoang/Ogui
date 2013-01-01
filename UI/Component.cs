@@ -83,7 +83,7 @@ namespace Ogui.UI {
 		/// see the various OnSettingUp methods for details.
 		/// </summary>
 		public event EventHandler SettingUp;
-		
+
 		/// <summary>
 		/// Raised every update tick of the application loop.
 		/// </summary>
@@ -135,7 +135,7 @@ namespace Ogui.UI {
 		/// is topmost at that position.
 		/// </summary>
 		public event EventHandler<MouseEventArgs> MouseHoverBegin;
-		
+
 		/// <summary>
 		/// Raised when the mouse has stopped hovering (has moved while
 		/// previously hovering).  Controls will only
@@ -151,7 +151,7 @@ namespace Ogui.UI {
 		/// is topmost at that position.
 		/// </summary>
 		public event EventHandler<MouseDragEventArgs> MouseDragBegin;
-		
+
 		/// <summary>
 		/// Raised when the mouse has stopped a mouse drag (e.g. left button
 		/// released).  Controls will only
@@ -272,12 +272,12 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Called when a component is added to a window.  Overred to add specific code.
 		/// </summary>
-		protected internal virtual void OnAdded() { }
+		protected internal virtual void OnAdded() {}
 
 		/// <summary>
 		/// Called when a component is removed from a window.  Overred to add specific code.
 		/// </summary>
-		protected internal virtual void OnRemoved() { }
+		protected internal virtual void OnRemoved() {}
 
 		/// <summary>
 		/// Called each application loop iteration.  Override to add specific update code.
@@ -318,7 +318,7 @@ namespace Ogui.UI {
 			if (Quitting != null)
 				Quitting(this, EventArgs.Empty);
 		}
-		
+
 		/// <summary>
 		/// Called when the user has pressed a keyboard key.  Override to add specific keypress
 		/// handling code.

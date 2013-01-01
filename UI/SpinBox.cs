@@ -22,12 +22,9 @@
 using System;
 using DEngine.Core;
 
-namespace Ogui.UI
-{
-	public class SpinBoxTemplate : ControlTemplate
-	{
-		public SpinBoxTemplate()
-		{
+namespace Ogui.UI {
+	public class SpinBoxTemplate : ControlTemplate {
+		public SpinBoxTemplate() {
 			MaximumValue = 1;
 			MaximumValue = 0;
 			Label = "";
@@ -66,14 +63,11 @@ namespace Ogui.UI
 		/// </summary>
 		public int StartingValue { get; set; }
 
-		public override Size CalculateSize()
-		{
+		public override Size CalculateSize() {
 			int width = 2; // for frame
 
 			if (!string.IsNullOrEmpty(Label))
-			{
 				width += Canvas.TextLength(Label) + 1;
-			}
 
 			width += NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			width += 3; // for buttons
@@ -82,18 +76,17 @@ namespace Ogui.UI
 		}
 	}
 
-	public class SpinBox : Control
-	{
+	public class SpinBox : Control {
 		#region Events
 
 		public event EventHandler ValueChanged;
 
 		#endregion
+
 		#region Constructors
 
 		public SpinBox(SpinBoxTemplate template)
-			: base(template)
-		{
+				: base(template) {
 			MinimumValue = template.MinimumValue;
 			MaximumValue = template.MaximumValue;
 			SpinDelay = template.SpinDelay;
@@ -101,22 +94,16 @@ namespace Ogui.UI
 			Label = template.Label;
 
 			if (Label == null)
-			{
 				Label = "";
-			}
 
 			CurrentValue = template.StartingValue;
 			if (CurrentValue < MinimumValue || CurrentValue > MaximumValue)
-			{
 				CurrentValue = MinimumValue;
-			}
-
 
 
 			HasFrame = true;
 			CanHaveKeyboardFocus = false;
 			HilightWhenMouseOver = false;
-
 		}
 
 		#endregion
@@ -126,11 +113,9 @@ namespace Ogui.UI
 		/// <summary>
 		/// The current value of the spin box.
 		/// </summary>
-		public int CurrentValue
-		{
+		public int CurrentValue {
 			get { return _currentValue; }
-			set
-			{
+			set {
 				int newVal = value;
 
 				if (newVal < MinimumValue)
@@ -140,12 +125,12 @@ namespace Ogui.UI
 					newVal = MaximumValue;
 
 				if (newVal != _currentValue)
-				{
 					_currentValue = value;
-				}
 			}
 		}
+
 		private int _currentValue;
+
 		#endregion
 
 		#region Protected Properties
@@ -183,62 +168,54 @@ namespace Ogui.UI
 
 		#region Protected Methods
 
-		protected virtual void OnValueChanged()
-		{
+		protected virtual void OnValueChanged() {
 			if (ValueChanged != null)
-			{
 				ValueChanged(this, EventArgs.Empty);
-			}
 		}
 
-		protected internal override void OnSettingUp()
-		{
+		protected internal override void OnSettingUp() {
 			base.OnSettingUp();
 
-			if (!string.IsNullOrEmpty(Label))
-			{
+			if (!string.IsNullOrEmpty(Label)) {
 				labelRect = new Rect(1, 1, Label.Length + 1, 1);
 				upButtonPos = new Point(Label.Length + 2, 1) + ActualScreenPosition;
-			}
-			else
-			{
+			} else
 				upButtonPos = Point.One + ActualScreenPosition;
-			}
 
 			int fieldWidth = NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			Size fieldSize = new Size(fieldWidth, 1);
 			fieldRect = new Rect(upButtonPos.Shift(2, 0), fieldSize);
 
 			downButtonPos = fieldRect.TopRight.Shift(1, 0);
-			
+
 			numEntry = new NumberEntry(new NumberEntryTemplate()
-			{
-				HasFrameBorder = false,
-				MinimumValue = this.MinimumValue,
-				MaximumValue = this.MaximumValue,
-				StartingValue = CurrentValue,
-				CommitOnLostFocus = true,
-				ReplaceOnFirstKey = true,
-				TopLeftPos = fieldRect.TopLeft
-			});
+			                           {
+			                           		HasFrameBorder = false,
+			                           		MinimumValue = this.MinimumValue,
+			                           		MaximumValue = this.MaximumValue,
+			                           		StartingValue = CurrentValue,
+			                           		CommitOnLostFocus = true,
+			                           		ReplaceOnFirstKey = true,
+			                           		TopLeftPos = fieldRect.TopLeft
+			                           });
 
 			upButton = new EmitterButton(new EmitterButtonTemplate()
-			{
-				HasFrameBorder = false,
-				Label = ((char)libtcod.TCODSpecialCharacter.ArrowNorthNoTail).ToString(),
-				TopLeftPos = upButtonPos,
-				StartEmittingDelay = SpinDelay,
-				Speed = SpinSpeed
-			});
+			                             {
+			                             		HasFrameBorder = false,
+			                             		Label = ((char) libtcod.TCODSpecialCharacter.ArrowNorthNoTail).ToString(),
+			                             		TopLeftPos = upButtonPos,
+			                             		StartEmittingDelay = SpinDelay,
+			                             		Speed = SpinSpeed
+			                             });
 
 			downButton = new EmitterButton(new EmitterButtonTemplate()
-			{
-				HasFrameBorder = false,
-				Label = ((char)libtcod.TCODSpecialCharacter.ArrowSouthNoTail).ToString(),
-				TopLeftPos = downButtonPos,
-				StartEmittingDelay = SpinDelay,
-				Speed = SpinSpeed
-			});
+			                               {
+			                               		HasFrameBorder = false,
+			                               		Label = ((char) libtcod.TCODSpecialCharacter.ArrowSouthNoTail).ToString(),
+			                               		TopLeftPos = downButtonPos,
+			                               		StartEmittingDelay = SpinDelay,
+			                               		Speed = SpinSpeed
+			                               });
 
 			ParentWindow.AddControls(downButton, upButton, numEntry);
 
@@ -247,76 +224,66 @@ namespace Ogui.UI
 			numEntry.EntryChanged += new EventHandler(numEntry_EntryChanged);
 		}
 
-		protected override void Redraw()
-		{
+		protected override void Redraw() {
 			base.Redraw();
-			if (!string.IsNullOrEmpty(Label))
-			{
+			if (!string.IsNullOrEmpty(Label)) {
 				Canvas.PrintString(labelRect.TopLeft, Label);
 
 				Canvas.PrintChar(labelRect.TopRight.Shift(0, -1),
-					(int)libtcod.TCODSpecialCharacter.TeeSouth,
-					DetermineFramePigment());
+				                 (int) libtcod.TCODSpecialCharacter.TeeSouth,
+				                 DetermineFramePigment());
 
 				Canvas.PrintChar(labelRect.TopRight.Shift(0, 0),
-					(int)libtcod.TCODSpecialCharacter.VertLine,
-					DetermineFramePigment());
+				                 (int) libtcod.TCODSpecialCharacter.VertLine,
+				                 DetermineFramePigment());
 
 				Canvas.PrintChar(labelRect.TopRight.Shift(0, 1),
-					(int)libtcod.TCODSpecialCharacter.TeeNorth,
-					DetermineFramePigment());
-
+				                 (int) libtcod.TCODSpecialCharacter.TeeNorth,
+				                 DetermineFramePigment());
 			}
 		}
+
 		#endregion
+
 		#region Private
 
-		void numEntry_EntryChanged(object sender, EventArgs e)
-		{
+		private void numEntry_EntryChanged(object sender, EventArgs e) {
 			NumberEntry entry = sender as NumberEntry;
 
-			if(this.CurrentValue != entry.CurrentValue)
-			{
+			if (this.CurrentValue != entry.CurrentValue) {
 				this.CurrentValue = entry.CurrentValue;
 				OnValueChanged();
 			}
 		}
 
-		void downButton_Emit(object sender, EventArgs e)
-		{
+		private void downButton_Emit(object sender, EventArgs e) {
 			numEntry.TryCommit();
 			if (CurrentValue > MinimumValue)
-			{
 				numEntry.TrySetValue(CurrentValue - 1);
-			}
 		}
 
-		void upButton_Emit(object sender, EventArgs e)
-		{
+		private void upButton_Emit(object sender, EventArgs e) {
 			numEntry.TryCommit();
 			if (CurrentValue < MaximumValue)
-			{
 				numEntry.TrySetValue(CurrentValue + 1);
-			}
 		}
 
-		NumberEntry numEntry;
-		EmitterButton downButton;
-		EmitterButton upButton;
-		Rect fieldRect;
-		Rect labelRect;
-		Point upButtonPos;
-		Point downButtonPos;
+		private NumberEntry numEntry;
+		private EmitterButton downButton;
+		private EmitterButton upButton;
+		private Rect fieldRect;
+		private Rect labelRect;
+		private Point upButtonPos;
+		private Point downButtonPos;
 
 		#endregion
+
 		#region Dispose
 
-		protected override void Dispose(bool isDisposing)
-		{
+		protected override void Dispose(bool isDisposing) {
 			base.Dispose(isDisposing);
 
-			if (isDisposing)
-			{
+			if (isDisposing) {
 				if (numEntry != null)
 					numEntry.Dispose();
 

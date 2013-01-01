@@ -34,15 +34,13 @@ namespace Ogui.UI {
 
 		public Pigment BarPigment { get; set; }
 
-		int _currValue;
+		private int _currValue;
+
 		public int CurrentValue {
-			get {
-				return _currValue;
-			}
+			get { return _currValue; }
 			set {
-				if (value >= MinimumValue && value <= MaximumValue) {
+				if (value >= MinimumValue && value <= MaximumValue)
 					_currValue = value;
-				}
 			}
 		}
 
@@ -54,7 +52,6 @@ namespace Ogui.UI {
 		}
 
 		protected ProgressBar(ProgressBarTemplate template) : base(template) {
-
 			MinimumValue = template.MinimumValue;
 			MaximumValue = template.MaximumValue;
 			CurrentValue = template.StartingValue;

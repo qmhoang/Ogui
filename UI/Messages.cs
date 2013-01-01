@@ -23,67 +23,71 @@ using System;
 using DEngine.Core;
 using libtcod;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region Enums
-	
+
 	/// <summary>
 	/// Represents which mouse button is pressed.
 	/// </summary>
-	public enum MouseButton
-	{
+	public enum MouseButton {
 		/// <summary>
 		/// No mouse buttons
 		/// </summary>
 		None = 0,
+
 		/// <summary>
 		/// Left mouse button
 		/// </summary>
 		LeftButton = 1,
+
 		/// <summary>
 		/// Middle mouse button
 		/// </summary>
 		MiddleButton = 2,
+
 		/// <summary>
 		/// Right mouse button
 		/// </summary>
 		RightButton = 3
 	}
-	
 
-	
+
 	/// <summary>
 	/// Control key flags
 	/// </summary>
 	[Flags]
-	public enum ControlKeys
-	{
+	public enum ControlKeys {
 		/// <summary>
 		/// No control keys
 		/// </summary>
 		None = 0,
+
 		/// <summary>
 		/// Left ALT key
 		/// </summary>
 		LeftAlt = 1,
+
 		/// <summary>
 		/// Right ALT key
 		/// </summary>
 		RightAlt = 2,
+
 		/// <summary>
 		/// Left CTRL key
 		/// </summary>
 		LeftControl = 4,
+
 		/// <summary>
 		/// Right CTRL key
 		/// </summary>
 		RightControl = 8,
+
 		/// <summary>
 		/// Left or right SHIFT key
 		/// </summary>
 		Shift = 16
 	}
-	
 
 	#endregion
 
@@ -93,42 +97,36 @@ namespace Ogui.UI
 	/// Holds data pertaining to a mouse event
 	/// Immtable data type
 	/// </summary>
-	public class MouseData
-	{
+	public class MouseData {
 		#region Constructors
-		
+
 		/// <summary>
 		/// Constructs a MouseData with specified mouse button, position and pixel position
 		/// </summary>
 		/// <param name="button"></param>
 		/// <param name="screenPos"></param>
 		/// <param name="pixelPos"></param>
-		public MouseData(MouseButton button, Point screenPos, Point pixelPos)
-		{
+		public MouseData(MouseButton button, Point screenPos, Point pixelPos) {
 			this.pixelPosition = pixelPos;
 			this.position = screenPos;
 			this.mouseButton = button;
 		}
-		
 
-		
+
 		/// <summary>
 		/// Constructs MouseData from TCODMouseData
 		/// </summary>
 		/// <param name="tcodMouseData"></param>
-		public MouseData(TCODMouseData tcodMouseData)
-		{
+		public MouseData(TCODMouseData tcodMouseData) {
 			if (tcodMouseData == null)
-			{
 				throw new ArgumentNullException("tcodMouseData");
-			}
 
-			this.position = new Point(tcodMouseData.CellX, 
-				tcodMouseData.CellY);
-			
-			this.pixelPosition = new Point(tcodMouseData.PixelX, 
-				tcodMouseData.PixelY);
-			
+			this.position = new Point(tcodMouseData.CellX,
+			                          tcodMouseData.CellY);
+
+			this.pixelPosition = new Point(tcodMouseData.PixelX,
+			                               tcodMouseData.PixelY);
+
 			mouseButton = MouseButton.None;
 			if (tcodMouseData.LeftButton)
 				mouseButton = MouseButton.LeftButton;
@@ -137,10 +135,11 @@ namespace Ogui.UI
 			if (tcodMouseData.RightButton)
 				mouseButton = MouseButton.RightButton;
 		}
-		
+
 		#endregion
+
 		#region Public Properties
-		
+
 		/// <summary>
 		/// Returns position of mouse pointer in character coordinates
 		/// Coordinate space may either be screen or local, depending on
@@ -149,18 +148,16 @@ namespace Ogui.UI
 		public Point Position {
 			get { return position; }
 		}
-		
 
-		
+
 		/// <summary>
 		/// Get which mouse button, if any, is pressed
 		/// </summary>
 		public MouseButton MouseButton {
 			get { return mouseButton; }
 		}
-		
 
-		
+
 		/// <summary>
 		/// Returns mouse cursor position in pixel coordinates.  Pixel coordinates
 		/// are always in screen space
@@ -168,27 +165,26 @@ namespace Ogui.UI
 		public Point PixelPosition {
 			get { return pixelPosition; }
 		}
-		
+
 		#endregion
+
 		#region Private Fields
-		
+
 		private readonly Point position;
 		private readonly MouseButton mouseButton;
 		private readonly Point pixelPosition;
-		
+
 		#endregion
 	}
-
 
 
 	/// <summary>
 	/// Holds data pertaining to a keyboard event
 	/// Immutable data type
 	/// </summary>
-	public class KeyboardData
-	{
+	public class KeyboardData {
 		#region Constructors
-		
+
 		/// <summary>
 		/// Constructs a KeyboardData given all of the parameters seperately
 		/// </summary>
@@ -196,94 +192,89 @@ namespace Ogui.UI
 		/// <param name="keyCode"></param>
 		/// <param name="isKeyDown"></param>
 		/// <param name="controlKeys"></param>
-		public KeyboardData(char character, TCODKeyCode keyCode, bool isKeyDown, 
-			ControlKeys controlKeys)
-		{
+		public KeyboardData(char character, TCODKeyCode keyCode, bool isKeyDown,
+		                    ControlKeys controlKeys) {
 			this.character = character;
 			this.isKeyPress = isKeyDown;
 			this.keyCode = keyCode;
 			this.controlKeys = controlKeys;
 		}
-		
 
-		
+
 		/// <summary>
 		/// Constructs a KeyboardData from specified TCODKey object
 		/// </summary>
 		/// <param name="tcodKeys"></param>
-		public KeyboardData(TCODKey tcodKeys)
-		{
+		public KeyboardData(TCODKey tcodKeys) {
 			if (tcodKeys == null)
-			{
 				throw new ArgumentNullException("tcodKeys");
-			}
 
 			this.character = tcodKeys.Character;
 			this.keyCode = tcodKeys.KeyCode;
 			this.isKeyPress = tcodKeys.Pressed;
-			
+
 			int f = 0;
 			if (tcodKeys.LeftAlt)
-				f |= (int)ControlKeys.LeftAlt;
+				f |= (int) ControlKeys.LeftAlt;
 			if (tcodKeys.RightAlt)
-				f |= (int)ControlKeys.RightAlt;
+				f |= (int) ControlKeys.RightAlt;
 			if (tcodKeys.LeftControl)
-				f |= (int)ControlKeys.LeftControl;
+				f |= (int) ControlKeys.LeftControl;
 			if (tcodKeys.RightControl)
-				f |= (int)ControlKeys.RightControl;
+				f |= (int) ControlKeys.RightControl;
 			if (tcodKeys.Shift)
-				f |= (int)ControlKeys.Shift;
-			
-			this.controlKeys = (ControlKeys)f;
+				f |= (int) ControlKeys.Shift;
+
+			this.controlKeys = (ControlKeys) f;
 		}
-		
+
 		#endregion
+
 		#region Public Properties
-		
+
 		/// <summary>
 		/// An ASCII character representation of the pressed key, or 0 if none.
 		/// </summary>
 		public char Character {
 			get { return character; }
 		}
-		
 
-		
+
 		/// <summary>
 		/// A TCODKeyCode value representing a key press
 		/// </summary>
 		public TCODKeyCode KeyCode {
 			get { return keyCode; }
 		}
-		
 
-		
+
 		/// <summary>
 		/// True if the specified key is being pressed, false if released.
 		/// </summary>
 		public bool IsKeyPress {
 			get { return isKeyPress; }
 		}
-		
 
-		
+
 		/// <summary>
 		/// A ControlKeys bit array representing the current control keys that are being pressed
 		/// </summary>
 		public ControlKeys ControlKeys {
 			get { return controlKeys; }
 		}
-		
+
 		#endregion
+
 		#region Private Fields
-		
+
 		private ControlKeys controlKeys;
 		private TCODKeyCode keyCode;
 		private readonly bool isKeyPress;
 		private readonly char character;
-		
+
 		#endregion
 	}
+
 	#endregion
 
 	#region EventArgs
@@ -291,18 +282,14 @@ namespace Ogui.UI
 	/// <summary>
 	/// Arguments for a mouse message or event, contains mouse state
 	/// </summary>
-	public class MouseEventArgs : EventArgs
-	{
+	public class MouseEventArgs : EventArgs {
 		/// <summary>
 		/// Construct a MouseEventArgs given the MouseData
 		/// </summary>
 		/// <param name="mouseData"></param>
-		public MouseEventArgs(MouseData mouseData)
-		{
+		public MouseEventArgs(MouseData mouseData) {
 			if (mouseData == null)
-			{
 				throw new ArgumentNullException("mouseData");
-			}
 
 			this.mouseData = mouseData;
 		}
@@ -313,24 +300,21 @@ namespace Ogui.UI
 		public MouseData MouseData {
 			get { return mouseData; }
 		}
-		readonly MouseData mouseData;
+
+		private readonly MouseData mouseData;
 	}
 
 	/// <summary>
 	/// Argument for a keyboard message or event, contains keyboard state
 	/// </summary>
-	public class KeyboardEventArgs : EventArgs
-	{
+	public class KeyboardEventArgs : EventArgs {
 		/// <summary>
 		/// Construct a KeyboardEventArgs given the KeyboardData
 		/// </summary>
 		/// <param name="keyboardData"></param>
-		public KeyboardEventArgs(KeyboardData keyboardData)
-		{
+		public KeyboardEventArgs(KeyboardData keyboardData) {
 			if (keyboardData == null)
-			{
 				throw new ArgumentNullException("keyboardData");
-			}
 
 			this.keyboardData = keyboardData;
 		}
@@ -341,21 +325,20 @@ namespace Ogui.UI
 		public KeyboardData KeyboardData {
 			get { return keyboardData; }
 		}
-		readonly KeyboardData keyboardData;
+
+		private readonly KeyboardData keyboardData;
 	}
 
 	/// <summary>
 	/// Argument for a MouseDrag event.
 	/// </summary>
-	public class MouseDragEventArgs : EventArgs
-	{
+	public class MouseDragEventArgs : EventArgs {
 		/// <summary>
 		/// Construct a MouseDragEventArgs instance given the screen position related to the
 		/// drag action.
 		/// </summary>
 		/// <param name="sPos"></param>
-		public MouseDragEventArgs(Point sPos)
-		{
+		public MouseDragEventArgs(Point sPos) {
 			this.SPos = sPos;
 		}
 
@@ -366,12 +349,6 @@ namespace Ogui.UI
 		/// </summary>
 		public Point SPos { get; private set; }
 	}
+
 	#endregion
-	
-	
-	
-	
-	
-	
-	
 }

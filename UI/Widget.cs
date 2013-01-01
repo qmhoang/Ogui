@@ -2,8 +2,7 @@ using System;
 using DEngine.Core;
 using Ogui.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
 	//public interface ITemplate
 	//{
 	//    Size CalculateSize();
@@ -15,18 +14,15 @@ namespace Ogui.UI
 	/// options, and override CalculateSize to ensure that the widget is created with the correct
 	/// size.
 	/// </summary>
-	public abstract class WidgetTemplate
-	{
-		
+	public abstract class WidgetTemplate {
 		/// <summary>
 		/// Default constructor initializes properties to their defaults.
 		/// </summary>
-		protected WidgetTemplate()
-		{
+		protected WidgetTemplate() {
 			OwnerDraw = false;
 			Pigments = new PigmentAlternatives();
 		}
-		
+
 		/// <summary>
 		/// If true, then base classes will not do any drawing to the canvas, including clearing
 		/// or blitting to the screen.  This property is present so that subclasses can implement
@@ -53,25 +49,24 @@ namespace Ogui.UI
 	/// Base class for any component that gets drawn on the screen.  A widget provides
 	/// a Canvas for drawing operations.
 	/// </summary>
-	public abstract class Widget : Component, IDisposable
-	{
+	public abstract class Widget : Component, IDisposable {
 		#region Events
-		
+
 		/// <summary>
 		/// Raised when the the Widget receives a draw message from the framework.  Subscribers
 		/// can perform custom drawing when this is raised.
 		/// </summary>
 		public event EventHandler Draw;
-		
+
 		#endregion
+
 		#region Constructors
-		
+
 		/// <summary>
 		/// Construct a Widget instance from the given template.
 		/// </summary>
 		/// <param name="template"></param>
-		protected Widget(WidgetTemplate template)
-		{
+		protected Widget(WidgetTemplate template) {
 			this.ActualScreenPosition = new Point(0, 0);
 			this.Size = template.CalculateSize();
 			this.Canvas = new Canvas(Size);
@@ -79,12 +74,12 @@ namespace Ogui.UI
 			this.OwnerDraw = template.OwnerDraw;
 
 			this.PigmentOverrides = template.Pigments.Copy();
-
 		}
-		
+
 		#endregion
+
 		#region Public Properties
-		
+
 		/// <summary>
 		/// Returns widget's rect in screen space coordinates
 		/// </summary>
@@ -96,8 +91,7 @@ namespace Ogui.UI
 		/// Returns the widget's rect in local space coordinates.  The TopLeft coordinate
 		/// will always be the Origin (0,0).
 		/// </summary>
-		public virtual Rect LocalRect
-		{
+		public virtual Rect LocalRect {
 			get { return new Rect(Point.Origin, Size); }
 		}
 
@@ -116,18 +110,19 @@ namespace Ogui.UI
 		/// to change the pigments for this widget and its children during runtime.
 		/// </summary>
 		public PigmentMap Pigments { get; internal set; }
-		
+
 		#endregion
+
 		#region Protected Properties
 
 		/// <summary>
 		/// The upper left position of this widget in screen space coordinates.
 		/// </summary>
-		protected internal virtual Point ActualScreenPosition { 
+		protected internal virtual Point ActualScreenPosition {
 			get { return ScreenPosition; }
-			set { ScreenPosition = value; } 
+			set { ScreenPosition = value; }
 		}
-		
+
 		/// <summary>
 		/// If true, then base classes will not do any drawing to the canvas, including clearing
 		/// or blitting to the screen.  This property is present so that subclasses can implement
@@ -135,83 +130,80 @@ namespace Ogui.UI
 		/// implement using overrides/events.
 		/// </summary>
 		protected bool OwnerDraw { get; set; }
-		
+
 		#endregion
+
 		#region Protected Methods
-		
+
 		/// <summary>
 		/// If OwnerDraw is false, this base method clears the Canvas with the Pigment
 		/// returned from DetermineMainPigment.
 		/// </summary>
-		protected virtual void Redraw()
-		{
-			if (!OwnerDraw)
-			{
+		protected virtual void Redraw() {
+			if (!OwnerDraw) {
 				Canvas.SetDefaultPigment(DetermineMainPigment());
 				Canvas.Clear();
 			}
 		}
-		
+
 		/// <summary>
 		/// Calculates the current Pigment of the main drawing area for the widget.  Override to change
 		/// which pigment is used.
 		/// </summary>
 		/// <returns></returns>
 		protected abstract Pigment DetermineMainPigment();
-		
+
 		/// <summary>
 		/// Calculate and return the current Pigment of the frame area for this widget.
 		/// Override to change which pigment is used.
 		/// </summary>
 		/// <returns></returns>
 		protected abstract Pigment DetermineFramePigment();
-		
+
 		#endregion
+
 		#region Message Handlers
-		
+
 		/// <summary>
 		/// Called during the drawing phase of the application loop.  Base method calls Redraw(), 
 		/// triggers the Draw event, and blits the canvas to the screen if OwnerDraw is false.
 		/// This method should rarely need to be overriden - instead, to provide custom drawing code
 		/// (whether OwnerDraw is true or false), override Redraw(), DetermineMainPigment(), and DetermineFramePigment().
 		/// </summary>
-		protected internal virtual void OnDraw()
-		{
+		protected internal virtual void OnDraw() {
 			Redraw();
 
 			if (Draw != null)
-			{
 				Draw(this, EventArgs.Empty);
-			}
 
 			if (!OwnerDraw)
-			{
 				Canvas.ToScreen(this.ActualScreenPosition);
-			}
 		}
-		
+
 		#endregion
+
 		#region Internal
+
 		internal PigmentAlternatives PigmentOverrides { get; set; }
 		internal Point ScreenPosition;
 
 		#endregion
+
 		#region Dispose
+
 		private bool alreadyDisposed;
 
 		/// <summary>
 		/// Default finalizer calls Dispose.
 		/// </summary>
-		~Widget()
-		{
+		~Widget() {
 			Dispose(false);
 		}
 
 		/// <summary>
 		/// Safely dispose this object and all of its contents.
 		/// </summary>
-		public void Dispose()
-		{
+		public void Dispose() {
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
@@ -220,19 +212,15 @@ namespace Ogui.UI
 		/// Override to add custom disposing code.
 		/// </summary>
 		/// <param name="isDisposing"></param>
-		protected virtual void Dispose(bool isDisposing)
-		{
+		protected virtual void Dispose(bool isDisposing) {
 			if (alreadyDisposed)
 				return;
 			if (isDisposing)
-			{
-				if(Canvas != null)
+				if (Canvas != null)
 					Canvas.Dispose();
-			}
 			alreadyDisposed = true;
 		}
+
 		#endregion
 	}
-
 }
-

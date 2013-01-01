@@ -186,7 +186,7 @@ namespace Ogui.UI {
 				return false;
 
 			if (ValidateField(TextInput) &&
-				TextInput.Length <= MaximumCharacters) {
+			    TextInput.Length <= MaximumCharacters) {
 				CurrentText = TextInput;
 
 				OnFieldChanged();
@@ -297,30 +297,30 @@ namespace Ogui.UI {
 			// Draw label
 			if (!string.IsNullOrEmpty(Label))
 				Canvas.PrintStringAligned(labelRect, Label,
-										  LabelAlign,
-										  VerticalAlign);
+				                          LabelAlign,
+				                          VerticalAlign);
 
 			// Draw input field
 			if (waitingToOverwrite)
 				Canvas.PrintStringAligned(fieldRect,
-										  TextInput,
-										  HorizontalAlignment.Left,
-										  VerticalAlign,
-										  Pigments[PigmentType.ViewSelected]);
+				                          TextInput,
+				                          HorizontalAlignment.Left,
+				                          VerticalAlign,
+				                          Pigments[PigmentType.ViewSelected]);
 			else
 				Canvas.PrintStringAligned(fieldRect,
-										  TextInput,
-										  HorizontalAlignment.Left,
-										  VerticalAlign);
+				                          TextInput,
+				                          HorizontalAlignment.Left,
+				                          VerticalAlign);
 
 			// Draw cursor
 			if (cursorOn && HasKeyboardFocus) {
 				int cursorX = fieldRect.Left + CursorPos;
 				if (cursorX <= LocalRect.Right)
 					Canvas.PrintChar(cursorX,
-									 cursorY,
-									 (int) TCODSpecialCharacter.Block1,
-									 Pigments[PigmentType.ViewSelected]);
+					                 cursorY,
+					                 (int) TCODSpecialCharacter.Block1,
+					                 Pigments[PigmentType.ViewSelected]);
 			}
 		}
 
@@ -341,7 +341,7 @@ namespace Ogui.UI {
 			base.OnKeyPressed(keyData);
 
 			if (keyData.Character != 0 &&
-				ValidateCharacter(keyData.Character)) {
+			    ValidateCharacter(keyData.Character)) {
 				if (waitingToOverwrite) {
 					TextInput = keyData.Character.ToString();
 					CursorPos = 1;
@@ -351,7 +351,7 @@ namespace Ogui.UI {
 					CursorPos++;
 				}
 			} else if (keyData.KeyCode == TCODKeyCode.Backspace &&
-					   TextInput.Length > 0) {
+			           TextInput.Length > 0) {
 				TextInput = TextInput.Substring(0, TextInput.Length - 1);
 				CursorPos--;
 			} else if (keyData.KeyCode == TCODKeyCode.Enter) {
@@ -442,7 +442,7 @@ namespace Ogui.UI {
 
 			labelRect = new Rect(viewRect.TopLeft, new Size(labelLength, viewRect.Size.Height));
 			fieldRect = new Rect(labelRect.TopRight.Shift(1, 0),
-								 new Size(fieldLength, viewRect.Size.Height));
+			                     new Size(fieldLength, viewRect.Size.Height));
 
 			switch (VerticalAlign) {
 				case VerticalAlignment.Top:

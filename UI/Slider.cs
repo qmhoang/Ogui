@@ -23,14 +23,10 @@ using System;
 using DEngine.Core;
 using Ogui.Core;
 
-namespace Ogui.UI
-{
-	public class SliderTemplate : ControlTemplate
-	{
-		public SliderTemplate()
-		{
+namespace Ogui.UI {
+	public class SliderTemplate : ControlTemplate {
+		public SliderTemplate() {}
 
-		}
 		/// <summary>
 		/// The minimum value that this spin control can have.  Defaults to 0.
 		/// </summary>
@@ -68,14 +64,11 @@ namespace Ogui.UI
 
 		public Pigment BarPigment { get; set; }
 
-		public override Size CalculateSize()
-		{
+		public override Size CalculateSize() {
 			int width = 2; // for frame
 
 			if (!string.IsNullOrEmpty(Label))
-			{
 				width += Canvas.TextLength(Label) + 1;
-			}
 
 			width += NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			//width += 3;
@@ -86,36 +79,31 @@ namespace Ogui.UI
 		}
 	}
 
-	public class Slider : Control
-	{
+	public class Slider : Control {
 		#region Events
- 
+
 		public event EventHandler ValueChanged;
- 
+
 		#endregion
+
 		#region Constructors
- 
+
 		/// <summary>
 		/// Construct a Slider instance using the specified template
 		/// </summary>
 		/// <param name="template"></param>
 		public Slider(SliderTemplate template)
-			: base(template)
-		{
+				: base(template) {
 			MinimumValue = template.MinimumValue;
 			MaximumValue = template.MaximumValue;
 
 			Label = template.Label;
 			if (Label == null)
-			{
 				Label = "";
-			}
 
 			CurrentValue = template.StartingValue;
 			if (CurrentValue < MinimumValue || CurrentValue > MaximumValue)
-			{
 				CurrentValue = MinimumValue;
-			}
 
 			HasFrame = true;
 			CanHaveKeyboardFocus = false;
@@ -126,10 +114,11 @@ namespace Ogui.UI
 			SpinDelay = template.SpinDelay;
 			SpinSpeed = template.SpinSpeed;
 		}
- 
+
 		#endregion
+
 		#region Public Properties
- 
+
 		/// <summary>
 		/// Get the minimum value that this spin control can have.
 		/// </summary>
@@ -165,12 +154,10 @@ namespace Ogui.UI
 		/// <summary>
 		/// Get the current value of the slider.
 		/// </summary>
-		public int CurrentValue 
-		{
+		public int CurrentValue {
 			get { return _currentValue; }
 
-			protected set
-			{
+			protected set {
 				int newVal = value;
 
 				if (newVal < MinimumValue)
@@ -180,46 +167,37 @@ namespace Ogui.UI
 					newVal = MaximumValue;
 
 				if (newVal != _currentValue)
-				{
 					_currentValue = newVal;
-				}
 			}
 		}
+
 		private int _currentValue;
- 
+
 		#endregion
+
 		#region Protected Methods
- 
+
 		/// <summary>
 		/// Called when this.CurrentValue has changed to a different value.
 		/// </summary>
-		protected virtual void OnValueChanged()
-		{
+		protected virtual void OnValueChanged() {
 			if (ValueChanged != null)
-			{
 				ValueChanged(this, EventArgs.Empty);
-			}
 		}
- 
 
- 
+
 		/// <summary>
 		/// Creates the NumberEntry and ValueBar for this slider.
 		/// </summary>
-		protected internal override void OnSettingUp()
-		{
+		protected internal override void OnSettingUp() {
 			base.OnSettingUp();
 
 			Point fieldPos;
-			if (!string.IsNullOrEmpty(Label))
-			{
+			if (!string.IsNullOrEmpty(Label)) {
 				labelRect = new Rect(1, 1, Label.Length + 1, 1);
 				fieldPos = new Point(Label.Length + 2, 1);
-			}
-			else
-			{
+			} else
 				fieldPos = new Point(1, 1);
-			}
 
 			int fieldWidth = NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			Size fieldSize = new Size(fieldWidth, 1);
@@ -229,42 +207,42 @@ namespace Ogui.UI
 				BarPigment = DetermineMainPigment();
 
 			numEntry = new NumberEntry(new NumberEntryTemplate()
-			{
-				HasFrameBorder = false,
-				MinimumValue = this.MinimumValue,
-				MaximumValue = this.MaximumValue,
-				StartingValue = CurrentValue,
-				CommitOnLostFocus = true,
-				ReplaceOnFirstKey = true,
-				TopLeftPos = this.LocalToScreen(fieldRect.TopLeft)
-			});
+			                           {
+			                           		HasFrameBorder = false,
+			                           		MinimumValue = this.MinimumValue,
+			                           		MaximumValue = this.MaximumValue,
+			                           		StartingValue = CurrentValue,
+			                           		CommitOnLostFocus = true,
+			                           		ReplaceOnFirstKey = true,
+			                           		TopLeftPos = this.LocalToScreen(fieldRect.TopLeft)
+			                           });
 
 			valueBar = new ValueBar(new ValueBarTemplate()
-			{
-				TopLeftPos = this.LocalToScreen(new Point(1,2)),
-				Width = this.Size.Width-4,
-				MaximumValue = this.MaximumValue,
-				MinimumValue = this.MinimumValue,
-				StartingValue = this.CurrentValue,
-				BarPigment = this.BarPigment
-			});
+			                        {
+			                        		TopLeftPos = this.LocalToScreen(new Point(1, 2)),
+			                        		Width = this.Size.Width - 4,
+			                        		MaximumValue = this.MaximumValue,
+			                        		MinimumValue = this.MinimumValue,
+			                        		StartingValue = this.CurrentValue,
+			                        		BarPigment = this.BarPigment
+			                        });
 
 			leftButton = new EmitterButton(new EmitterButtonTemplate()
-											   {
-													   HasFrameBorder = false,
-													   Label = "-",
-													   TopLeftPos = this.LocalToScreen(new Point(1, 2)),
-													   StartEmittingDelay = SpinDelay,
-													   Speed = SpinSpeed
-											   });
+			                               {
+			                               		HasFrameBorder = false,
+			                               		Label = "-",
+			                               		TopLeftPos = this.LocalToScreen(new Point(1, 2)),
+			                               		StartEmittingDelay = SpinDelay,
+			                               		Speed = SpinSpeed
+			                               });
 			rightButton = new EmitterButton(new EmitterButtonTemplate()
-												{
-														HasFrameBorder = false,
-														Label = "+",
-														TopLeftPos = this.LocalToScreen(new Point(1, 2).Shift(Size.Width - 3, 0)),
-														StartEmittingDelay = SpinDelay,
-														Speed = SpinSpeed
-												});
+			                                {
+			                                		HasFrameBorder = false,
+			                                		Label = "+",
+			                                		TopLeftPos = this.LocalToScreen(new Point(1, 2).Shift(Size.Width - 3, 0)),
+			                                		StartEmittingDelay = SpinDelay,
+			                                		Speed = SpinSpeed
+			                                });
 
 			ParentWindow.AddControls(valueBar, numEntry);
 			ParentWindow.AddControls(leftButton, rightButton);
@@ -273,41 +251,37 @@ namespace Ogui.UI
 
 			valueBar.MouseMoved += valueBar_MouseMoved;
 
-			valueBar.MouseButtonDown += valueBar_MouseButtonDown;            
-			
+			valueBar.MouseButtonDown += valueBar_MouseButtonDown;
+
 
 			leftButton.Emit += leftButton_Emit;
 			rightButton.Emit += rightButton_Emit;
 		}
 
- 
+
 		/// <summary>
 		/// Draws this Slider's label.
 		/// </summary>
-		protected override void Redraw()
-		{
+		protected override void Redraw() {
 			base.Redraw();
 
 			Canvas.PrintString(labelRect.TopLeft, Label);
 		}
- 
+
 		#endregion
+
 		#region Private
- 
-		void valueBar_MouseMoved(object sender, MouseEventArgs e)
-		{
-			if (e.MouseData.MouseButton == MouseButton.LeftButton)
-			{
+
+		private void valueBar_MouseMoved(object sender, MouseEventArgs e) {
+			if (e.MouseData.MouseButton == MouseButton.LeftButton) {
 				int newVal = CalculateValue(e.MouseData.PixelPosition.X);
 
 				numEntry.TrySetValue(newVal);
 			}
 		}
- 
 
- 
-		int CalculateValue(int pixelPosX)
-		{
+
+		private int CalculateValue(int pixelPosX) {
 			int charWidth = Canvas.GetCharSize().Width;
 			int currPx = pixelPosX;
 
@@ -315,68 +289,59 @@ namespace Ogui.UI
 
 			int widthInPx = (valueBar.Size.Width - 4) * charWidth;
 
-			float pixposPercent = (float)currPx / (float)widthInPx;
+			float pixposPercent = (float) currPx / (float) widthInPx;
 
-			return (int)((float)(MaximumValue - MinimumValue) * pixposPercent) + MinimumValue;
+			return (int) ((float) (MaximumValue - MinimumValue) * pixposPercent) + MinimumValue;
 		}
- 
 
- 
-		void numEntry_EntryChanged(object sender, EventArgs e)
-		{
+
+		private void numEntry_EntryChanged(object sender, EventArgs e) {
 			int value = numEntry.CurrentValue;
 
-			if (this.CurrentValue != value)
-			{
+			if (this.CurrentValue != value) {
 				this.CurrentValue = value;
 				valueBar.CurrentValue = this.CurrentValue;
 				OnValueChanged();
 			}
 		}
- 
 
- 
-		void valueBar_MouseButtonDown(object sender, MouseEventArgs e)
-		{
-			if (e.MouseData.MouseButton == MouseButton.LeftButton)
-			{
+
+		private void valueBar_MouseButtonDown(object sender, MouseEventArgs e) {
+			if (e.MouseData.MouseButton == MouseButton.LeftButton) {
 				int newVal = CalculateValue(e.MouseData.PixelPosition.X);
 
 				numEntry.TrySetValue(newVal);
-			}            
+			}
 		}
 
-		void leftButton_Emit(object sender, EventArgs e) {
+		private void leftButton_Emit(object sender, EventArgs e) {
 			numEntry.TryCommit();
-			if (CurrentValue > MinimumValue) {
+			if (CurrentValue > MinimumValue)
 				numEntry.TrySetValue(CurrentValue - 1);
-			}
 		}
 
-		void rightButton_Emit(object sender, EventArgs e) {
+		private void rightButton_Emit(object sender, EventArgs e) {
 			numEntry.TryCommit();
-			if (CurrentValue < MaximumValue) {
+			if (CurrentValue < MaximumValue)
 				numEntry.TrySetValue(CurrentValue + 1);
-			}
 		}
 
- 
-		NumberEntry numEntry;
-		ValueBar valueBar;
-		Rect labelRect;
-		Rect fieldRect;
 
-		EmitterButton leftButton, rightButton;
- 
+		private NumberEntry numEntry;
+		private ValueBar valueBar;
+		private Rect labelRect;
+		private Rect fieldRect;
+
+		private EmitterButton leftButton, rightButton;
+
 		#endregion
+
 		#region Dispose
- 
-		protected override void Dispose(bool isDisposing)
-		{
+
+		protected override void Dispose(bool isDisposing) {
 			base.Dispose(isDisposing);
 
-			if (isDisposing)
-			{
+			if (isDisposing) {
 				if (numEntry != null)
 					numEntry.Dispose();
 
@@ -384,7 +349,7 @@ namespace Ogui.UI
 					valueBar.Dispose();
 			}
 		}
- 
+
 		#endregion
 	}
 }

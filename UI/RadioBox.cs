@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using DEngine.Core;
 using Ogui.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region RadioGroup Helper Classes
+
 	/// <summary>
 	/// This is the argument sent as part of a RadioBox.RadioToggled event.
 	/// </summary>
-	public class RadioToggledEventArgs : EventArgs
-	{
+	public class RadioToggledEventArgs : EventArgs {
 		/// <summary>
 		/// Construct a RadioToggledEventArgs object with the specified item radio index.
 		/// </summary>
 		/// <param name="index"></param>
-		public RadioToggledEventArgs(int index)
-		{
+		public RadioToggledEventArgs(int index) {
 			Index = index;
 		}
 
@@ -24,22 +23,19 @@ namespace Ogui.UI
 		/// The index of the toggled radio.
 		/// </summary>
 		public int Index { get; private set; }
-
 	}
 
 	/// <summary>
 	/// Contains the label and tooltip text for each RadioItem that will be added
 	/// to a Listbox.
 	/// </summary>
-	public class RadioItemData
-	{
+	public class RadioItemData {
 		/// <summary>
 		/// Construct a ListItemData instance given the label and an optional tooltip.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="toolTip"></param>
-		public RadioItemData(string label, string toolTip = null)
-		{
+		public RadioItemData(string label, string toolTip = null) {
 			this.Label = label;
 			this.TooltipText = toolTip;
 		}
@@ -54,20 +50,19 @@ namespace Ogui.UI
 		/// </summary>
 		public string TooltipText { get; set; }
 	}
+
 	#endregion
 
 	#region RadioGroupTemplate
+
 	/// <summary>
 	/// Used to contructs a RadioGroup object.
 	/// </summary>
-	public class RadioGroupTemplate : ControlTemplate
-	{
- 
+	public class RadioGroupTemplate : ControlTemplate {
 		/// <summary>
 		/// Default constructor initializes properties to their defaults.
 		/// </summary>
-		public RadioGroupTemplate()
-		{
+		public RadioGroupTemplate() {
 			Items = new List<RadioItemData>();
 			LabelAlignment = HorizontalAlignment.Left;
 			InitialSelectedIndex = 0;
@@ -76,7 +71,7 @@ namespace Ogui.UI
 			HasFrameBorder = true;
 			RadioOnLeft = true;
 		}
- 
+
 
 		/// <summary>
 		/// The list of RadioItemData elements that will be included in the radio group.  Defaults
@@ -117,7 +112,7 @@ namespace Ogui.UI
 		/// Defaults to true.
 		/// </summary>
 		public bool HasFrameBorder { get; set; }
- 
+
 
 		/// <summary>
 		/// Set to true if the radio element will be drawn to the left of the label.  Otherwise
@@ -130,21 +125,17 @@ namespace Ogui.UI
 		/// </summary>
 		public string Title { get; set; }
 
- 
+
 		/// <summary>
 		/// Calculates the RadioGroup size based on the properties of this template.
 		/// </summary>
 		/// <returns></returns>
-		public override Size CalculateSize()
-		{
+		public override Size CalculateSize() {
 			if (AutoSizeOverride.Width > 0 && AutoSizeOverride.Height > 0)
-			{
 				return AutoSizeOverride;
-			}
 
 			int width = 0;
-			foreach (RadioItemData i in Items)
-			{
+			foreach (RadioItemData i in Items) {
 				if (i.Label == null)
 					i.Label = "";
 
@@ -156,8 +147,7 @@ namespace Ogui.UI
 
 			int height = Items.Count;
 
-			if (HasFrameBorder)
-			{
+			if (HasFrameBorder) {
 				width += 2;
 				height += 2;
 			}
@@ -165,36 +155,38 @@ namespace Ogui.UI
 			return new Size(width, height);
 		}
 	}
+
 	#endregion
 
 	#region RadioGroup
+
 	/// <summary>
 	/// Represents a group (list) of radio boxes.  Only one radio can be selected (toggled) at
 	/// a time.
 	/// </summary>
-	public class RadioGroup : Control
-	{
+	public class RadioGroup : Control {
 		#region Events
+
 		/// <summary>
 		/// Raised when a radio box has been toggled (selected) by user input.  The
 		/// RadioToggledEventArgs contains the index number of the selected radio.
 		/// </summary>
 		public event EventHandler<RadioToggledEventArgs> RadioToggled;
+
 		#endregion
+
 		#region Constructors
+
 		/// <summary>
 		/// Construct a RadioGroup from the specified templated.
 		/// </summary>
 		/// <param name="template"></param>
 		public RadioGroup(RadioGroupTemplate template)
-			: base(template)
-		{
+				: base(template) {
 			HasFrame = template.HasFrameBorder;
 
 			if (Size.Width < 3 || Size.Height < 3)
-			{
 				HasFrame = false;
-			}
 
 			HilightWhenMouseOver = false;
 
@@ -209,16 +201,15 @@ namespace Ogui.UI
 			CurrentSelected = template.InitialSelectedIndex;
 
 			if (CurrentSelected < 0 || CurrentSelected >= Items.Count)
-			{
 				CurrentSelected = 0;
-			}
 
 			CalcMetrics(template);
-
 		}
+
 		#endregion
 
 		#region Public Properties
+
 		/// <summary>
 		/// The alignment of the radio labels.
 		/// </summary>
@@ -244,63 +235,51 @@ namespace Ogui.UI
 		/// The title string.
 		/// </summary>
 		public string Title { get; private set; }
+
 		#endregion
 
 		#region Protected Methods
+
 		/// <summary>
 		/// Draws all of the items.
 		/// </summary>
-		protected void DrawItems()
-		{
+		protected void DrawItems() {
 			for (int i = 0; i < numberItemsDisplayed; i++)
-			{
 				DrawItem(i);
-			}
 		}
 
 		/// <summary>
 		/// Draws the specified item.
 		/// </summary>
 		/// <param name="index"></param>
-		protected void DrawItem(int index)
-		{
+		protected void DrawItem(int index) {
 			RadioItemData item = Items[index];
 			Pigment pigment;
 
 			if (mouseOverIndex == index && HilightRadioMouseOver)
-			{
 				pigment = Pigments[PigmentType.ViewHilight];
-			}
 			else
-			{
 				pigment = DetermineMainPigment();
-			}
 
 			if (labelRect.Size.Width > 0 &&
-				!string.IsNullOrEmpty(item.Label))
-			{
+			    !string.IsNullOrEmpty(item.Label))
 				Canvas.PrintStringAligned(labelRect.TopLeft.X,
-					labelRect.TopLeft.Y + index,
-					item.Label,
-					LabelAlignment,
-					labelRect.Size.Width,
-					pigment);
-			}
+				                          labelRect.TopLeft.Y + index,
+				                          item.Label,
+				                          LabelAlignment,
+				                          labelRect.Size.Width,
+				                          pigment);
 			char rc;
 
 			if (CurrentSelected == index)
-			{
-				rc = (char)10;
-			}
+				rc = (char) 10;
 			else
-			{
-				rc = (char)9;
-			}
+				rc = (char) 9;
 
 			Canvas.PrintChar(radioRect.TopLeft.X,
-				radioRect.TopLeft.Y + index,
-				rc, 
-				pigment);
+			                 radioRect.TopLeft.Y + index,
+			                 rc,
+			                 pigment);
 		}
 
 		/// <summary>
@@ -309,18 +288,13 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="lPos"></param>
 		/// <returns></returns>
-		protected int GetItemAt(Point lPos)
-		{
+		protected int GetItemAt(Point lPos) {
 			int index = -1;
 
 			if (itemsRect.Contains(lPos))
-			{
 				index = lPos.Y - itemsRect.Top;
-			}
 			if (index < 0 || index >= Items.Count)
-			{
 				index = -1;
-			}
 			return index;
 		}
 
@@ -332,8 +306,7 @@ namespace Ogui.UI
 		/// <summary>
 		/// Draws the radio items.  Override to add custom drawing code.
 		/// </summary>
-		protected override void Redraw()
-		{
+		protected override void Redraw() {
 			base.Redraw();
 
 			DrawItems();
@@ -344,8 +317,7 @@ namespace Ogui.UI
 		/// sets the state accordingly.  Override to add custom handling.
 		/// </summary>
 		/// <param name="mouseData"></param>
-		protected internal override void OnMouseMoved(MouseData mouseData)
-		{
+		protected internal override void OnMouseMoved(MouseData mouseData) {
 			base.OnMouseMoved(mouseData);
 
 			Point lPos = ScreenToLocal(mouseData.Position);
@@ -353,13 +325,9 @@ namespace Ogui.UI
 			mouseOverIndex = GetItemAt(lPos);
 
 			if (mouseOverIndex != -1)
-			{
 				TooltipText = Items[mouseOverIndex].TooltipText;
-			}
 			else
-			{
 				TooltipText = null;
-			}
 		}
 
 		/// <summary>
@@ -367,14 +335,11 @@ namespace Ogui.UI
 		/// is the case.  Override to add custom handling.
 		/// </summary>
 		/// <param name="mouseData"></param>
-		protected internal override void OnMouseButtonDown(MouseData mouseData)
-		{
+		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
 			if (mouseOverIndex != -1)
-			{
 				OnItemSelected(mouseOverIndex);
-			}
 		}
 
 		/// <summary>
@@ -382,17 +347,16 @@ namespace Ogui.UI
 		/// to add custom handling.
 		/// </summary>
 		/// <param name="index"></param>
-		protected virtual void OnItemSelected(int index)
-		{
+		protected virtual void OnItemSelected(int index) {
 			CurrentSelected = index;
 			if (RadioToggled != null)
-			{
 				RadioToggled(this, new RadioToggledEventArgs(index));
-			}
 		}
+
 		#endregion
 
 		#region Private
+
 		private List<RadioItemData> Items;
 		private int mouseOverIndex;
 		private Rect itemsRect;
@@ -401,37 +365,31 @@ namespace Ogui.UI
 		private Rect radioRect;
 		private Rect labelRect;
 
-		private void CalcMetrics(RadioGroupTemplate template)
-		{
+		private void CalcMetrics(RadioGroupTemplate template) {
 			itemsRect = this.LocalRect;
 			if (HasFrame)
-			{
 				itemsRect = Rect.Inflate(itemsRect, -1, -1);
-			}
 
 			int delta = itemsRect.Size.Height - Items.Count;
 
 			numberItemsDisplayed = Items.Count;
 
 			if (delta < 0)
-			{
 				numberItemsDisplayed += delta;
-			}
 
-			if (RadioOnLeft)
-			{
+			if (RadioOnLeft) {
 				radioRect = new Rect(itemsRect.TopLeft, new Size(1, 1));
-				labelRect = new Rect(radioRect.TopRight.Shift(2,0), 
-					itemsRect.TopRight);
-			}
-			else
-			{
+				labelRect = new Rect(radioRect.TopRight.Shift(2, 0),
+				                     itemsRect.TopRight);
+			} else {
 				radioRect = new Rect(itemsRect.TopRight, new Size(1, 1));
-				labelRect = new Rect(itemsRect.TopLeft, 
-					radioRect.BottomLeft.Shift(-2,0));
+				labelRect = new Rect(itemsRect.TopLeft,
+				                     radioRect.BottomLeft.Shift(-2, 0));
 			}
 		}
+
 		#endregion
 	}
+
 	#endregion
 }

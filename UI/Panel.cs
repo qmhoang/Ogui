@@ -22,19 +22,18 @@
 using DEngine.Core;
 using Ogui.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region PanelInfo Class
+
 	/// <summary>
 	/// This class builds on the Control Template, and adds options specific to a Panel.
 	/// </summary>
-	public class PanelTemplate : ControlTemplate
-	{
+	public class PanelTemplate : ControlTemplate {
 		/// <summary>
 		/// Default constructor initializes properties to their defaults.
 		/// </summary>
-		public PanelTemplate()
-		{
+		public PanelTemplate() {
 			HasFrame = true;
 			CanHaveKeyboardFocus = false;
 			HilightedWhenMouseOver = false;
@@ -73,30 +72,30 @@ namespace Ogui.UI
 		/// Size property; this method simply returns that property.
 		/// </summary>
 		/// <returns></returns>
-		public override Size CalculateSize()
-		{
+		public override Size CalculateSize() {
 			return Size;
 		}
 	}
+
 	#endregion
 
-
 	#region Panel Class
+
 	/// <summary>
 	/// A panel is a simple control whose size is manually set.  Other than drawin a frame,
 	/// a panel provides little default drawing or message handling code.
 	/// </summary>
 	public class Panel : Control {
 		private string title;
+
 		/// <summary>
 		/// Construct a Panel instance from the given template.
 		/// </summary>
 		/// <param name="template"></param>
 		public Panel(PanelTemplate template)
-			: base(template)
-		{
+				: base(template) {
 			this.HasFrame = template.HasFrame;
-			
+
 			this.CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
 			this.HilightWhenMouseOver = template.HilightedWhenMouseOver;
 
@@ -117,10 +116,10 @@ namespace Ogui.UI
 		/// Pigments[PigmentType.Window]
 		/// </summary>
 		/// <returns></returns>
-		protected override Pigment DetermineMainPigment()
-		{
+		protected override Pigment DetermineMainPigment() {
 			return Pigments[PigmentType.Window];
 		}
 	}
+
 	#endregion
 }

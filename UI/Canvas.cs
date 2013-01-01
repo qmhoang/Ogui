@@ -25,22 +25,24 @@ using Ogui.Core;
 using libtcod;
 using System.Text;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region Enums
+
 	/// <summary>
 	/// Text alignment in the horizontal direction
 	/// </summary>
-	public enum HorizontalAlignment
-	{
+	public enum HorizontalAlignment {
 		/// <summary>
 		/// Text is placed on the far left side.
 		/// </summary>
 		Left,
+
 		/// <summary>
 		/// Text is placed halfway between the left and right sides.
 		/// </summary>
 		Center,
+
 		/// <summary>
 		/// Text is placed on the far right side.
 		/// </summary>
@@ -50,32 +52,34 @@ namespace Ogui.UI
 	/// <summary>
 	/// Text alignment in the vertical direction.
 	/// </summary>
-	public enum VerticalAlignment
-	{
+	public enum VerticalAlignment {
 		/// <summary>
 		/// Text is placed at the very top.
 		/// </summary>
 		Top,
+
 		/// <summary>
 		/// Text is placed halfway between the top and bottom.
 		/// </summary>
 		Center,
+
 		/// <summary>
 		/// Text is placed at the very bottom.
 		/// </summary>
 		Bottom
 	}
+
 	#endregion
 
 	#region Canvas Class
+
 	/// <summary>
 	/// A canvas is basically a wrapper around an off-screen TCODConsole.  Every window
 	/// exposes a Canvas property to provide drawing functionality.  Drawing can be performed
 	/// using the provided Canvas methods, or by exposing the underlying TCODConsole object
 	/// through the Console property.
 	/// </summary>
-	public class Canvas : IDisposable
-	{
+	public class Canvas : IDisposable {
 		#region Constructors
 
 		/// <summary>
@@ -83,13 +87,10 @@ namespace Ogui.UI
 		/// </summary>
 		/// <exception cref="System.ArgumentOutOfRangeException">Thrown when the specified
 		/// <paramref name="size"/> is larger than the screen size</exception>
-		public Canvas(Size size)
-		{
+		public Canvas(Size size) {
 			if (size.Width > Application.ScreenSize.Width ||
-				size.Height > Application.ScreenSize.Height)
-			{
+			    size.Height > Application.ScreenSize.Height)
 				throw new ArgumentOutOfRangeException("size", "The specified size must be equal to or smaller than the screen size");
-			}
 
 			defaultPigment = new Pigment(0xffffff, 0x000000);
 			Console = new TCODConsole(size.Width, size.Height);
@@ -97,16 +98,14 @@ namespace Ogui.UI
 		}
 
 
-
 		/// <summary>
 		/// Construct a Canvas object with the given dimensions.
 		/// </summary>
 		public Canvas(int width, int height)
-			: this(new Size(width, height))
-		{
-		}
+				: this(new Size(width, height)) {}
 
 		#endregion
+
 		#region Public Properties
 
 		/// <summary>
@@ -120,6 +119,7 @@ namespace Ogui.UI
 		public TCODConsole Console { get; private set; }
 
 		#endregion
+
 		#region Public Methods
 
 		/// <summary>
@@ -128,15 +128,14 @@ namespace Ogui.UI
 		/// </summary>
 		/// <exception cref="System.ArgumentNullException">Thrown if <paramref name="pigment"/> 
 		/// is null</exception>
-		public void SetDefaultPigment(Pigment pigment)
-		{
+		public void SetDefaultPigment(Pigment pigment) {
 			if (pigment == null)
 				throw new ArgumentNullException("pigment");
 
 			defaultPigment = pigment;
 			SetPigment(pigment);
 		}
-		
+
 		/// <summary>
 		/// Sets the pigment of a single character at the given coordinates.
 		/// </summary>
@@ -144,18 +143,15 @@ namespace Ogui.UI
 		/// is null</exception>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="x"/> or <param name="y"/> is outside of this Canvas region</exception>
-		public void SetCharPigment(int x, int y, Pigment pigment)
-		{
+		public void SetCharPigment(int x, int y, Pigment pigment) {
 			if (pigment == null)
 				throw new ArgumentNullException("pigment");
 
-			if (x < 0 || x >= Size.Width) {
+			if (x < 0 || x >= Size.Width)
 				throw new ArgumentOutOfRangeException("x", "The specified x coordinate is invalid.");
-			}
 
-			if (y < 0 || y >= Size.Width) {
+			if (y < 0 || y >= Size.Width)
 				throw new ArgumentOutOfRangeException("y", "The specified y coordinate is invalid.");
-			} 
 
 			Console.setCharBackground(x, y, pigment.Background.TCODColor);
 			Console.setCharForeground(x, y, pigment.Foreground.TCODColor);
@@ -167,49 +163,38 @@ namespace Ogui.UI
 		/// <exception cref="System.ArgumentNullException">Thrown when pigment is null</exception>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="position"/> is outside of this Canvas region</exception>
-		public void SetCharPigment(Point position, Pigment pigment)
-		{
+		public void SetCharPigment(Point position, Pigment pigment) {
 			if (pigment == null)
 				throw new ArgumentNullException("pigment");
 
 			if (position.X < 0 || position.X >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("position", "The specified x coordinate is invalid.");
-			}
 
 			if (position.Y < 0 || position.Y >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("position", "The specified y coordinate is invalid.");
-			}
 
 			SetCharPigment(position.X, position.Y, pigment);
 		}
 
-		
+
 		/// <summary>
 		/// Clear the Canvas using the default pigment
 		/// </summary>
-		public void Clear()
-		{
+		public void Clear() {
 			Console.clear();
 		}
-		
+
 		/// <summary>
 		/// Prints a single character at the specified coordinates.
 		/// </summary>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified position is outside of this Canvas region</exception>
-		public void PrintChar(int x, int y, int character, Pigment pigment = null)
-		{
+		public void PrintChar(int x, int y, int character, Pigment pigment = null) {
 			if (x < 0 || x >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("x", "The specified x coordinate is invalid.");
-			}
 
 			if (y < 0 || y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("y", "The specified y coordinate is invalid.");
-			}
 
 			if (pigment != null)
 				SetPigment(pigment);
@@ -225,19 +210,14 @@ namespace Ogui.UI
 		/// </summary>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="lPos"/> is outside of this Canvas region</exception>
-		public void PrintChar(Point lPos, int character, Pigment pigment = null)
-		{
+		public void PrintChar(Point lPos, int character, Pigment pigment = null) {
 			if (lPos.X < 0 || lPos.X >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("lPos", "The specified x coordinate is invalid.");
-			}
 
 			if (lPos.Y < 0 || lPos.Y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("lPos", "The specified y coordinate is invalid.");
-			}
 
-			PrintChar(lPos.X, lPos.Y, character,pigment);
+			PrintChar(lPos.X, lPos.Y, character, pigment);
 		}
 
 		/// <summary>
@@ -247,20 +227,15 @@ namespace Ogui.UI
 		/// null</exception>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified position is outside of this Canvas region</exception>
-		public void PrintString(int x, int y, string text, Pigment pigment = null)
-		{
+		public void PrintString(int x, int y, string text, Pigment pigment = null) {
 			if (text == null)
 				throw new ArgumentNullException("text");
 
 			if (x < 0 || x >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("x", "The specified x coordinate is invalid.");
-			}
 
 			if (y < 0 || y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("y", "The specified y coordinate is invalid.");
-			}
 
 			if (pigment != null)
 				SetPigment(pigment);
@@ -279,20 +254,15 @@ namespace Ogui.UI
 		/// null</exception>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="lPos"/> is outside of this Canvas region</exception>
-		public void PrintString(Point lPos, string text, Pigment pigment = null)
-		{
+		public void PrintString(Point lPos, string text, Pigment pigment = null) {
 			if (text == null)
 				throw new ArgumentNullException("text");
 
 			if (lPos.X < 0 || lPos.X >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("lPos", "The specified x coordinate is invalid.");
-			}
 
 			if (lPos.Y < 0 || lPos.Y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("lPos", "The specified y coordinate is invalid.");
-			}
 
 			PrintString(lPos.X, lPos.Y, text, pigment);
 		}
@@ -310,37 +280,28 @@ namespace Ogui.UI
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified field length is less than 1</exception>
 		public void PrintStringAligned(int x, int y, string text,
-			HorizontalAlignment alignment, int fieldLength, Pigment pigment = null)
-		{
+		                               HorizontalAlignment alignment, int fieldLength, Pigment pigment = null) {
 			if (text == null)
 				throw new ArgumentNullException("text");
 
 			if (x < 0 || x >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("x", "The specified x coordinate is invalid.");
-			}
 
 			if (y < 0 || y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("y", "The specified y coordinate is invalid.");
-			}
 
 			if (fieldLength < 1)
-			{
 				throw new ArgumentOutOfRangeException("fieldLength",
-					"The field length must equal to or greater than 1");
-			}
+				                                      "The field length must equal to or greater than 1");
 
 			Point pos = GetHorAlign(new Point(x, y), text, alignment, fieldLength);
 
 			if (fieldLength < TextLength(text))
-			{
 				text = TrimText(text, fieldLength);
-			}
 
 			PrintString(pos, text, pigment);
 		}
-		
+
 		/// <summary>
 		/// Prints the specified string at the given coordinates.  The text is aligned
 		/// horizontally with the specified alignment and within the specified field length.
@@ -354,31 +315,24 @@ namespace Ogui.UI
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified field length is less than 1</exception>
 		public void PrintStringAligned(Point lPos, string text,
-			HorizontalAlignment alignment, int fieldLength, Pigment pigment = null)
-		{
+		                               HorizontalAlignment alignment, int fieldLength, Pigment pigment = null) {
 			if (text == null)
 				throw new ArgumentNullException("text");
 
 			if (lPos.X < 0 || lPos.X >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("lPos", "The specified x coordinate is invalid.");
-			}
 
 			if (lPos.Y < 0 || lPos.Y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("lPos", "The specified y coordinate is invalid.");
-			}
 
 			if (fieldLength < 1)
-			{
 				throw new ArgumentOutOfRangeException("fieldLength",
-					"The field length must equal to or greater than 1");
-			}
+				                                      "The field length must equal to or greater than 1");
 
 			PrintStringAligned(lPos.X, lPos.Y, text, alignment, fieldLength, pigment);
 		}
 
-		
+
 		/// <summary>
 		/// Prints the specified string at the given coordinates.  The text is aligned
 		/// both horizontally and vertically with the specified alignments, and within
@@ -394,35 +348,24 @@ namespace Ogui.UI
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the width or height of the field size is less than 1</exception>
 		public void PrintStringAligned(int x, int y, string text, HorizontalAlignment hAlign,
-			VerticalAlignment vAlign, Size fieldSize, Pigment pigment = null)
-		{
+		                               VerticalAlignment vAlign, Size fieldSize, Pigment pigment = null) {
 			if (text == null)
 				throw new ArgumentNullException("text");
 
 			if (x < 0 || x >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("x", "The specified x coordinate is invalid.");
-			}
 
 			if (y < 0 || y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("y", "The specified y coordinate is invalid.");
-			}
 
 			if (fieldSize.Width < 1)
-			{
 				throw new ArgumentOutOfRangeException("fieldSize", "The specified width of fieldSize is less than 1");
-			}
 
 			if (fieldSize.Height < 1)
-			{
 				throw new ArgumentOutOfRangeException("fieldSize", "The specified height of fieldSize is less than 1");
-			}
-			
+
 			if (fieldSize.Width < TextLength(text))
-			{
 				text = TrimText(text, fieldSize.Width);
-			}
 
 			Point pos = GetHVAlign(new Point(x, y), text, hAlign, vAlign, fieldSize);
 
@@ -444,30 +387,21 @@ namespace Ogui.UI
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the width or height of the field size is less than 1</exception>
 		public void PrintStringAligned(Point lPos, string text, HorizontalAlignment hAlign,
-			VerticalAlignment vAlign, Size fieldSize, Pigment pigment = null)
-		{
+		                               VerticalAlignment vAlign, Size fieldSize, Pigment pigment = null) {
 			if (text == null)
 				throw new ArgumentNullException("text");
 
 			if (lPos.X < 0 || lPos.X >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("lPos", "The specified x coordinate is invalid.");
-			}
 
 			if (lPos.Y < 0 || lPos.Y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("lPos", "The specified y coordinate is invalid.");
-			}
 
 			if (fieldSize.Width < 1)
-			{
 				throw new ArgumentOutOfRangeException("fieldSize", "The specified width of fieldSize is less than 1");
-			}
 
 			if (fieldSize.Height < 1)
-			{
 				throw new ArgumentOutOfRangeException("fieldSize", "The specified height of fieldSize is less than 1");
-			}
 
 			PrintStringAligned(lPos.X, lPos.Y, text, hAlign, vAlign, fieldSize, pigment);
 		}
@@ -486,36 +420,27 @@ namespace Ogui.UI
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the width or height of the rect is less than 1</exception>
 		public void PrintStringAligned(Rect rect, string text, HorizontalAlignment hAlign,
-			VerticalAlignment vAlign, Pigment pigment = null)
-		{
+		                               VerticalAlignment vAlign, Pigment pigment = null) {
 			if (text == null)
 				throw new ArgumentNullException("text");
 
 			if (rect.TopLeft.X < 0 || rect.TopLeft.X >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("rect", "The specified x coordinate is invalid.");
-			}
 
 			if (rect.TopLeft.Y < 0 || rect.TopLeft.Y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("rect", "The specified y coordinate is invalid.");
-			}
 
 			if (rect.Size.Width < 1)
-			{
 				throw new ArgumentOutOfRangeException("rect", "The specified width of rect is less than 1");
-			}
 
 			if (rect.Size.Height < 1)
-			{
 				throw new ArgumentOutOfRangeException("rect", "The specified height of rect is less than 1");
-			}
 
-			PrintStringAligned(rect.TopLeft.X, rect.TopLeft.Y, 
-				text, 
-				hAlign, vAlign,
-				rect.Size, 
-				pigment);
+			PrintStringAligned(rect.TopLeft.X, rect.TopLeft.Y,
+			                   text,
+			                   hAlign, vAlign,
+			                   rect.Size,
+			                   pigment);
 		}
 
 		/// <summary>
@@ -523,17 +448,12 @@ namespace Ogui.UI
 		/// </summary>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified position is outside of this Canvas region</exception>
-		public void DrawHLine(int startX, int startY, int length, Pigment pigment = null)
-		{
+		public void DrawHLine(int startX, int startY, int length, Pigment pigment = null) {
 			if (startX < 0 || startX >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("startX", "The specified x coordinate is invalid.");
-			}
 
 			if (startY < 0 || startY >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("startY", "The specified y coordinate is invalid.");
-			}
 
 			if (pigment != null)
 				SetPigment(pigment);
@@ -549,17 +469,12 @@ namespace Ogui.UI
 		/// </summary>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="startPos"/> is outside of this Canvas region</exception>
-		public void DrawHLine(Point startPos, int length, Pigment pigment = null)
-		{
+		public void DrawHLine(Point startPos, int length, Pigment pigment = null) {
 			if (startPos.X < 0 || startPos.X >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("startPos", "The specified x coordinate is invalid.");
-			}
 
 			if (startPos.Y < 0 || startPos.Y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("startPos", "The specified y coordinate is invalid.");
-			}
 
 			DrawHLine(startPos.X, startPos.Y, length, pigment);
 		}
@@ -569,17 +484,12 @@ namespace Ogui.UI
 		/// </summary>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified position is outside of this Canvas region</exception>
-		public void DrawVLine(int x, int y, int length, Pigment pigment = null)
-		{
+		public void DrawVLine(int x, int y, int length, Pigment pigment = null) {
 			if (x < 0 || x >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("x", "The specified x coordinate is invalid.");
-			}
 
 			if (y < 0 || y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("y", "The specified y coordinate is invalid.");
-			}
 
 			if (pigment != null)
 				SetPigment(pigment);
@@ -595,65 +505,52 @@ namespace Ogui.UI
 		/// </summary>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="startPos"/> is outside of this Canvas region</exception>
-		public void DrawVLine(Point startPos, int length, Pigment pigment = null)
-		{
+		public void DrawVLine(Point startPos, int length, Pigment pigment = null) {
 			if (startPos.X < 0 || startPos.X >= Size.Width)
-			{
 				throw new ArgumentOutOfRangeException("startPos", "The specified x coordinate is invalid.");
-			}
 
 			if (startPos.Y < 0 || startPos.Y >= Size.Height)
-			{
 				throw new ArgumentOutOfRangeException("startPos", "The specified y coordinate is invalid.");
-			}
 
 			DrawVLine(startPos.X, startPos.Y, length, pigment);
 		}
-		
+
 		/// <summary>
 		/// Blits this Canvas to the screen at the given coordinates in screen space.
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
-		public void ToScreen(int x, int y)
-		{
+		public void ToScreen(int x, int y) {
 			int maxWidth = Application.ScreenSize.Width - x;
 			int maxHeight = Application.ScreenSize.Height - y;
 
 			if (maxWidth < 1 || maxHeight < 1)
-			{
 				return;
-			}
 
 			int finalWidth = Size.Width;
 			int finalHeight = Size.Height;
 
 			if (finalWidth > maxWidth)
-			{
 				finalWidth = maxWidth;
-			}
 			if (finalHeight > maxHeight)
-			{
 				finalHeight = maxHeight;
-			}
 
 			Size finalSize = new Size(finalWidth, finalHeight);
-			
+
 			TCODConsole.blit(Console,
-				0, 0,
-				finalSize.Width,
-				finalSize.Height,
-				TCODConsole.root,
-				x,
-				y);
+			                 0, 0,
+			                 finalSize.Width,
+			                 finalSize.Height,
+			                 TCODConsole.root,
+			                 x,
+			                 y);
 		}
 
 		/// <summary>
 		/// Blits this Canvas to the screen at the given coordinates.
 		/// </summary>
 		/// <param name="sPos">Position given in screen coordinate space</param>
-		public void ToScreen(Point sPos)
-		{
+		public void ToScreen(Point sPos) {
 			ToScreen(sPos.X, sPos.Y);
 		}
 
@@ -665,41 +562,34 @@ namespace Ogui.UI
 		/// <param name="y"></param>
 		/// <param name="fgAlpha"></param>
 		/// <param name="bgAlpha"></param>
-		public void ToScreenAlpha(int x, int y, float fgAlpha, float bgAlpha)
-		{
+		public void ToScreenAlpha(int x, int y, float fgAlpha, float bgAlpha) {
 			int maxWidth = Application.ScreenSize.Width - x;
 			int maxHeight = Application.ScreenSize.Height - y;
 
 			if (maxWidth < 1 || maxHeight < 1)
-			{
 				return;
-			}
 
 			int finalWidth = Size.Width;
 			int finalHeight = Size.Height;
 
 			if (finalWidth > maxWidth)
-			{
 				finalWidth = maxWidth;
-			}
 			if (finalHeight > maxHeight)
-			{
 				finalHeight = maxHeight;
-			}
 
 			Size finalSize = new Size(finalWidth, finalHeight);
 
 			TCODConsole.blit(Console,
-				0, 0,
-				finalSize.Width,
-				finalSize.Height,
-				TCODConsole.root,
-				x,
-				y,
-				fgAlpha,
-				bgAlpha);
+			                 0, 0,
+			                 finalSize.Width,
+			                 finalSize.Height,
+			                 TCODConsole.root,
+			                 x,
+			                 y,
+			                 fgAlpha,
+			                 bgAlpha);
 		}
-		
+
 		/// <summary>
 		/// Blits this Canvas to the screen at the given coordinates and using the provided
 		/// foreground and background alpha values.
@@ -707,19 +597,17 @@ namespace Ogui.UI
 		/// <param name="sPos"></param>
 		/// <param name="fgAlpha"></param>
 		/// <param name="bgAlpha"></param>
-		public void ToScreenAlpha(Point sPos, float fgAlpha, float bgAlpha)
-		{
+		public void ToScreenAlpha(Point sPos, float fgAlpha, float bgAlpha) {
 			ToScreenAlpha(sPos.X, sPos.Y, fgAlpha, bgAlpha);
 		}
-		
+
 		/// <summary>
 		/// Blits the provided Canvas to this Canvas at the specified position
 		/// </summary>
 		/// <param name="source">The destination position in local (to this) coordinate space</param>
 		/// <param name="destPos"></param>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="source"/> is null</exception>
-		public void Blit(Canvas source, Point destPos)
-		{
+		public void Blit(Canvas source, Point destPos) {
 			if (source == null)
 				throw new ArgumentNullException("source");
 
@@ -733,8 +621,7 @@ namespace Ogui.UI
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="source"/> is null</exception>
-		public void Blit(Canvas source, int x, int y)
-		{
+		public void Blit(Canvas source, int x, int y) {
 			if (source == null)
 				throw new ArgumentNullException("source");
 
@@ -742,102 +629,81 @@ namespace Ogui.UI
 			int maxHeight = Application.ScreenSize.Height - y;
 
 			if (maxWidth < 1 || maxHeight < 1)
-			{
 				return;
-			}
 
 			int finalWidth = source.Size.Width;
 			int finalHeight = source.Size.Height;
 
 			if (finalWidth > maxWidth)
-			{
 				finalWidth = maxWidth;
-			}
 			if (finalHeight > maxHeight)
-			{
 				finalHeight = maxHeight;
-			}
 
 			Size finalSize = new Size(finalWidth, finalHeight);
 
 			TCODConsole.blit(source.Console,
-				0, 0,
-				finalSize.Width,
-				finalSize.Height,
-				Console,
-				x,
-				y);
+			                 0, 0,
+			                 finalSize.Width,
+			                 finalSize.Height,
+			                 Console,
+			                 x,
+			                 y);
 		}
 
 		/// <summary>
 		/// Prints a frame border around the canvas, with an optional centered title.
 		/// </summary>
-		public void PrintFrame(string title, Pigment pigment = null)
-		{
+		public void PrintFrame(string title, Pigment pigment = null) {
 			if (pigment != null)
 				SetPigment(pigment);
 
 			if (string.IsNullOrEmpty(title))
-			{
 				Console.printFrame(0, 0,
-					Size.Width, Size.Height,
-					false);
-			}
+				                   Size.Width, Size.Height,
+				                   false);
 			else
-			{
 				Console.printFrame(0, 0,
-					Size.Width, Size.Height,
-					false,
-					TCODBackgroundFlag.Set,
-					title);
-			}
+				                   Size.Width, Size.Height,
+				                   false,
+				                   TCODBackgroundFlag.Set,
+				                   title);
 
 			if (pigment != null)
 				SetPigment(defaultPigment);
 		}
-		
+
 		/// <summary>
 		/// Scrolls this Canvas by the given delta x and y amounts.  
 		/// </summary>
 		/// <param name="deltaX"></param>
 		/// <param name="deltaY"></param>
-		public void Scroll(int deltaX,int deltaY)
-		{
-			Size srcSize = new Size(Size.Width - Math.Abs(deltaX), 
-				Size.Height - Math.Abs(deltaY));
+		public void Scroll(int deltaX, int deltaY) {
+			Size srcSize = new Size(Size.Width - Math.Abs(deltaX),
+			                        Size.Height - Math.Abs(deltaY));
 
-			using (Canvas tmpCanvas = new Canvas(srcSize))
-			{
+			using (Canvas tmpCanvas = new Canvas(srcSize)) {
 				int srcX = 0;
 				int srcY = 0;
 				int destX = 0;
 				int destY = 0;
 
 				if (deltaX < 0)
-				{
 					srcX = -deltaX;
-				}
 
 				if (deltaX > 0)
-				{
 					destX = deltaX;
-				}
 
 				if (deltaY < 0)
-				{
 					srcY = -deltaY;
-				}
 
 				if (deltaY > 0)
-				{
 					destY = deltaY;
-				}
 
 				TCODConsole.blit(this.Console,
-					srcX, srcY,
-					srcSize.Width, srcSize.Height,
-					tmpCanvas.Console,
-					destX, destY);
+				                 srcX, srcY,
+				                 srcSize.Width, srcSize.Height,
+				                 tmpCanvas.Console,
+				                 destX, destY);
 
 				Clear();
 				Blit(tmpCanvas, 0, 0);
@@ -848,58 +714,49 @@ namespace Ogui.UI
 		/// Get the size, in pixels, of a single character, as per TCODSystem.getCharSize().
 		/// </summary>
 		/// <returns></returns>
-		static public Size GetCharSize()
-		{
+		public static Size GetCharSize() {
 			int w, h;
 
 			TCODSystem.getCharSize(out w, out h);
 
 			return new Size(w, h);
 		}
+
 		#endregion
+
 		#region Private
 
-		private void SetPigment(Pigment pigment)
-		{
+		private void SetPigment(Pigment pigment) {
 			Console.setBackgroundColor(pigment.Background.TCODColor);
 			Console.setBackgroundFlag(pigment.BackgroundFlag);
 			Console.setForegroundColor(pigment.Foreground.TCODColor);
 		}
 
-		private void Print(int x, int y, string str)
-		{
+		private void Print(int x, int y, string str) {
 			int cx = x;
 			TCODColor bg = Console.getBackgroundColor();
 			TCODColor fg = Console.getForegroundColor();
 			int i = 0;
 
-			while(i < str.Length)
-			{
+			while (i < str.Length) {
 				char c = str[i];
-				if (c == Color.CodeForeground[0])
-				{
+				if (c == Color.CodeForeground[0]) {
 					int r = str[i + 1];
 					int g = str[i + 2];
 					int b = str[i + 3];
 					Console.setForegroundColor(new TCODColor(r, g, b));
 					i += 4;
-				}
-				else if (c == Color.CodeBackground[0])
-				{
+				} else if (c == Color.CodeBackground[0]) {
 					int r = str[i + 1];
 					int g = str[i + 2];
 					int b = str[i + 3];
 					Console.setBackgroundColor(new TCODColor(r, g, b));
 					i += 4;
-				}
-				else if (c == Color.StopColorCode[0])
-				{
+				} else if (c == Color.StopColorCode[0]) {
 					Console.setForegroundColor(fg);
 					Console.setBackgroundColor(bg);
 					i++;
-				}
-				else
-				{                    
+				} else {
 					Console.putChar(cx, y, c);
 					i++;
 					cx++;
@@ -919,21 +776,14 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="str"></param>
 		/// <returns></returns>
-		public static int TextLength(string str)
-		{
+		public static int TextLength(string str) {
 			int len = str.Length;
 
 			foreach (char c in str)
-			{
 				if (c == Color.CodeBackground[0] || c == Color.CodeForeground[0])
-				{
 					len = len - 4;
-				}
 				else if (c == Color.StopColorCode[0])
-				{
 					len = len - 1;
-				}
-			}
 
 			return len;
 		}
@@ -943,32 +793,25 @@ namespace Ogui.UI
 		/// color control codes.  Use this method instead of string.Substring()
 		/// for strings with embedded color codes.
 		/// </summary>
-		public static string TrimText(string text, int width)
-		{
+		public static string TrimText(string text, int width) {
 			StringBuilder str = new StringBuilder();
 
 			int i = 0;
 			int w = 0;
-			while (w < width)
-			{
+			while (w < width) {
 				char c = text[i];
 
-				if (c == Color.CodeBackground[0] || c == Color.CodeForeground[0])
-				{
+				if (c == Color.CodeBackground[0] || c == Color.CodeForeground[0]) {
 					str.Append(c);
 					str.Append(text[i + 1]);
 					str.Append(text[i + 2]);
 					str.Append(text[i + 3]);
 
 					i += 4;
-				}
-				else if (c == Color.StopColorCode[0])
-				{
+				} else if (c == Color.StopColorCode[0]) {
 					str.Append(c);
 					i++;
-				}
-				else
-				{
+				} else {
 					str.Append(c);
 					i++;
 					w++;
@@ -990,17 +833,13 @@ namespace Ogui.UI
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="str"/> is
 		/// null</exception>
-		public static Point GetHorAlign(Point lPos, string str, HorizontalAlignment align, int fieldLength)
-		{
+		public static Point GetHorAlign(Point lPos, string str, HorizontalAlignment align, int fieldLength) {
 			if (str == null)
-			{
 				throw new ArgumentNullException("str");
-			}
 
 			int startX = 0;
 
-			switch (align)
-			{
+			switch (align) {
 				case HorizontalAlignment.Center:
 					startX = (fieldLength - TextLength(str)) / 2;
 					break;
@@ -1016,7 +855,6 @@ namespace Ogui.UI
 		}
 
 
-
 		/// <summary>
 		/// Returns the position of the given text aligned both horizontally and vertically
 		/// within the field defined by the upper left position and size.
@@ -1029,18 +867,14 @@ namespace Ogui.UI
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="str"/> is
 		/// null</exception>
-		public static Point GetHVAlign(Point lPos, string str, HorizontalAlignment hAlign, VerticalAlignment vAlign, Size fieldSize)
-		{
+		public static Point GetHVAlign(Point lPos, string str, HorizontalAlignment hAlign, VerticalAlignment vAlign, Size fieldSize) {
 			if (str == null)
-			{
 				throw new ArgumentNullException("str");
-			}
 
 			int startX = 0;
 			int startY = 0;
 
-			switch (hAlign)
-			{
+			switch (hAlign) {
 				case HorizontalAlignment.Center:
 					startX = (fieldSize.Width - TextLength(str)) / 2;
 					break;
@@ -1050,8 +884,7 @@ namespace Ogui.UI
 					break;
 			}
 
-			switch (vAlign)
-			{
+			switch (vAlign) {
 				case VerticalAlignment.Center:
 					startY = (fieldSize.Height - 1) / 2;
 					break;
@@ -1066,6 +899,7 @@ namespace Ogui.UI
 		}
 
 		#endregion
+
 		#region Dispose
 
 		private bool alreadyDisposed;
@@ -1073,16 +907,14 @@ namespace Ogui.UI
 		/// <summary>
 		/// Default finalizer calls Dispose.
 		/// </summary>
-		~Canvas()
-		{
+		~Canvas() {
 			Dispose(false);
 		}
 
 		/// <summary>
 		/// Safely dispose this object and all of its contents.
 		/// </summary>
-		public void Dispose()
-		{
+		public void Dispose() {
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
@@ -1091,18 +923,16 @@ namespace Ogui.UI
 		/// Override to add custom disposing code.
 		/// </summary>
 		/// <param name="isDisposing"></param>
-		protected virtual void Dispose(bool isDisposing)
-		{
+		protected virtual void Dispose(bool isDisposing) {
 			if (alreadyDisposed)
 				return;
 			if (isDisposing)
-			{
 				Console.Dispose();
-			}
 			alreadyDisposed = true;
 		}
 
 		#endregion
 	}
+
 	#endregion
 }

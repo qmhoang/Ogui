@@ -23,47 +23,53 @@ using System.Collections.Generic;
 using DEngine.Core;
 using Ogui.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
 	/// <summary>
 	/// The various UI Pigment types used by the framework.
 	/// </summary>
-	public enum PigmentType
-	{
+	public enum PigmentType {
 		/// <summary>
 		/// The pigment used for the window drawing area
 		/// </summary>
 		Window,
+
 		/// <summary>
 		/// The pigment used for a tooltip
 		/// </summary>
 		Tooltip,
+
 		/// <summary>
 		/// The pigment used for an item that is being dragged
 		/// </summary>
 		DragItem,
+
 		/// <summary>
 		/// The pigment for the frame of a control that has the keyboard focus
 		/// </summary>
 		FrameFocus,
+
 		/// <summary>
 		/// The pigment used for the frame of a control that is inactive
 		/// </summary>
 		FrameInactive,
+
 		/// <summary>
 		/// The pigment used for the frame of a control that is hilighted (e.g. when
 		/// hilighted by mouse over state)
 		/// </summary>
 		FrameHilight,
+
 		/// <summary>
 		/// The pigment used for the frame of a control when no other states are applicable.
 		/// </summary>
 		FrameNormal,
+
 		/// <summary>
 		/// The pigment used for the frame of a control when it is depressed (e.g. when
 		/// a button is being pusehd)
 		/// </summary>
 		FrameDepressed,
+
 		/// <summary>
 		/// The pigment used for the frame of a control when it is selected.
 		/// </summary>
@@ -73,30 +79,34 @@ namespace Ogui.UI
 		/// The pigment used for the main area of a control that is inactive
 		/// </summary>
 		ViewFocus,
+
 		/// <summary>
 		/// The pigment used for the main area of a control that is inactive
 		/// </summary>
 		ViewInactive,
+
 		/// <summary>
 		/// The pigment used for the main area of a control that is hilighted (e.g. when
 		/// hilighted by mouse over state)
 		/// </summary>
 		ViewHilight,
+
 		/// <summary>
 		/// The pigment used for the main area of a control that is hilighted (e.g. when
 		/// hilighted by mouse over state)
 		/// </summary>
 		ViewNormal,
+
 		/// <summary>
 		/// The pigment used for the main area of a control when it is depressed (e.g. when
 		/// a button is being pusehd)
 		/// </summary>
 		ViewDepressed,
+
 		/// <summary>
 		/// The pigment used for the main area of a control when it is selected.
 		/// </summary>
 		ViewSelected
-
 	};
 
 	/// <summary>
@@ -106,21 +116,17 @@ namespace Ogui.UI
 	/// This class is used to pass a collection of alternative pigments to a widget in the
 	/// template.
 	/// </summary>
-	public class PigmentAlternatives : Dictionary<PigmentType, Pigment>
-	{
+	public class PigmentAlternatives : Dictionary<PigmentType, Pigment> {
 		/// <summary>
 		/// Performs a copy of this instance.  Since the Pigment class is
 		/// immutable, this is conceptually a deep copy.
 		/// </summary>
 		/// <returns></returns>
-		public PigmentAlternatives Copy()
-		{
+		public PigmentAlternatives Copy() {
 			PigmentAlternatives ret = new PigmentAlternatives();
 
 			foreach (var itm in this)
-			{
 				ret.Add(itm.Key, itm.Value);
-			}
 
 			return ret;
 		}
@@ -130,16 +136,13 @@ namespace Ogui.UI
 	/// Simply wraps an AlternativeMap object for code cleanliness.
 	/// This class is used to store the pigments for a UI object.
 	/// </summary>
-	public class PigmentMap : AlternativeMap<PigmentType, Pigment>
-	{
+	public class PigmentMap : AlternativeMap<PigmentType, Pigment> {
 		/// <summary>
 		/// Construct a PigmentMap instance given the defaults.
 		/// </summary>
 		/// <param name="defaults"></param>
 		public PigmentMap(IStaticDictionary<PigmentType, Pigment> defaults)
-			: base(defaults)
-		{
-		}
+				: base(defaults) {}
 
 		/// <summary>
 		/// Construct a PigmentMap instance given the defaults and a
@@ -148,9 +151,7 @@ namespace Ogui.UI
 		/// <param name="defaults"></param>
 		/// <param name="alternatives"></param>
 		public PigmentMap(IStaticDictionary<PigmentType, Pigment> defaults,
-			Dictionary<PigmentType, Pigment> alternatives)
-			: base(defaults, alternatives)
-		{
-		}
+		                  Dictionary<PigmentType, Pigment> alternatives)
+				: base(defaults, alternatives) {}
 	}
 }

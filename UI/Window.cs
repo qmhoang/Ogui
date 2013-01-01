@@ -4,21 +4,20 @@ using DEngine.Core;
 using System.Collections.ObjectModel;
 using Ogui.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region Window Template Class
+
 	/// <summary>
 	/// When subclassing a type of Window, consider
 	/// also subclassing WindowTemplate to provide an interface for the client to specify
 	/// options.
 	/// </summary>
-	public class WindowTemplate : WidgetTemplate
-	{
+	public class WindowTemplate : WidgetTemplate {
 		/// <summary>
 		/// Default constructor initializes properties to their defaults.
 		/// </summary>
-		public WindowTemplate()
-		{
+		public WindowTemplate() {
 			HasFrame = false;
 
 			TooltipFGAlpha = 1.0f;
@@ -61,12 +60,12 @@ namespace Ogui.UI
 		/// Returns the screen size.
 		/// </summary>
 		/// <returns></returns>
-		public override Size CalculateSize()
-		{
+		public override Size CalculateSize() {
 //            return Application.ScreenSize;
 			return Size;
 		}
 	}
+
 	#endregion
 
 	public enum WindowState {
@@ -76,6 +75,7 @@ namespace Ogui.UI
 	}
 
 	#region Window Class
+
 	/// <summary>
 	/// A Window acts as both a drawing region and a container for controls.  A Window is always
 	/// the <strike>size of the screen , and the application has exactly one Window active at a time.</strike>  
@@ -83,19 +83,17 @@ namespace Ogui.UI
 	/// Since Window derives from Widget, providing custom drawing code can be accomplished by overriding
 	/// Redraw().  The Window handles all message dispatch to children automatically.
 	/// </summary>
-	public class Window : Widget
-	{
+	public class Window : Widget {
 		protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		#region Constructors
-		
+
 		/// <summary>
 		/// Construct a Window instance from the given template.
 		/// </summary>
 		/// <param name="template"></param>
 		public Window(WindowTemplate template)
-			:base(template)
-		{
+				: base(template) {
 			this.controlList = new List<Control>();
 			this.managerList = new List<Manager>();
 
@@ -108,10 +106,11 @@ namespace Ogui.UI
 
 			Input = new InputManager(this);
 		}
-		
+
 		#endregion
+
 		#region Public Properties
-		
+
 		/// <summary>
 		/// The parent Application instance.
 		/// </summary>
@@ -141,17 +140,15 @@ namespace Ogui.UI
 		/// </summary>
 		public bool IsPopup { get; protected set; }
 
-		public WindowState WindowState { get; protected set; }        
+		public WindowState WindowState { get; protected set; }
 
-		public InputManager Input { get; protected set; }        
+		public InputManager Input { get; protected set; }
 
 		/// <summary>
 		/// Checks whether this screen is active and can respond to user input.
 		/// </summary>
 		public bool IsActive {
-			get {
-				return WindowState == WindowState.Active;
-			}
+			get { return WindowState == WindowState.Active; }
 		}
 
 		/// <summary>
@@ -165,6 +162,7 @@ namespace Ogui.UI
 		public event EventHandler<EventArgs<Component>> RemovedComponent;
 
 		#endregion
+
 		#region Public Methods
 
 		/// <summary>
@@ -174,22 +172,17 @@ namespace Ogui.UI
 		/// <param name="manager"></param>
 		/// <exception cref="System.ArgumentException">Thrown when the specified
 		/// <paramref name="manager"/> instance is already contained by this window.</exception>
-		public void AddManager(Manager manager)
-		{
+		public void AddManager(Manager manager) {
 			if (managerList.Contains(manager) || managerAddList.Contains(manager))
-			{
 				throw new ArgumentException("Added manager instances must be unique.");
-			}
 
 			managerAddList.Add(manager);
 			manager.ParentWindow = this;
 
 			if (!manager.isSetup)
-			{
 				manager.OnSettingUp();
-			}
 
-			manager.OnAdded();            
+			manager.OnAdded();
 			OnAdded(new EventArgs<Component>(manager));
 		}
 
@@ -198,12 +191,9 @@ namespace Ogui.UI
 		/// reference-unique, or this method will throw an ArgumentException.
 		/// </summary>
 		/// <param name="managers"></param>
-		public void AddManagers(params Manager[] managers)
-		{
+		public void AddManagers(params Manager[] managers) {
 			foreach (Manager m in managers)
-			{
 				AddManager(m);
-			}
 		}
 
 		/// <summary>
@@ -213,25 +203,18 @@ namespace Ogui.UI
 		/// <param name="manager"></param>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="manager"/> is
 		/// null.</exception>
-		public void RemoveManager(Manager manager)
-		{
+		public void RemoveManager(Manager manager) {
 			if (manager == null)
-			{
 				throw new ArgumentNullException("manager");
-			}
 
 //            manager.ParentWindow = null;
 
-			if(managerList.Contains(manager))
-			{
+			if (managerList.Contains(manager))
 				managerRemoveList.Add(manager);
-			}
 
 			// make sure to remove any managers waiting to be added
-			if(managerAddList.Contains(manager))
-			{
+			if (managerAddList.Contains(manager))
 				managerAddList.Remove(manager);
-			}
 
 			manager.OnRemoved();
 			OnRemoved(new EventArgs<Component>(manager));
@@ -248,94 +231,71 @@ namespace Ogui.UI
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentException">Thrown when the specified <paramref name="control"/>
 		/// is already contained by this window.</exception>
-		public bool AddControl(Control control)
-		{
+		public bool AddControl(Control control) {
 			if (ContainsControl(control) || controlAddList.Contains(control))
-			{
 				throw new ArgumentException("CurrentWindow already contians an instance of this control");
-			}
 
 			this.controlAddList.Add(control);
 			control.ParentWindow = this;
 			bool atRequestedPos = CheckNewlyAddedControlPosition(control);
 
 			if (!atRequestedPos)
-			{
 				if (!ScreenRect.Contains(control.ScreenRect.TopLeft) ||
-					!ScreenRect.Contains(control.ScreenRect.BottomRight))
-				{
+				    !ScreenRect.Contains(control.ScreenRect.BottomRight))
 					throw new ArgumentException("The specified control is too large to fit on the screen.");
-				}
-			}
 
 			CheckNewlyAddedControlMessages(control);
 
-			control.Pigments = new PigmentMap(Pigments, 
-				control.PigmentOverrides);
-			
+			control.Pigments = new PigmentMap(Pigments,
+			                                  control.PigmentOverrides);
+
 			if (!control.isSetup)
-			{
 				control.OnSettingUp();
-			}
 
 			control.OnAdded();
 			OnAdded(new EventArgs<Component>(control));
 
 			return atRequestedPos;
 		}
-		
 
-		
+
 		/// <summary>
 		/// Adds several controls to the window.  See AddControl() method.
 		/// </summary>
 		/// <param name="controls"></param>
-		public void AddControls(params Control[] controls)
-		{
+		public void AddControls(params Control[] controls) {
 			foreach (Control c in controls)
-			{
 				AddControl(c);
-			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Remove the provided control from the window.
 		/// </summary>
 		/// <param name="control"></param>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="control"/>
 		/// is null.</exception>
-		public void RemoveControl(Control control)
-		{
+		public void RemoveControl(Control control) {
 			if (control == null)
-			{
 				throw new ArgumentNullException("control");
-			}
 
 			if (controlList.Contains(control))
-			{
 				controlRemoveList.Add(control);
-			}
 
 			if (controlAddList.Contains(control))
-			{
 				controlAddList.Remove(control);
-			}
 
 			control.OnRemoved();
 			OnRemoved(new EventArgs<Component>(control));
 		}
-		
 
-		
+
 		/// <summary>
 		/// Returns true if Window currently contains the specified control.
 		/// </summary>
 		/// <param name="control"></param>
 		/// <returns></returns>
-		public bool ContainsControl(Control control)
-		{
+		public bool ContainsControl(Control control) {
 			return ControlList.Contains(control);
 		}
 
@@ -348,7 +308,7 @@ namespace Ogui.UI
 			return managerList.Contains(manager);
 		}
 
-		
+
 		/// <summary>
 		/// Moves the specified control to the top of the draw order.  Controls on top
 		/// are drawn over lower controls.
@@ -356,22 +316,17 @@ namespace Ogui.UI
 		/// <param name="control"></param>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="control"/>
 		/// is null.</exception>
-		public void MoveToTop(Control control)
-		{
+		public void MoveToTop(Control control) {
 			if (control == null)
-			{
 				throw new ArgumentNullException("control");
-			}
 
-			if(ContainsControl(control))
-			{
+			if (ContainsControl(control)) {
 				controlList.Remove(control);
 				controlList.Add(control);
 			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Moves specified control to the bottom of the draw order.  Controls on bottom
 		/// are drawn first (covered up by higher controls).
@@ -379,71 +334,56 @@ namespace Ogui.UI
 		/// <param name="control"></param>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="control"/>
 		/// is null.</exception>
-		public void MoveToBottom(Control control)
-		{
+		public void MoveToBottom(Control control) {
 			if (control == null)
-			{
 				throw new ArgumentNullException("control");
-			}
 
-			if(ContainsControl(control))
-			{
+			if (ContainsControl(control)) {
 				controlList.Remove(control);
 				controlList.Insert(0, control);
 			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Release the keyboard focus from the provided control.  The control will receive
 		/// a ReleaseKB message (and raise the related RelaseKeyboardEvent)
 		/// </summary>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="control"/>
 		/// is null.</exception>
-		public void ReleaseKeyboard(Control control)
-		{
+		public void ReleaseKeyboard(Control control) {
 			if (control == null)
-			{
 				throw new ArgumentNullException("control");
-			}
 
-			if (control == CurrentKeyboardFocus)
-			{
+			if (control == CurrentKeyboardFocus) {
 				control.OnReleaseKeyboardFocus();
 				CurrentKeyboardFocus = null;
 			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Forces the keyboard focus to the given control, sending a TakeKeyboardFocus
 		/// message to the specified control.  If a control currently has the
 		/// keyboard focus, that control will receive a ReleaseKeyboardFocus message.
 		/// </summary>
-		public void TakeKeyboard(Control control)
-		{
+		public void TakeKeyboard(Control control) {
 			if (control == null)
-			{
 				throw new ArgumentNullException("control");
-			}
 
-			if (control != CurrentKeyboardFocus)
-			{
+			if (control != CurrentKeyboardFocus) {
 				control.OnTakeKeyboardFocus();
 				if (CurrentKeyboardFocus != null)
-				{
 					CurrentKeyboardFocus.OnReleaseKeyboardFocus();
-				}
 
 				CurrentKeyboardFocus = control;
 			}
 		}
 
-		
 		#endregion
+
 		#region Protected Properties
+
 		protected void OnAdded(EventArgs<Component> e) {
 			EventHandler<EventArgs<Component>> handler = AddedComponent;
 			if (handler != null)
@@ -459,12 +399,8 @@ namespace Ogui.UI
 		/// <summary>
 		/// The list of controls currently added to the Window.
 		/// </summary>
-		protected ReadOnlyCollection<Control> ControlList
-		{
-			get
-			{
-				return new ReadOnlyCollection<Control>(controlList);
-			}
+		protected ReadOnlyCollection<Control> ControlList {
+			get { return new ReadOnlyCollection<Control>(controlList); }
 		}
 
 
@@ -489,32 +425,29 @@ namespace Ogui.UI
 		/// </summary>
 		protected Control CurrentDragging { get; private set; }
 
-		
 		#endregion
+
 		#region Protected Methods
 
 		/// <summary>
 		/// Quit current window, removing it from the application's window stack
 		/// </summary>
-		protected void ExitWindow() {            
+		protected void ExitWindow() {
 			WindowState = WindowState.Quitting;
 		}
-		
+
 		/// <summary>
 		/// Returns the topmost control at the given position, or null
 		/// for none
 		/// </summary>
 		/// <param name="screenPos"></param>
 		/// <returns></returns>
-		protected Control GetTopControlAt(Point screenPos)
-		{
+		protected Control GetTopControlAt(Point screenPos) {
 			Control retControl = null;
 
-			for(int i = ControlList.Count-1;i>=0;i--)
-			{
+			for (int i = ControlList.Count - 1; i >= 0; i--) {
 				Control c = ControlList[i];
-				if (c.ScreenRect.Contains(screenPos) && c.IsActive)
-				{
+				if (c.ScreenRect.Contains(screenPos) && c.IsActive) {
 					retControl = c;
 					break;
 					// stop searching when topmost control found
@@ -523,9 +456,8 @@ namespace Ogui.UI
 
 			return retControl;
 		}
-		
 
-		
+
 		/// <summary>
 		/// Request that this Window display a tooltip with the specified text near the
 		/// specified position in screen space.  If the specified <paramref name="text"/>
@@ -538,33 +470,26 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="text"></param>
 		/// <param name="sPos"></param>
-		protected internal void ShowTooltip(string text, Point sPos)
-		{
+		protected internal void ShowTooltip(string text, Point sPos) {
 			if (!string.IsNullOrEmpty(text))
-			{
 				CurrentTooltip = new Tooltip(text, sPos, this);
-			}
 		}
-		
+
 		/// <summary>
 		/// Base method prints the frame if applicable.  Override to add custom drawing code.
 		/// </summary>
-		protected override void Redraw()
-		{
+		protected override void Redraw() {
 			base.Redraw();
 
 			if (HasFrame)
-			{
 				Canvas.PrintFrame("", DetermineFramePigment());
-			}
 		}
 
 		/// <summary>
 		/// Returns the Pigment for the main window area.
 		/// </summary>
 		/// <returns></returns>
-		protected override Pigment DetermineMainPigment()
-		{
+		protected override Pigment DetermineMainPigment() {
 			return Pigments[PigmentType.Window];
 		}
 
@@ -572,41 +497,34 @@ namespace Ogui.UI
 		/// Returns the Pigment for the window frame.
 		/// </summary>
 		/// <returns></returns>
-		protected override Pigment DetermineFramePigment()
-		{
+		protected override Pigment DetermineFramePigment() {
 			return Pigments[PigmentType.FrameNormal];
 		}
+
 		#endregion
+
 		#region Message Handlers
-		
+
 		/// <summary>
 		/// Base method draws each of the controls, and the tooltip if applicable.
 		/// </summary>
-		protected internal override void OnDraw()
-		{
+		protected internal override void OnDraw() {
 			base.OnDraw();
-			
+
 			// propagate Draw message to all children
 			foreach (Control c in ControlList)
-			{
 				c.OnDraw();
-			}
 
 			if (CurrentTooltip != null)
-			{
 				CurrentTooltip.DrawToScreen();
-			}
-			
 		}
-		
 
-		
+
 		/// <summary>
 		/// Base method sends tick message to controls and managers.  Override to add
 		/// custom handling.
 		/// </summary>
-		internal protected override void Update()
-		{
+		protected internal override void Update() {
 			base.Update();
 
 			AddManagersFromList();
@@ -616,216 +534,159 @@ namespace Ogui.UI
 			RemoveControlsFromList();
 
 			foreach (Manager m in managerList)
-			{
 				m.Update();
-			}
 
 			foreach (Control c in ControlList)
-			{
 				c.Update();
-			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnQuitting()
-		{
+		protected internal override void OnQuitting() {
 			base.OnQuitting();
 
 			foreach (Manager m in managerList)
-			{
 				m.OnQuitting();
-			}
 
 			foreach (Control c in ControlList)
-			{
 				c.OnQuitting();
-			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnKeyPressed(KeyboardData keyData)
-		{
+		protected internal override void OnKeyPressed(KeyboardData keyData) {
 			base.OnKeyPressed(keyData);
-			
+
 			foreach (Manager m in managerList)
-			{
 				m.OnKeyPressed(keyData);
-			}
 
 			if (CurrentKeyboardFocus != null)
-			{
 				CurrentKeyboardFocus.OnKeyPressed(keyData);
-			}
 		}
-		
+
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
-		protected internal override void OnKeyReleased(KeyboardData keyData)
-		{
+		protected internal override void OnKeyReleased(KeyboardData keyData) {
 			base.OnKeyReleased(keyData);
 
 			foreach (Manager m in managerList)
-			{
 				m.OnKeyReleased(keyData);
-			}
 
 			if (CurrentKeyboardFocus != null)
-			{
 				CurrentKeyboardFocus.OnKeyReleased(keyData);
-			}
 		}
 
-		
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnMouseButtonDown(MouseData mouseData)
-		{
+		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
 			foreach (Manager m in managerList)
-			{
 				m.OnMouseButtonDown(mouseData);
-			}
 
 			// If applicable, forward MouseDown and Select to child control
-			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive)
-			{
+			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive) {
 				CurrentUnderMouse.OnMouseButtonDown(mouseData);
 
 				LastLBDown = CurrentUnderMouse;
 			}
-			
+
 			// Check to see if a control looses KBFocus if user hit any mouse button outside current focused control
 			if (CurrentKeyboardFocus != null)
-			{
-				if (CurrentKeyboardFocus != CurrentUnderMouse)
-				{
+				if (CurrentKeyboardFocus != CurrentUnderMouse) {
 					CurrentKeyboardFocus.OnReleaseKeyboardFocus();
 					CurrentKeyboardFocus = null;
 				}
-			}
-			
+
 			// Give KBFocus to child on left button down, if applicable
-			if (CurrentUnderMouse != null && 
-				CurrentUnderMouse.CanHaveKeyboardFocus && 
-				CurrentUnderMouse.HasKeyboardFocus == false &&
-				mouseData.MouseButton == MouseButton.LeftButton &&
-				CurrentUnderMouse.IsActive)
-			{
+			if (CurrentUnderMouse != null &&
+			    CurrentUnderMouse.CanHaveKeyboardFocus &&
+			    CurrentUnderMouse.HasKeyboardFocus == false &&
+			    mouseData.MouseButton == MouseButton.LeftButton &&
+			    CurrentUnderMouse.IsActive) {
 				CurrentKeyboardFocus = CurrentUnderMouse;
-				
+
 				CurrentKeyboardFocus.OnTakeKeyboardFocus();
 			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnMouseButtonUp(MouseData mouseData)
-		{
+		protected internal override void OnMouseButtonUp(MouseData mouseData) {
 			base.OnMouseButtonUp(mouseData);
 
 			foreach (Manager m in managerList)
-			{
 				m.OnMouseButtonUp(mouseData);
-			}
 
 			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive)
-			{
 				CurrentUnderMouse.OnMouseButtonUp(mouseData);
-			}
 
 			LastLBDown = null;
 		}
-		
 
-		
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnMouseMoved(MouseData mouseData)
-		{
+		protected internal override void OnMouseMoved(MouseData mouseData) {
 			base.OnMouseMoved(mouseData);
 
 			foreach (Manager m in managerList)
-			{
 				m.OnMouseMoved(mouseData);
-			}
 
 			Control checkUnderMouse = GetTopControlAt(mouseData.Position);
-			
-			if (checkUnderMouse != CurrentUnderMouse)
-			{
+
+			if (checkUnderMouse != CurrentUnderMouse) {
 				// check for Leave and Enter actions
 
 				if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive)
-				{
 					CurrentUnderMouse.OnMouseLeave();
-				}
-				
+
 				if (checkUnderMouse != null && checkUnderMouse.IsActive)
-				{
 					checkUnderMouse.OnMouseEnter();
-				}
-				
+
 				CurrentUnderMouse = checkUnderMouse;
 			}
-			
-			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive)
-			{
-				CurrentUnderMouse.OnMouseMoved(mouseData);
-			}
-		
-		}
-		
 
-		
+			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive)
+				CurrentUnderMouse.OnMouseMoved(mouseData);
+		}
+
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnMouseHoverBegin(MouseData mouseData)
-		{
+		protected internal override void OnMouseHoverBegin(MouseData mouseData) {
 			base.OnMouseHoverBegin(mouseData);
 
 			foreach (Manager m in managerList)
-			{
 				m.OnMouseHoverBegin(mouseData);
-			}
 
 			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive)
-			{
 				CurrentUnderMouse.OnMouseHoverBegin(mouseData);
-
-			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnMouseHoverEnd(MouseData mouseData)
-		{
-			if (CurrentTooltip != null)
-			{
+		protected internal override void OnMouseHoverEnd(MouseData mouseData) {
+			if (CurrentTooltip != null) {
 				CurrentTooltip.Dispose();
 				CurrentTooltip = null;
 			}
@@ -833,57 +694,43 @@ namespace Ogui.UI
 			base.OnMouseHoverEnd(mouseData);
 
 			foreach (Manager m in managerList)
-			{
 				m.OnMouseHoverEnd(mouseData);
-			}
 
 			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive)
-			{
 				CurrentUnderMouse.OnMouseHoverEnd(mouseData);
-			}
 		}
-		
 
-		
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnMouseDragBegin(Point sPosOrigin)
-		{
+		protected internal override void OnMouseDragBegin(Point sPosOrigin) {
 			base.OnMouseDragBegin(sPosOrigin);
 
 			foreach (Manager m in managerList)
-			{
 				m.OnMouseDragBegin(sPosOrigin);
-			}
 
-			if (LastLBDown != null && LastLBDown.IsActive)
-			{
+			if (LastLBDown != null && LastLBDown.IsActive) {
 				CurrentDragging = LastLBDown;
 				LastLBDown.OnMouseDragBegin(sPosOrigin);
 			}
-			
+
 			// TODO handle drag/drop operation
 		}
-		
 
-		
+
 		/// <summary>
 		/// Base method propagates messages to children controls and managers.  Override to
 		/// add custom handling.
 		/// </summary>
-		internal protected override void OnMouseDragEnd(Point sPos)
-		{
+		protected internal override void OnMouseDragEnd(Point sPos) {
 			base.OnMouseDragEnd(sPos);
 
 			foreach (Manager m in managerList)
-			{
 				m.OnMouseDragEnd(sPos);
-			}
 
-			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive)
-			{
+			if (CurrentUnderMouse != null && CurrentUnderMouse.IsActive) {
 				CurrentDragging = null;
 				CurrentUnderMouse.OnMouseDragEnd(sPos);
 			}
@@ -896,14 +743,14 @@ namespace Ogui.UI
 		/// it's pigments from the parent application.
 		/// Override to add specific setup code.
 		/// </summary>
-		protected internal override void OnSettingUp()
-		{
-			base.OnSettingUp();                        
+		protected internal override void OnSettingUp() {
+			base.OnSettingUp();
 		}
-		
+
 		#endregion
+
 		#region Internal
-		
+
 		internal Tooltip CurrentTooltip { get; set; }
 
 		private List<Manager> managerAddList = new List<Manager>();
@@ -913,10 +760,9 @@ namespace Ogui.UI
 		private List<Control> controlRemoveList = new List<Control>();
 
 		private List<Control> controlList;
-		private List<Manager> managerList;        
+		private List<Manager> managerList;
 
-		internal Point AutoPosition(Point nearPos, Size sizeOfControl)
-		{
+		internal Point AutoPosition(Point nearPos, Size sizeOfControl) {
 			Rect conRect = new Rect(nearPos, sizeOfControl);
 			int dx = 0;
 			int dy = 0;
@@ -940,96 +786,80 @@ namespace Ogui.UI
 			return new Point(finalX, finalY);
 		}
 
-		private void CheckNewlyAddedControlMessages(Control control)
-		{
-			if (control.ScreenRect.Contains(CurrentMousePos))
-			{
+		private void CheckNewlyAddedControlMessages(Control control) {
+			if (control.ScreenRect.Contains(CurrentMousePos)) {
 				control.OnMouseEnter();
 				CurrentUnderMouse = control;
 			}
 		}
 
-		private bool CheckNewlyAddedControlPosition(Control control)
-		{
+		private bool CheckNewlyAddedControlPosition(Control control) {
 			Point newPos = AutoPosition(control.ActualScreenPosition,
-				control.Size);
+			                            control.Size);
 
 			if (newPos == control.ActualScreenPosition)
-			{
 				return true;
-			}
 			control.ActualScreenPosition = newPos;
 			return false;
 		}
 
-		private void AddControlsFromList()
-		{
+		private void AddControlsFromList() {
 			if (controlAddList.Count == 0)
 				return;
 
 			foreach (Control control in controlAddList)
-			{
 				controlList.Add(control);
-			}
 
 			controlAddList.Clear();
 		}
 
-		private void RemoveControlsFromList()
-		{
+		private void RemoveControlsFromList() {
 			if (controlRemoveList.Count == 0)
 				return;
 
 			foreach (Control control in controlRemoveList)
-			{
 				controlList.Remove(control);
-			}
 			controlRemoveList.Clear();
 		}
 
-		private void AddManagersFromList()
-		{
+		private void AddManagersFromList() {
 			if (managerAddList.Count == 0)
 				return;
 
 			foreach (Manager manager in managerAddList)
-			{
 				managerList.Add(manager);
-			}
 
 			managerAddList.Clear();
 		}
 
-		private void RemoveManagersFromList()
-		{
+		private void RemoveManagersFromList() {
 			if (managerRemoveList.Count == 0)
 				return;
 
 			foreach (Manager manager in managerRemoveList)
-			{
-				managerList.Remove(manager);                
-			}
+				managerList.Remove(manager);
 
 			managerRemoveList.Clear();
 		}
+
 		#endregion
+
 		#region Dispose
+
 		/// <summary>
 		/// Override to add custom disposing code.
 		/// </summary>
 		/// <param name="isDisposing"></param>
-		protected override void Dispose(bool isDisposing)
-		{
+		protected override void Dispose(bool isDisposing) {
 			base.Dispose(isDisposing);
 
 			if (isDisposing)
-			{
 				if (CurrentTooltip != null)
 					CurrentTooltip.Dispose();
-			}
 		}
+
 		#endregion
 	}
+
 	#endregion
 }
-

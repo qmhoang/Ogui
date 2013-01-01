@@ -22,32 +22,35 @@
 using System;
 using DEngine.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region Public Enums
-	
+
 	/// <summary>
 	/// Types of characters for use in entry validation.
 	/// </summary>
 	[Flags]
-	public enum TextEntryValidations
-	{
+	public enum TextEntryValidations {
 		/// <summary>
 		/// Allow all printable characters (but no control codes)
 		/// </summary>
 		All = 15,
+
 		/// <summary>
 		/// Allow only letters, uppercase or lowercase, and spaces
 		/// </summary>
 		Letters = 1,
+
 		/// <summary>
 		/// Allow only the digits 0 through 9
 		/// </summary>
 		Numbers = 2,
+
 		/// <summary>
 		/// Allow plus, minus and decimal point signs along with numbers.
 		/// </summary>
 		Decimal = 4,
+
 		/// <summary>
 		/// Allow all printable symbols that are not numbers or letters.  Setting this
 		/// flag will effectively override the Decimal flag validation of the plus, minus
@@ -55,30 +58,27 @@ namespace Ogui.UI
 		/// </summary>
 		Symbols = 8
 	}
-	
+
 	#endregion
 
-
 	#region TextEntryTemplate
+
 	/// <summary>
 	/// Simple data structure for passing to textentry's constructor.  This allows
 	/// re-using the same setup parameters, for example, on multiple textentries.
 	/// Also allows use of named initializers.
 	/// </summary>
-	public class TextEntryTemplate : EntryTemplate
-	{
-		
+	public class TextEntryTemplate : EntryTemplate {
 		/// <summary>
 		/// Default constructor initializes properties to their defaults.
 		/// </summary>
-		public TextEntryTemplate()
-		{
+		public TextEntryTemplate() {
 			MaximumCharacters = 1;
 			Validation = TextEntryValidations.All;
 
 			StartingField = "";
 		}
-		
+
 
 		/// <summary>
 		/// Maximum number of accepted characters.  Defaults to 1.
@@ -95,21 +95,16 @@ namespace Ogui.UI
 		/// </summary>
 		public string StartingField { get; set; }
 
-		
 
-		
 		/// <summary>
 		/// Calculates the size of a TextEntry created with this template based on the other
 		/// properties.
 		/// </summary>
 		/// <returns></returns>
-		public override Size CalculateSize()
-		{
+		public override Size CalculateSize() {
 			if (AutoSizeOverride.Height > 0 &&
-				AutoSizeOverride.Width >= MaximumCharacters)
-			{
+			    AutoSizeOverride.Width >= MaximumCharacters)
 				return AutoSizeOverride;
-			}
 
 			if (Label == null)
 				Label = "";
@@ -119,9 +114,7 @@ namespace Ogui.UI
 			int frameSize = 0;
 
 			if (HasFrameBorder)
-			{
 				frameSize = 2;
-			}
 
 			return new Size(len + MaximumCharacters + 1 + frameSize, 1 + frameSize);
 		}
@@ -130,16 +123,15 @@ namespace Ogui.UI
 		/// Returns this.MaximumCharacters.
 		/// </summary>
 		/// <returns></returns>
-		public override int CalculateMaxCharacters()
-		{
+		public override int CalculateMaxCharacters() {
 			return this.MaximumCharacters;
 		}
-		
 	}
+
 	#endregion
 
-
 	#region TextEntry Class
+
 	/// <summary>
 	/// A text entry accepts general text input from the user.  The input can be validated by 
 	/// the maximum number of characters
@@ -148,49 +140,46 @@ namespace Ogui.UI
 	/// Hitting the escape key or otherwise loosing the keyboard focus (by default) before hitting 
 	/// enter cancels the current text from being committed.
 	/// </summary>
-	public class TextEntry : Entry
-	{
+	public class TextEntry : Entry {
 		#region Constructors
-		
+
 		/// <summary>
 		/// Construct a TextEntry instance from the given template.
 		/// </summary>
 		/// <param name="template"></param>
 		public TextEntry(TextEntryTemplate template)
-			:base(template)
-		{
+				: base(template) {
 			this.Validation = template.Validation;
 			TrySetField(template.StartingField);
 		}
-		
+
 		#endregion
+
 		#region Public Properties
-		
+
 		/// <summary>
 		/// Get or set the character validation type for this control.  If a typed character is
 		/// not valid according to this property, then it will be ignored (not added to the 
 		/// entry field).
 		/// </summary>
 		public TextEntryValidations Validation { get; set; }
-		
+
 		#endregion
+
 		#region Protected Properties
+
 		/// <summary>
 		/// Returns the default field of this entry if there is no valid previous or current field
 		/// Base method returns the empty string "".
 		/// </summary>
-		protected override string DefaultField
-		{
-			get
-			{
-				return "";
-			}
+		protected override string DefaultField {
+			get { return ""; }
 		}
 
-		
 		#endregion
+
 		#region Protected Methods
-		
+
 		/// <summary>
 		/// Returns true if the entry field is valid when a commit is about to occur.  For a
 		/// TextEntry, all text is validated by character, so this method always returns true.
@@ -198,8 +187,7 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="entry"></param>
 		/// <returns></returns>
-		protected override bool ValidateField(string entry)
-		{
+		protected override bool ValidateField(string entry) {
 			return true;
 		}
 
@@ -211,54 +199,32 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="character"></param>
 		/// <returns></returns>
-		protected override bool ValidateCharacter(char character)
-		{
+		protected override bool ValidateCharacter(char character) {
 			bool valid = false;
 
-			if(Validation.HasFlag(TextEntryValidations.Numbers) ||
-				Validation.HasFlag(TextEntryValidations.Decimal))
-			{
+			if (Validation.HasFlag(TextEntryValidations.Numbers) ||
+			    Validation.HasFlag(TextEntryValidations.Decimal))
 				if (char.IsNumber(character))
-				{
 					valid = true;
-				}
-			}
 
 			if (Validation.HasFlag(TextEntryValidations.Letters))
-			{
-				if(char.IsLetter(character) ||
-					character == ' ')
-				{
+				if (char.IsLetter(character) ||
+				    character == ' ')
 					valid = true;
-				}
-			}
 
 			if (Validation.HasFlag(TextEntryValidations.Decimal))
-			{
 				if (character == '+' || character == '-' || character == '.')
-				{
 					valid = true;
-				}
-			}
 
 			if (Validation.HasFlag(TextEntryValidations.Symbols))
-			{
-				if("`~!@#$%|^&*()_+-={};:'\",<.>/?".Contains(character.ToString()))
-				{
+				if ("`~!@#$%|^&*()_+-={};:'\",<.>/?".Contains(character.ToString()))
 					valid = true;
-				}
-			}
 
 			return valid;
 		}
-		
 
-		
 		#endregion
 
 		#endregion
 	}
-
-
-
 }

@@ -4,20 +4,18 @@ using System.Collections.Generic;
 using DEngine.Core;
 using libtcod;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
+
 	#region ApplicationInfo
+
 	/// <summary>
 	/// This class holds the application options passed to Application.Start().
 	/// </summary>
-	public class ApplicationInfo
-	{
-		
+	public class ApplicationInfo {
 		/// <summary>
 		/// Default constructor, sets data to defaults
 		/// </summary>
-		public ApplicationInfo()
-		{
+		public ApplicationInfo() {
 			Fullscreen = false;
 			ScreenSize = new Size(80, 60);
 			Title = "";
@@ -28,7 +26,7 @@ namespace Ogui.UI
 			InitialDelay = 100;
 			IntervalDelay = 75;
 		}
-		
+
 		/// <summary>
 		/// True if fulscreen.  Defaults to false
 		/// </summary>
@@ -60,7 +58,7 @@ namespace Ogui.UI
 		/// and all child widgets.  Use this to set application-wide pigments.
 		/// </summary>
 		public PigmentAlternatives Pigments { get; set; }
-		
+
 		/// <summary>
 		/// Limits the framerate per limit, defaults to 60
 		/// </summary>
@@ -69,12 +67,12 @@ namespace Ogui.UI
 		public int InitialDelay { get; set; }
 
 		public int IntervalDelay { get; set; }
-
 	}
+
 	#endregion
 
-
 	#region Application Class
+
 	/// <summary>
 	/// Represents the entire application, and controls top-level logic and state.  The Application
 	/// contains <strike>a Window</strike> a stack which maintains several windows (which is a container 
@@ -85,12 +83,11 @@ namespace Ogui.UI
 	/// overriding OnSetup.  Call Application.Start to initialize and start the application loop, which will
 	/// continue until IsQuitting is set to true.</remarks>
 	/// </summary>
-	public class Application : IDisposable
-	{
+	public class Application : IDisposable {
 		private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		#region Events
-		
+
 		/// <summary>
 		/// Raised when the application is setting up.  This is raised after TCODInitRoot() has
 		/// been called, so place any intitialization code dependant on libtcod being initialized here.
@@ -106,22 +103,23 @@ namespace Ogui.UI
 		/// logic updating in an overriden Update method, or within a custom Window class.
 		/// </summary>
 		public event EventHandler UpdateEventHandler;
-		
+
 		#endregion
+
 		#region Constructors
-		
+
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public Application()
-		{
+		public Application() {
 			IsQuitting = false;
 			windowStack = new List<Window>();
 		}
-		
+
 		#endregion
+
 		#region Public Properties
-		
+
 		/// <summary>
 		/// True if the application wants to quit.  Set to true to quit.
 		/// </summary>
@@ -132,69 +130,60 @@ namespace Ogui.UI
 		/// changes to pigments.
 		/// </summary>
 		public PigmentMap Pigments { get; protected set; }
-		
+
 		#endregion
+
 		#region Public Methods
-		
+
 		/// <summary>
 		/// Initializes libtcod and starts the application's main loop.  This will loop 
 		/// until IsQuitting is set to true or the main system window is closed.
 		/// </summary>
 		/// <param name="setupInfo">An ApplicationInfo object containing the options specific
 		/// to this application</param>
-		public void Start(ApplicationInfo setupInfo)
-		{
-			Setup(setupInfo);            
+		public void Start(ApplicationInfo setupInfo) {
+			Setup(setupInfo);
 
 			Run();
 
 			while (windowStack.Count > 0) {
 				windowStack.ForEach(w =>
-										{
-											w.OnQuitting();
-											w.Dispose();
-										});
+				                    {
+				                    	w.OnQuitting();
+				                    	w.Dispose();
+				                    });
 
 				windowStack.Clear();
 			}
 		}
-		
-		
-		
+
+
 		/// <summary>
 		/// Gets the size of TCODConsole.root, which is the size of the screen (or system window)
 		/// in cells.
 		/// </summary>
-		public static Size ScreenSize
-		{
-			get
-			{
-				return new Size(TCODConsole.root.getWidth(), TCODConsole.root.getHeight());
-			}
+		public static Size ScreenSize {
+			get { return new Size(TCODConsole.root.getWidth(), TCODConsole.root.getHeight()); }
 		}
-		
 
-		
+
 		/// <summary>
 		/// Gets a Rect representing the screen (or the system window).  The UpperLeft position
 		/// will always be the origin (0,0).
 		/// </summary>
-		public static Rect ScreenRect
-		{
-			get
-			{
-				return new Rect(Point.Origin, ScreenSize);
-			}
+		public static Rect ScreenRect {
+			get { return new Rect(Point.Origin, ScreenSize); }
 		}
-		
 
-		
+
 		/// <summary>
 		/// Get the Application's current window.
 		/// </summary>
-		public Window CurrentWindow { get { return windowStack[windowStack.Count - 1]; } }
+		public Window CurrentWindow {
+			get { return windowStack[windowStack.Count - 1]; }
+		}
 
-		
+
 		private readonly List<Window> windowStack;
 
 		/// <summary>
@@ -206,21 +195,20 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="win"></param>
 		public void Push(Window win) {
-			Logger.InfoFormat("Pushing window {0}", win.GetType());            
-			if (win == null) {
+			Logger.InfoFormat("Pushing window {0}", win.GetType());
+			if (win == null)
 				throw new ArgumentNullException("win");
-			} if (windowStack.Contains(win))
+			if (windowStack.Contains(win))
 				throw new ArgumentException("Window already exist in the stack", "win");
 
 
 //            Input = new InputManager(win);
 			win.ParentApplication = this;
 			win.Pigments = new PigmentMap(this.Pigments,
-				win.PigmentOverrides);
+			                              win.PigmentOverrides);
 
-			if (!win.isSetup) {
+			if (!win.isSetup)
 				win.OnSettingUp();
-			}
 			windowStack.Add(win);
 			win.OnAdded();
 		}
@@ -241,51 +229,48 @@ namespace Ogui.UI
 //            Push(newState);
 //        }
 
-		public int StateCount { get { return windowStack.Count; } }
+		public int StateCount {
+			get { return windowStack.Count; }
+		}
 
-		
 		#endregion
+
 		#region Protected Properties
-		
+
 //        /// <summary>
 //        /// Get the current InputManager for the current Window.
 //        /// </summary>
 //        protected InputManager Input { get; private set; }
-		
+
 		#endregion
+
 		#region Protected Methods
-		
+
 		/// <summary>
 		/// Called after Application.Start has been called.  Override and place application specific
 		/// setup code here after calling base method.
 		/// </summary>
 		/// <param name="info"></param>
-		protected virtual void Setup(ApplicationInfo info)
-		{
+		protected virtual void Setup(ApplicationInfo info) {
 			if (!string.IsNullOrEmpty(info.Font))
-			{
 				TCODConsole.setCustomFont(info.Font,
-					(int) info.FontFlags);
-			}
+				                          (int) info.FontFlags);
 
 			TCODConsole.initRoot(info.ScreenSize.Width, info.ScreenSize.Height, info.Title,
-				info.Fullscreen, TCODRendererType.SDL);
+			                     info.Fullscreen, TCODRendererType.SDL);
 			TCODSystem.setFps(info.FpsLimit);
-			TCODConsole.setKeyboardRepeat(info.InitialDelay, info.IntervalDelay);            
+			TCODConsole.setKeyboardRepeat(info.InitialDelay, info.IntervalDelay);
 
 			TCODMouse.showCursor(true);
 
 			if (SetupEventHandler != null)
-			{
 				SetupEventHandler(this, EventArgs.Empty);
-			}
 
 			Pigments = new PigmentMap(DefaultPigments.FrameworkDefaults,
-				info.Pigments);
+			                          info.Pigments);
 		}
-		
 
-		
+
 		/// <summary>
 		/// Called each iteration of the main loop (each frame).  
 		/// Override and add specific logic update code after calling base method.
@@ -299,44 +284,37 @@ namespace Ogui.UI
 			windowStack.RemoveAll(win => win.WindowState == WindowState.Quitting);
 
 			if (UpdateEventHandler != null)
-			{
 				UpdateEventHandler(this, EventArgs.Empty);
-			}
 
 			uint elapsed = TCODSystem.getElapsedMilli();
 
-			foreach (var window in windowStack) {
+			foreach (var window in windowStack)
 				if (window.IsActive)
-					window.Update();                
-			}
+					window.Update();
 
 			CurrentWindow.Input.Update(elapsed);
 		}
-		
+
 		#endregion
+
 		#region Private
-		
-		private int Run()
-		{
-			if (StateCount <= 0)
-			{
+
+		private int Run() {
+			if (StateCount <= 0) {
 				Window win = new Window(new WindowTemplate());
-				Push(win);                
+				Push(win);
 			}
 
-			while (!TCODConsole.isWindowClosed() && !IsQuitting)
-			{
+			while (!TCODConsole.isWindowClosed() && !IsQuitting) {
 				Update();
 				Draw();
 			}
 
 			return 0;
 		}
-		
 
-		
-		private void Draw()
-		{
+
+		private void Draw() {
 			var reverse = new Stack<Window>();
 
 			for (int i = windowStack.Count - 1; i >= 0; i--) {
@@ -346,29 +324,28 @@ namespace Ogui.UI
 			}
 
 			TCODConsole.root.clear();
-			foreach (var window in reverse) {
+			foreach (var window in reverse)
 				window.OnDraw();
-			}
 			TCODConsole.flush();
 		}
-		
+
 		#endregion
+
 		#region Dispose
+
 		private bool alreadyDisposed;
 
 		/// <summary>
 		/// Default finalizer calls Dispose.
 		/// </summary>
-		~Application()
-		{
+		~Application() {
 			Dispose(false);
 		}
 
 		/// <summary>
 		/// Safely dispose this object and all of its contents.
 		/// </summary>
-		public void Dispose()
-		{
+		public void Dispose() {
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
@@ -377,26 +354,22 @@ namespace Ogui.UI
 		/// Override to add custom disposing code.
 		/// </summary>
 		/// <param name="isDisposing"></param>
-		protected virtual void Dispose(bool isDisposing)
-		{
+		protected virtual void Dispose(bool isDisposing) {
 			if (alreadyDisposed)
 				return;
 			if (isDisposing)
-			{
 				while (windowStack.Count > 0) {
-									   
 					windowStack.ForEach(w => w.Dispose());
 
 					windowStack.Clear();
 				}
 //                if(CurrentWindow != null)
 //                    CurrentWindow.Dispose();
-
-			}
 			alreadyDisposed = true;
 		}
+
 		#endregion
 	}
+
 	#endregion
 }
-

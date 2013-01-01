@@ -22,22 +22,18 @@
 using System;
 using DEngine.Core;
 
-namespace Ogui.UI
-{
+namespace Ogui.UI {
 	/// <summary>
 	/// Contains the data needed to construct a CheckBox object.  A CheckBox will, by default, automatically
 	/// generate its width based on the Label and MinimumWidth properties of the template, leaving space for
 	/// the check element, and will always
 	/// have a height of 3 (1 space for the label and 2 spaces for the borders).
 	/// </summary>
-	public class CheckBoxTemplate : ControlTemplate
-	{
-
+	public class CheckBoxTemplate : ControlTemplate {
 		/// <summary>
 		/// Default constructor, sets all properties to the default.
 		/// </summary>
-		public CheckBoxTemplate()
-		{
+		public CheckBoxTemplate() {
 			this.Label = "";
 			this.MinimumWidth = 0;
 			LabelAlignment = HorizontalAlignment.Left;
@@ -47,7 +43,6 @@ namespace Ogui.UI
 			HasFrameBorder = true;
 			VerticalAlign = VerticalAlignment.Center;
 		}
-
 
 
 		/// <summary>
@@ -107,18 +102,14 @@ namespace Ogui.UI
 		/// Auto generates the size of the control based on the other options.
 		/// </summary>
 		/// <returns></returns>
-		public override Size CalculateSize()
-		{
+		public override Size CalculateSize() {
 			if (!AutoSizeOverride.IsEmpty)
-			{
 				return AutoSizeOverride;
-			}
 
 			int width = Canvas.TextLength(Label) + 1;
 			int height = 1;
 
-			if (HasFrameBorder)
-			{
+			if (HasFrameBorder) {
 				width += 2;
 				height += 2;
 			}
@@ -126,7 +117,6 @@ namespace Ogui.UI
 
 			return new Size(width, height);
 		}
-
 	}
 
 	/// <summary>
@@ -134,15 +124,17 @@ namespace Ogui.UI
 	/// current state of the IsChecked property.  This state
 	/// is toggled by left mouse button clicks, or by setting the IsChecked property manually.
 	/// </summary>
-	public class CheckBox : Control
-	{
+	public class CheckBox : Control {
 		#region Events
+
 		/// <summary>
 		/// Raised when the state of a checkbox has been toggled by user input.  Get IsChecked to get
 		/// current state.  Manually setting IsChecked property will not cause this event to be raised.
 		/// </summary>
 		public event EventHandler CheckBoxToggled;
+
 		#endregion
+
 		#region Constructors
 
 		/// <summary>
@@ -150,14 +142,11 @@ namespace Ogui.UI
 		/// </summary>
 		/// <param name="template"></param>
 		public CheckBox(CheckBoxTemplate template)
-			: base(template)
-		{
+				: base(template) {
 			HasFrame = template.HasFrameBorder;
 
 			if (Size.Height < 3 || Size.Width < 3)
-			{
 				HasFrame = false;
-			}
 
 			HilightWhenMouseOver = template.HilightWhenMouseOver;
 			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
@@ -171,10 +160,10 @@ namespace Ogui.UI
 			this.VerticalAlign = template.VerticalAlign;
 
 			CalcMetrics(template);
-
 		}
 
 		#endregion
+
 		#region Public Properties
 
 		/// <summary>
@@ -204,6 +193,7 @@ namespace Ogui.UI
 		public VerticalAlignment VerticalAlign { get; private set; }
 
 		#endregion
+
 		#region Message Handlers
 
 		/// <summary>
@@ -211,60 +201,43 @@ namespace Ogui.UI
 		/// add custom mouse button handling code.
 		/// </summary>
 		/// <param name="mouseData"></param>
-		protected internal override void OnMouseButtonDown(MouseData mouseData)
-		{
+		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
-			if (mouseData.MouseButton == MouseButton.LeftButton)
-			{
+			if (mouseData.MouseButton == MouseButton.LeftButton) {
 				if (IsChecked)
-				{
 					IsChecked = false;
-				}
 				else
-				{
 					IsChecked = true;
-				}
 
 				if (CheckBoxToggled != null)
-				{
 					CheckBoxToggled(this, EventArgs.Empty);
-				}
 			}
 		}
-
 
 
 		/// <summary>
 		/// Draws the label and chec element based on current state.  Override to add custom
 		/// drawing code.
 		/// </summary>
-		protected override void Redraw()
-		{
+		protected override void Redraw() {
 			base.Redraw();
 
 			if (!string.IsNullOrEmpty(Label))
-			{
 				Canvas.PrintStringAligned(labelRect,
-					Label,
-					LabelAlignment,
-					VerticalAlign);
-			}
+				                          Label,
+				                          LabelAlignment,
+				                          VerticalAlign);
 
 			if (IsActive)
-			{
 				if (IsChecked)
-				{
 					Canvas.PrintChar(checkPos, 225, Pigments[PigmentType.ViewNormal]);
-				}
 				else
-				{
 					Canvas.PrintChar(checkPos, 224, Pigments[PigmentType.ViewNormal]);
-				}
-			}
 		}
 
 		#endregion
+
 		#region Private 
 
 		//private int labelPosX;
@@ -273,37 +246,28 @@ namespace Ogui.UI
 		private Rect labelRect;
 		private Point checkPos;
 
-		private void CalcMetrics(CheckBoxTemplate template)
-		{
+		private void CalcMetrics(CheckBoxTemplate template) {
 			Rect inner = this.LocalRect;
 
 			if (template.HasFrameBorder && template.CalculateSize().Height >= 3)
-			{
 				inner = Rect.Inflate(inner, -1, -1);
-			}
 
 			int checkX;
 
-			if (CheckOnLeft)
-			{
+			if (CheckOnLeft) {
 				checkX = inner.Left;
 				labelRect = new Rect(inner.TopLeft.Shift(1, 0),
-					inner.BottomRight);
-			}
-			else
-			{
+				                     inner.BottomRight);
+			} else {
 				checkX = inner.Right;
 				labelRect = new Rect(inner.TopLeft,
-					inner.BottomRight.Shift(-1, 0));
+				                     inner.BottomRight.Shift(-1, 0));
 			}
 
 			if (labelRect.Size.Width < 1)
-			{
 				Label = "";
-			}
 
-			switch (VerticalAlign)
-			{
+			switch (VerticalAlign) {
 				case VerticalAlignment.Bottom:
 					checkPos = new Point(checkX, labelRect.Bottom);
 					break;
