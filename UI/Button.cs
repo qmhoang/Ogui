@@ -1,0 +1,262 @@
+﻿using System;
+using DEngine.Core;
+using Ogui.Core;
+
+namespace Ogui.UI
+{
+    #region Button Template class
+
+    /// <summary>
+    /// Contains the data needed to construct a Button object.  A button will, by default, automatically
+    /// generate its size based on the Label and MinimumWidth properties of the template, and will always
+    /// have a height of 3 (1 space for the label and 2 spaces for the borders).  Otherwise,
+    /// specify a custom size using the AutoSizeOverride property.
+    /// </summary>
+    public class ButtonTemplate : ControlTemplate
+    {
+
+        /// <summary>
+        /// Default constructor initializes properties to their defaults.
+        /// </summary>
+        public ButtonTemplate()
+        {
+            this.LabelAlignment = HorizontalAlignment.Left;
+            this.Label = "";
+            this.MinimumWidth = 0;
+            HilightWhenMouseOver = true;
+            CanHaveKeyboardFocus = false;
+            HasFrameBorder = true;
+            VAlignment = VerticalAlignment.Center;
+        }
+
+
+
+        /// <summary>
+        /// The text displayed by the button.  Defaults to empty string ""
+        /// </summary>
+        public string Label { get; set; }
+
+        /// <summary>
+        /// The minimum width of the button.  This property is ignored if either AutoSizeOverride
+        /// is set to a non-zero size, or if MinimumWidth is less than the automatically calculated
+        /// size.  Defaults to 0.
+        /// </summary>
+        public int MinimumWidth { get; set; }
+
+        /// <summary>
+        /// The horizontal alignment of the label.  Defaults to HorizontalAlignment.Left.
+        /// </summary>
+        public HorizontalAlignment LabelAlignment { get; set; }
+
+        /// <summary>
+        /// True if the button will draw itself with hilight colors when under the mouse
+        /// pointer.  Defaults to true.
+        /// </summary>
+        public bool HilightWhenMouseOver { get; set; }
+
+        /// <summary>
+        /// Set to true if this button can take the keyboard focus by being left-clicked on.
+        /// Defaults to false.
+        /// </summary>
+        public bool CanHaveKeyboardFocus { get; set; }
+
+        /// <summary>
+        /// If true, the button will have a frame drawn around it.  If autosizing, space
+        /// for the frame will be added.  Defaults to true.
+        /// </summary>
+        public bool HasFrameBorder { get; set; }
+
+        /// <summary>
+        /// Use this to manually provide a size for the button.  If empty (the default), then
+        /// the button will atuosize.
+        /// </summary>
+        public Size AutoSizeOverride { get; set; }
+
+        /// <summary>
+        /// The vertical alignment of the label.  Only used if the AutoSizeOverride property
+        /// has been set to a height of greater than 1.  Defaults to VerticalAlignment.Center.
+        /// </summary>
+        public VerticalAlignment VAlignment { get; set; }
+
+
+
+        /// <summary>
+        /// Auto generates the size of the button based on the other options.
+        /// </summary>
+        /// <returns></returns>
+        public override Size CalculateSize()
+        {
+            if (AutoSizeOverride.IsEmpty)
+            {
+                int len = Canvas.TextLength(Label);
+                int width = len;
+                int height = 1;
+
+                if (HasFrameBorder)
+                {
+                    width += 2;
+                    height += 2;
+                }
+
+                return new Size(Math.Max(width, MinimumWidth), height);
+            }
+            else
+            {
+                return AutoSizeOverride;
+            }
+        }
+
+    }
+    #endregion
+
+
+    #region Button Class
+    /// <summary>
+    /// Represents a button control.  A button can be pushed, which happens when the left mouse button is 
+    /// pressed then subsequently released while over the button.
+    /// </summary>
+    public class Button : Control
+    {
+        #region Events
+        /// <summary>
+        /// Raised when a button has been pushed (mouse button down then up over control).
+        /// </summary>
+        public event EventHandler ButtonPushed;
+
+        #endregion
+        #region Constructors
+        /// <summary>
+        /// Constructs a Button instance given the template.
+        /// </summary>
+        public Button(ButtonTemplate template)
+            :base(template)
+        {
+            this.Label = template.Label;
+            this.LabelAlignment = template.LabelAlignment;
+            HilightWhenMouseOver = template.HilightWhenMouseOver;
+            HasFrame = template.HasFrameBorder;
+            CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
+
+            LabelRect = new Rect(Point.Origin, this.Size);
+            VAlignment = template.VAlignment;
+
+            if (template.HasFrameBorder &&
+                this.Size.Width > 2 &&
+                this.Size.Height > 2)
+            {
+                LabelRect = Rect.Inflate(LabelRect, -1, -1);
+                
+            }
+        }
+
+        #endregion
+        #region Public Properties
+        /// <summary>
+        /// Get the button Label.
+        /// </summary>
+        public string Label { get; private set; }
+
+        /// <summary>
+        /// Get or set the label's horizontal alignment.
+        /// </summary>
+        public HorizontalAlignment LabelAlignment { get; set; }
+
+        /// <summary>
+        /// Get or set the label's vertical alignment.  This will only have an effect if
+        /// the height of the button is larger than 3 as specified by the AutoSizeOverride
+        /// property of the creating template.
+        /// </summary>
+        protected VerticalAlignment VAlignment { get; set; }
+        #endregion
+        #region  Protected Methods
+
+        /// <summary>
+        /// This base method clears the Canvas, draws the frame (if any), and draws the label, unless
+        /// OwnerDraw is set to true in which case the base methods do nothing.  Override to add custom
+        /// drawing code here.
+        /// </summary>
+        protected override void Redraw()
+        {
+            base.Redraw();
+            if (!OwnerDraw)
+            {
+                Canvas.PrintStringAligned(LabelRect,
+                    Label,
+                    LabelAlignment,
+                    VAlignment);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Returns the pigment of the main control area based on its current state.
+        /// Override to return a custom color for the main drawing area of the button, or to add
+        /// additional colors for the button based on custom states.
+        /// </summary>
+        protected override Pigment DetermineMainPigment()
+        {
+            if (IsActive && IsBeingPushed)
+            {
+                return Pigments[PigmentType.ViewDepressed];
+            }
+            return base.DetermineMainPigment();
+        }
+
+        /// <summary>
+        /// Returns the pigment of the frame based on the current state.
+        /// Override to return a custom color for the frame, or to add additional colors
+        /// for the button based on custom states.
+        /// </summary>
+        /// <returns></returns>
+        protected override Pigment DetermineFramePigment()
+        {
+            if (IsActive && IsBeingPushed)
+            {
+                return Pigments[PigmentType.FrameDepressed];
+            }
+            return base.DetermineFramePigment();
+        }
+
+        #endregion
+        #region Message Handlers
+
+        /// <summary>
+        /// Called when a mouse button is released while over this button.  Triggers proper
+        /// events.  Override to add custom handling.
+        /// </summary>
+        /// <param name="mouseData"></param>
+        protected internal override void OnMouseButtonUp(MouseData mouseData)
+        {
+            bool wasBeingPushed = IsBeingPushed; // store, since base call will reset this to false
+
+            base.OnMouseButtonUp(mouseData);
+
+            if (mouseData.MouseButton == MouseButton.LeftButton && wasBeingPushed)
+            {
+                OnButtonPushed();
+            }
+        }
+
+
+
+        /// <summary>
+        /// Called by the framework when a buton click
+        /// action is performed.  Triggers proper
+        /// events.  Override to add custom handling.
+        /// </summary>
+        protected virtual void OnButtonPushed()
+        {
+            if (ButtonPushed != null)
+            {
+                ButtonPushed(this, EventArgs.Empty);
+            }
+        }
+
+        #endregion
+        #region Private
+        private Rect LabelRect { get; set; }
+        #endregion
+    }
+    #endregion
+}
