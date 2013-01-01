@@ -66,10 +66,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="libtcod-net">
-      <HintPath>..\CrossroadsRL\libtcod-net.dll</HintPath>
+      <HintPath>..\..\Code Libraries\libtcod 1.5.1 c#\libtcod-net.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\..\Code Libraries\log4net-1.2.11\bin\net\4.0\release\log4net.dll</HintPath>
+      <HintPath>..\..\Code Libraries\log4net-1.2.11\bin\net\4.0\release\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -116,12 +116,11 @@
     <Compile Include="UI\Window.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ogui.cd" />
     <None Include="UI\UI.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DEngine\DEngine.csproj">
-      <Project>{D7BF47FC-5FD3-46EC-A01A-3BFB107907D5}</Project>
+    <ProjectReference Include="..\DEngine\DEngine\DEngine.csproj">
+      <Project>{FAA2CEF2-1844-4043-A582-AD4CDE346ADD}</Project>
       <Name>DEngine</Name>
     </ProjectReference>
   </ItemGroup>
