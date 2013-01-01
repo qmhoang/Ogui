@@ -1,0 +1,533 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DEngine.UI.ApplicationInfo" Collapsed="true">
+    <Position X="38.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAIAAAAAAAAAEIAAEIAAAAAAAAAAAIIAAAAAAACAAA=</HashCode>
+      <FileName>UI\Application.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Application" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAACCIGAgAAAEKgAAAABAAAAQAAAAAAAAIACAI=</HashCode>
+      <FileName>UI\Application.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DEngine.UI.WindowTemplate" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgoAQAAAAAAAAAAAAAAAACAAACAAAIAAA=</HashCode>
+      <FileName>UI\Window.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Window" Collapsed="true">
+    <Position X="34.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACowCAAkACsl4VBAEA1AGAuCMBABiARGAIpSAABIFQQ=</HashCode>
+      <FileName>UI\Window.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ButtonTemplate" Collapsed="true">
+    <Position X="19.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAEAAAAAQAAAAAAAAAQAEAAAAAAAAgAAZAAAA=</HashCode>
+      <FileName>UI\Button.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Button" Collapsed="true">
+    <Position X="20" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAEAAAAAAAAAAAAAAAAEEAAAAAAABAAAMIUAA=</HashCode>
+      <FileName>UI\Button.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Canvas" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="40.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQCAAAAEECAAggAAAAAgCCAgAIAAACAAKAYgBQBkAgA=</HashCode>
+      <FileName>UI\Canvas.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DEngine.UI.CheckBoxTemplate" Collapsed="true">
+    <Position X="9.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAABAAEAABAAQAAAAAAAAAQAEAAAAAAAAgAARAAAA=</HashCode>
+      <FileName>UI\CheckBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.CheckBox" Collapsed="true">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CQoAAAAAECABAAgAAAAAAAAAAAEAAAAAQABAAAAAAAA=</HashCode>
+      <FileName>UI\CheckBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Schedule" Collapsed="true">
+    <Position X="42.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAABAAABAAAAAAAAAAAAAAAAAABAAAAQAA=</HashCode>
+      <FileName>UI\Component.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Component" Collapsed="true">
+    <Position X="17.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIIABAgAgAEAQRAKABkAEAgAADwAiQAABAAQBBBoSQA=</HashCode>
+      <FileName>UI\Component.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ControlTemplate" Collapsed="true">
+    <Position X="16.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JEDABAEIAAABEAIAAAAQAAAAAAAAAAIAQIAIIAAIAAA=</HashCode>
+      <FileName>UI\Control.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Control" Collapsed="true">
+    <Position X="17.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQogBJAIABAgAYAAEghsAABIQAAAAAAgAABABACIGAA=</HashCode>
+      <FileName>UI\Control.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.DefaultPigments" Collapsed="true">
+    <Position X="42.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\DefaultPigments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.EmitterButtonTemplate" Collapsed="true">
+    <Position X="18.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\EmitterButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.EmitterButton" Collapsed="true">
+    <Position X="18.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAMAAAAAAAAMAAAADABAAAAAAAgABAAAAAYAAA=</HashCode>
+      <FileName>UI\EmitterButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.EntryTemplate" Collapsed="true">
+    <Position X="15.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAhEAEAABAAAAACAAAAAAQAAAAAAABAAgAAQAAAA=</HashCode>
+      <FileName>UI\Entry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Entry" Collapsed="true">
+    <Position X="15.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAgjEGQFAEDAQAACCAIIAACIAAAgAAARABgAgKAAAA=</HashCode>
+      <FileName>UI\Entry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.InputManager" Collapsed="true">
+    <Position X="44" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAABAggIAADQAAAgABIAAAAAAGKAAAACAQYBAAQCA=</HashCode>
+      <FileName>UI\InputManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ListItemSelectedEventArgs" Collapsed="true">
+    <Position X="42.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>UI\ListBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ListItemData" Collapsed="true">
+    <Position X="40.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\ListBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ListBoxTemplate" Collapsed="true">
+    <Position X="2.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAABAAAAAACEQAAAAAIAAAQAEAAAAAAQAgAAQAAAA=</HashCode>
+      <FileName>UI\ListBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ListBox" Collapsed="true">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAAAACAAACEAACEIgAAAAABEAAgCgQIBAAAEEaAA=</HashCode>
+      <FileName>UI\ListBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Manager" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Manager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.MenuItemSelectedEventArgs" Collapsed="true">
+    <Position X="37" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>UI\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.MenuItemData" Collapsed="true">
+    <Position X="44" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.MenuTemplate" Collapsed="true">
+    <Position X="23" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAACAQAAAAAAAAAQAEAAAAAAAAgAAQAAAA=</HashCode>
+      <FileName>UI\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Menu" Collapsed="true">
+    <Position X="23.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAIAAAACAAACEIgAAAAABEAAgCAQIBAAAAACAA=</HashCode>
+      <FileName>UI\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.MenuButtonTemplate" Collapsed="true">
+    <Position X="20.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAACAwgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\MenuButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.MenuButton" Collapsed="true">
+    <Position X="21" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAACAAAAAAAAIAAAgEIAgAAAAAAAAAIABAQAEAQAA=</HashCode>
+      <FileName>UI\MenuButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.MouseData" Collapsed="true">
+    <Position X="38.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAAAAAQAAAAAAgAAAAIAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>UI\Messages.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.KeyboardData" Collapsed="true">
+    <Position X="37" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAABAAACAQ=</HashCode>
+      <FileName>UI\Messages.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.MouseEventArgs" Collapsed="true">
+    <Position X="42.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Messages.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.KeyboardEventArgs" Collapsed="true">
+    <Position X="38.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Messages.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.MouseDragEventArgs" Collapsed="true">
+    <Position X="40.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Messages.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.NumberEntryTemplate" Collapsed="true">
+    <Position X="16.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAQAAEAAAAAAQAAACAAAAAAAAAAAEAA=</HashCode>
+      <FileName>UI\NumberEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.NumberEntry" Collapsed="true">
+    <Position X="16.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAEAQAAAAAAAACEAAAAAAYEAAAAAAAAAAAACAgAA=</HashCode>
+      <FileName>UI\NumberEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.PanelTemplate" Collapsed="true">
+    <Position X="5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAggEQAAAAAAAAAQAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Panel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Panel" Collapsed="true">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAQAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Panel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.PigmentAlternatives" Collapsed="true">
+    <Position X="44" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\PigmentMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.PigmentMap" Collapsed="true">
+    <Position X="37" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\PigmentMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ProgressBarTemplate" Collapsed="true">
+    <Position X="25.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAEBAAEAAQAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>UI\ProgressBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ProgressBar" Collapsed="true">
+    <Position X="26.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAgAAAAAAAAAAAQAEBAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\ProgressBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.RadioToggledEventArgs" Collapsed="true">
+    <Position X="40.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>UI\RadioBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.RadioItemData" Collapsed="true">
+    <Position X="38.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\RadioBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.RadioGroupTemplate" Collapsed="true">
+    <Position X="7.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACEQAAAAAIAAAQAEAAiAAAAAgAAQAAAA=</HashCode>
+      <FileName>UI\RadioBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.RadioGroup" Collapsed="true">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQIAAAAAAAAACEAAAEIAAAgAABEAAiCgQIBAAAAESAA=</HashCode>
+      <FileName>UI\RadioBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.SliderTemplate" Collapsed="true">
+    <Position X="11.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAQAAEBAAAAAUAAQAAAAAAAAAABAEAA=</HashCode>
+      <FileName>UI\Slider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Slider" Collapsed="true">
+    <Position X="12" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QRAAgAAMECAAgQEAAEBABAAAUMAQAAEgAAFAAAIAAAA=</HashCode>
+      <FileName>UI\Slider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.SolidProgressBar" Collapsed="true">
+    <Position X="27.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAABAA=</HashCode>
+      <FileName>UI\SolidProgressBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.SpinBoxTemplate" Collapsed="true">
+    <Position X="27.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAQAAEAAAAAAUAAQAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>UI\SpinBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.SpinBox" Collapsed="true">
+    <Position X="30" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QQAAwAAAEKAAASAAAEAACAAAUEAQgAEAAAFAAAIAAAA=</HashCode>
+      <FileName>UI\SpinBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.TextBoxTemplate" Collapsed="true">
+    <Position X="5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\TextBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.TextBox" Collapsed="true">
+    <Position X="5.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAgAAACCCAAIQCDAEAgAhhAAAAAAAAAAADAAAAAAAA=</HashCode>
+      <FileName>UI\TextBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.TextEntryTemplate" Collapsed="true">
+    <Position X="14" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAQAACAAAAACAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>UI\TextEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.TextEntry" Collapsed="true">
+    <Position X="14.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAACCAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\TextEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.TooltipEventArgs" Collapsed="true">
+    <Position X="37" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAACAAA=</HashCode>
+      <FileName>UI\Tooltip.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Tooltip" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="44" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAACAAAAAAAIAgAABCAAIAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Tooltip.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DEngine.UI.TreeNode" Collapsed="true">
+    <Position X="38.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAggAAAAEAgAEAAAAAAAQAAAAAIAAIAgAQCAAAAAIAA=</HashCode>
+      <FileName>UI\TreeView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.TreeViewTemplate" Collapsed="true">
+    <Position X="29.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAABAAAAAACEQAAAAAIAAAQAEAAAAAAQAgAAQAAAA=</HashCode>
+      <FileName>UI\TreeView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.TreeView" Collapsed="true">
+    <Position X="32.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAACAAACMAACEIgAAAAEFEAAgCgQIBAAAEMaAA=</HashCode>
+      <FileName>UI\TreeView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ValueBarTemplate" Collapsed="true">
+    <Position X="25.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABABA=</HashCode>
+      <FileName>UI\ValueBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.ValueBar" Collapsed="true">
+    <Position X="25.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAQAAABAABAAAAAAAA=</HashCode>
+      <FileName>UI\ValueBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.WidgetTemplate" Collapsed="true">
+    <Position X="15.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAEAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>UI\Widget.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DEngine.UI.Widget" Collapsed="true">
+    <Position X="18.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAACAAggAAAEJgAAAAAAAAIAAEBABAIAAAGAA=</HashCode>
+      <FileName>UI\Widget.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Enum Name="DEngine.UI.WindowState" Collapsed="true">
+    <Position X="42.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAEAAA=</HashCode>
+      <FileName>UI\Window.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DEngine.UI.HorizontalAlignment" Collapsed="true">
+    <Position X="38.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAIAAA=</HashCode>
+      <FileName>UI\Canvas.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DEngine.UI.VerticalAlignment" Collapsed="true">
+    <Position X="40.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAIAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>UI\Canvas.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DEngine.UI.LayoutDirection" Collapsed="true">
+    <Position X="40.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACCCABABAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAABAAQ=</HashCode>
+      <FileName>UI\Control.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DEngine.UI.RectPosition" Collapsed="true">
+    <Position X="37" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Control.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DEngine.UI.MouseButton" Collapsed="true">
+    <Position X="42.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAABAACAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>UI\Messages.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DEngine.UI.ControlKeys" Collapsed="true">
+    <Position X="37" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAQAgAAAAAAAAAACAAAAAAAAAAAAGAAAA=</HashCode>
+      <FileName>UI\Messages.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DEngine.UI.PigmentType" Collapsed="true">
+    <Position X="44" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEQAAAAAAAAAFAAAAISBAAAAIAAAAQAAAAKAACEAA=</HashCode>
+      <FileName>UI\PigmentMap.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DEngine.UI.TextEntryValidations" Collapsed="true">
+    <Position X="38.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABgAAAgAAAAAIAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>UI\TextEntry.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Delegate Name="DEngine.UI.ScheduleCallback" Collapsed="true">
+    <Position X="37" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\Component.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
