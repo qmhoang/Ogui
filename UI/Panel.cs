@@ -24,103 +24,103 @@ using Ogui.Core;
 
 namespace Ogui.UI
 {
-    #region PanelInfo Class
-    /// <summary>
-    /// This class builds on the Control Template, and adds options specific to a Panel.
-    /// </summary>
-    public class PanelTemplate : ControlTemplate
-    {
-        /// <summary>
-        /// Default constructor initializes properties to their defaults.
-        /// </summary>
-        public PanelTemplate()
-        {
-            HasFrame = true;
-            CanHaveKeyboardFocus = false;
-            HilightedWhenMouseOver = false;
-            Size = new Size(1, 1);
-            Title = "";
-        }
+	#region PanelInfo Class
+	/// <summary>
+	/// This class builds on the Control Template, and adds options specific to a Panel.
+	/// </summary>
+	public class PanelTemplate : ControlTemplate
+	{
+		/// <summary>
+		/// Default constructor initializes properties to their defaults.
+		/// </summary>
+		public PanelTemplate()
+		{
+			HasFrame = true;
+			CanHaveKeyboardFocus = false;
+			HilightedWhenMouseOver = false;
+			Size = new Size(1, 1);
+			Title = "";
+		}
 
-        /// <summary>
-        /// The size of the panel, defaults to 1 x 1.
-        /// </summary>
-        public Size Size { get; set; }
+		/// <summary>
+		/// The size of the panel, defaults to 1 x 1.
+		/// </summary>
+		public Size Size { get; set; }
 
-        /// <summary>
-        /// True if a frame will initially be drawn around the panel.  Defaults to true.
-        /// </summary>
-        public bool HasFrame { get; set; }
+		/// <summary>
+		/// True if a frame will initially be drawn around the panel.  Defaults to true.
+		/// </summary>
+		public bool HasFrame { get; set; }
 
-        /// <summary>
-        /// The title that will be drawn for the frame
-        /// </summary>
-        public string Title { get; set; }
+		/// <summary>
+		/// The title that will be drawn for the frame
+		/// </summary>
+		public string Title { get; set; }
 
-        /// <summary>
-        /// True if the panel can receive the keyboard focus.  Defaults to false.
-        /// </summary>
-        public bool CanHaveKeyboardFocus { get; set; }
+		/// <summary>
+		/// True if the panel can receive the keyboard focus.  Defaults to false.
+		/// </summary>
+		public bool CanHaveKeyboardFocus { get; set; }
 
-        /// <summary>
-        /// True if the panel will be drawn with hilighted colors when under the mouse pointer.
-        /// Defaults to false.
-        /// </summary>
-        public bool HilightedWhenMouseOver { get; set; }
+		/// <summary>
+		/// True if the panel will be drawn with hilighted colors when under the mouse pointer.
+		/// Defaults to false.
+		/// </summary>
+		public bool HilightedWhenMouseOver { get; set; }
 
-        /// <summary>
-        /// Calculates the size of the panel.  For a panel, the size is specified by the 
-        /// Size property; this method simply returns that property.
-        /// </summary>
-        /// <returns></returns>
-        public override Size CalculateSize()
-        {
-            return Size;
-        }
-    }
-    #endregion
+		/// <summary>
+		/// Calculates the size of the panel.  For a panel, the size is specified by the 
+		/// Size property; this method simply returns that property.
+		/// </summary>
+		/// <returns></returns>
+		public override Size CalculateSize()
+		{
+			return Size;
+		}
+	}
+	#endregion
 
 
-    #region Panel Class
-    /// <summary>
-    /// A panel is a simple control whose size is manually set.  Other than drawin a frame,
-    /// a panel provides little default drawing or message handling code.
-    /// </summary>
-    public class Panel : Control {
-        private string title;
-        /// <summary>
-        /// Construct a Panel instance from the given template.
-        /// </summary>
-        /// <param name="template"></param>
-        public Panel(PanelTemplate template)
-            : base(template)
-        {
-            this.HasFrame = template.HasFrame;
-            
-            this.CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
-            this.HilightWhenMouseOver = template.HilightedWhenMouseOver;
+	#region Panel Class
+	/// <summary>
+	/// A panel is a simple control whose size is manually set.  Other than drawin a frame,
+	/// a panel provides little default drawing or message handling code.
+	/// </summary>
+	public class Panel : Control {
+		private string title;
+		/// <summary>
+		/// Construct a Panel instance from the given template.
+		/// </summary>
+		/// <param name="template"></param>
+		public Panel(PanelTemplate template)
+			: base(template)
+		{
+			this.HasFrame = template.HasFrame;
+			
+			this.CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
+			this.HilightWhenMouseOver = template.HilightedWhenMouseOver;
 
-            this.title = template.Title;
-        }
+			this.title = template.Title;
+		}
 
-        /// <summary>
-        /// Draw a frame around the control border.  If the <paramref name="pigment"/> is null,
-        /// the frame will drawn with the Canvas' current default pigment.
-        /// </summary>
-        protected override void DrawFrame(Pigment pigment = null) {
-            if (this.Size.Width > 2 && this.Size.Height > 2)
-                Canvas.PrintFrame(title, pigment);
-        }
+		/// <summary>
+		/// Draw a frame around the control border.  If the <paramref name="pigment"/> is null,
+		/// the frame will drawn with the Canvas' current default pigment.
+		/// </summary>
+		protected override void DrawFrame(Pigment pigment = null) {
+			if (this.Size.Width > 2 && this.Size.Height > 2)
+				Canvas.PrintFrame(title, pigment);
+		}
 
-        /// <summary>
-        /// Returns the pigment for the main area of the panel.  Base method returns
-        /// Pigments[PigmentType.Window]
-        /// </summary>
-        /// <returns></returns>
-        protected override Pigment DetermineMainPigment()
-        {
-            return Pigments[PigmentType.Window];
-        }
-    }
-    #endregion
+		/// <summary>
+		/// Returns the pigment for the main area of the panel.  Base method returns
+		/// Pigments[PigmentType.Window]
+		/// </summary>
+		/// <returns></returns>
+		protected override Pigment DetermineMainPigment()
+		{
+			return Pigments[PigmentType.Window];
+		}
+	}
+	#endregion
 }

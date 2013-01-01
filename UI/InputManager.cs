@@ -71,7 +71,7 @@ namespace Ogui.UI
 		// NOTE: consider making these configurable instead of constants
 		private const int dragPixelTol = 24;
 		private const float hoverMSTol = 600f;
-	    private const int delayUntilNextClick = 100;
+		private const int delayUntilNextClick = 100;
 		
 		#endregion
 		#region Keyboard Input
