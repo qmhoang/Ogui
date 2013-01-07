@@ -509,6 +509,9 @@ namespace Ogui.UI {
 		/// Base method draws each of the controls, and the tooltip if applicable.
 		/// </summary>
 		protected internal override void OnDraw() {
+			if (WindowState == WindowState.Hidden || WindowState == WindowState.Quitting)
+				return;
+
 			base.OnDraw();
 
 			// propagate Draw message to all children

@@ -195,7 +195,7 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <param name="win"></param>
 		public void Push(Window win) {
-			Logger.InfoFormat("Pushing window {0}", win.GetType());
+			Logger.DebugFormat("Pushing window {0}", win.GetType());
 			if (win == null)
 				throw new ArgumentNullException("win");
 			if (windowStack.Contains(win))
@@ -315,16 +315,16 @@ namespace Ogui.UI {
 
 
 		private void Draw() {
-			var reverse = new Stack<Window>();
-
-			for (int i = windowStack.Count - 1; i >= 0; i--) {
-				reverse.Push(windowStack[i]);
-				if (!windowStack[i].IsPopup)
-					break;
-			}
-
+//			var reverse = new Stack<Window>();
+//
+//			for (int i = windowStack.Count - 1; i >= 0; i--) {
+//				reverse.Push(windowStack[i]);
+//				if (!windowStack[i].IsPopup)
+//					break;
+//			}
+			
 			TCODConsole.root.clear();
-			foreach (var window in reverse)
+			foreach (var window in windowStack)
 				window.OnDraw();
 			TCODConsole.flush();
 		}
