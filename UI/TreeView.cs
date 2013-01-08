@@ -7,15 +7,15 @@ using libtcod;
 
 namespace Ogui.UI {
 
-	#region ListBox Helper Classes
+	#region TreeNode Class
 
 	/// <summary>
-	/// Contains the label and tooltip text for each Listitem that will be added
-	/// to a Listbox.
+	/// Contains the label and tooltip text for each TreeNode that will be added
+	/// to a Treeview.
 	/// </summary>
 	public class TreeNode {
 		/// <summary>
-		/// Construct a ListItemData instance given the label and an optional tooltip.
+		/// Construct a TreeNode instance given the label and an optional tooltip.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="toolTip"></param>
@@ -29,12 +29,12 @@ namespace Ogui.UI {
 		}
 
 		/// <summary>
-		/// The label of this list item.
+		/// The label of this tree node.
 		/// </summary>
 		public virtual string Label { get; set; }
 
 		/// <summary>
-		/// The optional tooltip text for this list item.
+		/// The optional tooltip text for this tree node.
 		/// </summary>
 		public virtual string TooltipText { get; set; }
 
@@ -83,7 +83,7 @@ namespace Ogui.UI {
 	#region TreeViewTemplate
 
 	/// <summary>
-	/// This class builds on the Control Template, and adds options specific to a ListBox.
+	/// This class builds on the Control Template, and adds options specific to a TreeView.
 	/// </summary>
 	public class TreeViewTemplate : ControlTemplate {
 		/// <summary>
@@ -102,7 +102,7 @@ namespace Ogui.UI {
 		}
 
 		/// <summary>
-		/// The list of ListItemData elements that will be included in the list box.  Defaults
+		/// The list of ListItemData elements that will be included in the TreeView.  Defaults
 		/// to an empty list.
 		/// </summary>
 		public List<TreeNode> Items { get; set; }
@@ -163,7 +163,7 @@ namespace Ogui.UI {
 		public bool FrameTitle { get; set; }
 
 		/// <summary>
-		/// Calculates the ListBox size based on the properties of this template.
+		/// Calculates the TreeView size based on the properties of this template.
 		/// </summary>
 		/// <returns></returns>
 		public override Size CalculateSize() {
@@ -215,9 +215,8 @@ namespace Ogui.UI {
 	#region TreeView
 
 	/// <summary>
-	/// A ListBox control allows the selection of a single option among a list of
-	/// options presented in rows.  The selection state of an item is persistant, and
-	/// is marked as currently selected.
+	/// A TreeView control allows the selection of a tree-like view of options that can be expanded to more options.
+	/// The selection state of an item is persistant, and is marked as currently selected.
 	/// </summary>
 	public class TreeView : Control {
 		#region Events
