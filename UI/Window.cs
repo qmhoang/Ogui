@@ -84,8 +84,6 @@ namespace Ogui.UI {
 	/// Redraw().  The Window handles all message dispatch to children automatically.
 	/// </summary>
 	public class Window : Widget {
-		protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		#region Constructors
 
 		/// <summary>
