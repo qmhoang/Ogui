@@ -84,8 +84,6 @@ namespace Ogui.UI {
 	/// continue until IsQuitting is set to true.</remarks>
 	/// </summary>
 	public class Application : IDisposable {
-		private static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		#region Events
 
 		/// <summary>
@@ -195,7 +193,6 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <param name="win"></param>
 		public void Push(Window win) {
-			Logger.DebugFormat("Pushing window {0}", win.GetType());
 			if (win == null)
 				throw new ArgumentNullException("win");
 			if (windowStack.Contains(win))
@@ -277,7 +274,6 @@ namespace Ogui.UI {
 		/// </summary>
 		protected virtual void Update() {
 			foreach (var window in windowStack.Where(window => window.WindowState == WindowState.Quitting)) {
-				Logger.InfoFormat("Removing {0}", window.GetType());
 				window.OnRemoved();
 			}
 
