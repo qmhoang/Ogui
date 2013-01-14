@@ -30,9 +30,3 @@ syntax: glob
 *.orig
 _ReSharper*\*
 Backup*\*
-bin/x86/Debug/DEngine.dll
-bin/x86/Debug/Ogui.dll
-bin/x86/Debug/libtcod-net.dll
-bin/x86/Debug/log4net.dll
-bin/x86/Debug/log4net.xml
-obj/x86/Debug/Ogui.dll
