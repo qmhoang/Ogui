@@ -361,36 +361,11 @@ namespace Ogui.UI {
 		/// Draws each of the items in the list.
 		/// </summary>
 		protected void DrawItems() {
-//            Stack<TreeNode> nodesToProcess = new Stack<TreeNode>();
-//            Queue<TreeNode> nodesToDraw = new Queue<TreeNode>();
-//
-//            var items = new List<TreeNode>(Items);
-//            items.Reverse();
-//            foreach (var node in items) {
-//                nodesToProcess.Push(node);
-//            }
-//
-//            while (nodesToProcess.Count > 0) {
-//                var treeNode = nodesToProcess.Pop();
-//
-//                
-//                if (treeNode.Expanded)
-//                    foreach (var node in treeNode.Nodes) {
-//                        nodesToProcess.Push(node);                        
-//                    }
-//
-//                nodesToDraw.Enqueue(treeNode);
-//            }
-//
-			int index = 0;
-//
-//            foreach (var treeNode in nodesToDraw) {
-//                DrawItem(index, treeNode);
-//                index++;
-//            }
+			int[] index = {0};
 
-			foreach (var treeNode in Items)
-				NagivateNodes(treeNode, node => DrawItem(index++, node));
+			foreach (var treeNode in Items) {
+				NagivateNodes(treeNode, node => DrawItem(index[0]++, node));
+			}
 		}
 
 		/// <summary>

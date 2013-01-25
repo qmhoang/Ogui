@@ -287,6 +287,12 @@ namespace Ogui.UI {
 			OnRemoved(new EventArgs<Component>(control));
 		}
 
+		public void RemoveControls(params Control[] controls) {
+			foreach (var control in controls) {
+				RemoveControl(control);
+			}
+		}
+
 
 		/// <summary>
 		/// Returns true if Window currently contains the specified control.

@@ -1,35 +1,21 @@
-﻿using System;
+using System;
 using DEngine.Core;
 using Ogui.Core;
 
 namespace Ogui.UI {
-	public class ValueBarTemplate : ProgressBarTemplate {
-		public float MinimumBGIntensity { get; set; }
-		public float MinimumFGIntensity { get; set; }
-
+	public class VerticalValueBarTemplate : ValueBarTemplate {
+		public override Size CalculateSize() {
+			return new Size(1, Length + 2);
+		}
 	}
 
-	public abstract class ValueBarBase : ProgressBar {
-		protected float minimumBGIntensity;
-		protected float minimumFGIntensity;
-		protected int range;
-		protected ValueBarBase(ProgressBarTemplate template) : base(template) {}
-	}
-
-	/// <summary>
-	/// A value bar is a graphical representation of a value.  It provides one of the elements
-	/// for a Slider, but it can also be used standalone as, for example, a progress bar.
-	/// </summary>
-	public class ValueBar : ValueBarBase {
-		#region Constructors
-
-		public ValueBar(ValueBarTemplate template)
+	public class VerticalValueBar : ValueBarBase {
+		public VerticalValueBar(VerticalValueBarTemplate template)
 				: base(template) {
 			HasFrame = false;
 			CurrentValue = template.StartingValue;
-
-			range = this.Size.Width - 2;
-
+			
+			range = this.Size.Height - 2;
 
 			BarPigment = template.BarPigment;
 
@@ -37,8 +23,6 @@ namespace Ogui.UI {
 			minimumFGIntensity = template.MinimumFGIntensity;
 			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
 		}
-
-		#endregion
 
 		protected override void Redraw() {
 			base.Redraw();
@@ -50,12 +34,12 @@ namespace Ogui.UI {
 			Color bg, fg;
 			float intensity;
 
-			Canvas.PrintChar(0, 0, (int) libtcod.TCODSpecialCharacter.DoubleVertLine);
-			Canvas.PrintChar(this.LocalRect.TopRight, (int) libtcod.TCODSpecialCharacter.DoubleVertLine);
+			Canvas.PrintChar(0, 0, (int) libtcod.TCODSpecialCharacter.DoubleHorzLine);
+			Canvas.PrintChar(this.LocalRect.BottomRight, (int) libtcod.TCODSpecialCharacter.DoubleHorzLine);
 
-			for (int x = 0; x < range; x++) {
-				float fx = (float) (x);
-				float delta = Math.Abs(fx + 0.5f - currBarFine);
+			for (int y = 0; y < range; y++) {
+				float fy = (float) (y);
+				float delta = Math.Abs(fy + 0.5f - currBarFine);
 				if (delta <= 3f)
 					intensity = (float) Math.Pow((3f - delta) / 3f, 0.5d);
 				else
@@ -67,12 +51,10 @@ namespace Ogui.UI {
 				fg = DetermineMainPigment().Foreground.ReplaceValue(
 						Math.Max(minimumFGIntensity, intensity));
 
-				Canvas.PrintChar(x + 1, 0,
+				Canvas.PrintChar(0, y + 1,
 				                 (int) libtcod.TCODSpecialCharacter.HorzLine,
 				                 new Pigment(fg, bg));
 			}
-
-
 		}
 	}
 }
