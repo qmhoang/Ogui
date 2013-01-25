@@ -28,6 +28,17 @@ namespace Ogui.UI {
 		public SliderTemplate() {}
 
 		/// <summary>
+		/// If true, the button will have a frame drawn around it.  If autosizing, space
+		/// for the frame will be added.  Defaults to true.
+		/// </summary>
+		public bool HasFrameBorder { get; set; }
+
+		/// <summary>
+		/// If true, the label will not be display or taken into account
+		/// </summary>
+		public bool ShowLabel { get; set; }
+
+		/// <summary>
 		/// The minimum value that this spin control can have.  Defaults to 0.
 		/// </summary>
 		public int MinimumValue { get; set; }
@@ -55,8 +66,7 @@ namespace Ogui.UI {
 		public uint SpinDelay { get; set; }
 
 		/// <summary>
-		/// And optional label to display to the left of the numerical entry and spin buttons.  Defaults
-		/// to empty string (no label).
+		/// Speed for the buttons spins
 		/// </summary>
 		public uint SpinSpeed { get; set; }
 
@@ -65,7 +75,8 @@ namespace Ogui.UI {
 		public Pigment BarPigment { get; set; }
 
 		public override Size CalculateSize() {
-			int width = 2; // for frame
+			int width = HasFrameBorder ? 2 : 0; 
+			int height = HasFrameBorder ? 2 : 0;	// frames add 2
 
 			if (!string.IsNullOrEmpty(Label))
 				width += Canvas.TextLength(Label) + 1;
@@ -75,7 +86,10 @@ namespace Ogui.UI {
 
 			width = Math.Max(width, MinimumWidth);
 
-			return new Size(width, 4);
+			if (ShowLabel) // we don't have a label;
+				height++;
+
+			return new Size(width, height);
 		}
 	}
 
@@ -101,11 +115,13 @@ namespace Ogui.UI {
 			if (Label == null)
 				Label = "";
 
+			ShowLabel = template.ShowLabel;
+
 			CurrentValue = template.StartingValue;
 			if (CurrentValue < MinimumValue || CurrentValue > MaximumValue)
 				CurrentValue = MinimumValue;
 
-			HasFrame = true;
+			HasFrame = template.HasFrameBorder;
 			CanHaveKeyboardFocus = false;
 			HilightWhenMouseOver = false;
 
@@ -118,6 +134,10 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Public Properties
+		/// <summary>
+		/// If true, the label will not be display or taken into account
+		/// </summary>
+		public bool ShowLabel { get; private set; }
 
 		/// <summary>
 		/// Get the minimum value that this spin control can have.
@@ -130,7 +150,8 @@ namespace Ogui.UI {
 		public int MaximumValue { get; private set; }
 
 		/// <summary>
-		/// Get the optional label to display to the left of the numerical entry.
+		/// Get the optional label to display to the left of the numerical entry. Defaults
+		/// to empty string (no label).
 		/// </summary>
 		public string Label { get; private set; }
 
@@ -146,8 +167,8 @@ namespace Ogui.UI {
 		protected uint SpinDelay { get; set; }
 
 		/// <summary>
-		/// And optional label to display to the left of the numerical entry and spin buttons.  Defaults
-		/// to empty string (no label).
+		/// The speed of the buttons' emit event cycle, in millisecond delay between each event.
+		/// Defaults to 0.
 		/// </summary>
 		protected uint SpinSpeed { get; set; }
 
@@ -155,7 +176,7 @@ namespace Ogui.UI {
 		/// Get the current value of the slider.
 		/// </summary>
 		public int CurrentValue {
-			get { return _currentValue; }
+			get { return currentValue; }
 
 			protected set {
 				int newVal = value;
@@ -166,12 +187,12 @@ namespace Ogui.UI {
 				if (newVal > MaximumValue)
 					newVal = MaximumValue;
 
-				if (newVal != _currentValue)
-					_currentValue = newVal;
+				if (newVal != currentValue)
+					currentValue = newVal;
 			}
 		}
 
-		private int _currentValue;
+		private int currentValue;
 
 		#endregion
 
@@ -184,8 +205,7 @@ namespace Ogui.UI {
 			if (ValueChanged != null)
 				ValueChanged(this, EventArgs.Empty);
 		}
-
-
+		
 		/// <summary>
 		/// Creates the NumberEntry and ValueBar for this slider.
 		/// </summary>
@@ -193,11 +213,20 @@ namespace Ogui.UI {
 			base.OnSettingUp();
 
 			Point fieldPos;
-			if (!string.IsNullOrEmpty(Label)) {
-				labelRect = new Rect(1, 1, Label.Length + 1, 1);
-				fieldPos = new Point(Label.Length + 2, 1);
-			} else
-				fieldPos = new Point(1, 1);
+			if (HasFrame) {
+				if (!string.IsNullOrEmpty(Label)) {
+					labelRect = new Rect(1, 1, Label.Length + 1, 1);
+					fieldPos = new Point(Label.Length + 2, 1);
+				} else
+					fieldPos = new Point(1, 1);
+			} else {
+				if (!string.IsNullOrEmpty(Label)) {
+					labelRect = new Rect(0, 0, Label.Length + 1, 1);
+					fieldPos = new Point(Label.Length + 2, 0);
+				} else
+					fieldPos = new Point(0, 0);
+			}
+
 
 			int fieldWidth = NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			Size fieldSize = new Size(fieldWidth, 1);
@@ -217,10 +246,20 @@ namespace Ogui.UI {
 			                           		TopLeftPos = this.LocalToScreen(fieldRect.TopLeft)
 			                           });
 
+			int w = 0, h = 0;
+
+			if (ShowLabel)
+				h++;
+			
+			if (HasFrame) {
+				h++;
+				w++;
+			}
+			
 			valueBar = new ValueBar(new ValueBarTemplate()
 			                        {
-			                        		TopLeftPos = this.LocalToScreen(new Point(1, 2)),
-			                        		Width = this.Size.Width - 4,
+			                        		TopLeftPos = this.LocalToScreen(new Point(w, h)),
+			                        		Length = this.Size.Width - (HasFrame ? 4 : 2),
 			                        		MaximumValue = this.MaximumValue,
 			                        		MinimumValue = this.MinimumValue,
 			                        		StartingValue = this.CurrentValue,
@@ -231,7 +270,7 @@ namespace Ogui.UI {
 			                               {
 			                               		HasFrameBorder = false,
 			                               		Label = "-",
-			                               		TopLeftPos = this.LocalToScreen(new Point(1, 2)),
+												TopLeftPos = this.LocalToScreen(new Point(w, h)),
 			                               		StartEmittingDelay = SpinDelay,
 			                               		Speed = SpinSpeed
 			                               });
@@ -239,33 +278,46 @@ namespace Ogui.UI {
 			                                {
 			                                		HasFrameBorder = false,
 			                                		Label = "+",
-			                                		TopLeftPos = this.LocalToScreen(new Point(1, 2).Shift(Size.Width - 3, 0)),
+													TopLeftPos = this.LocalToScreen(new Point(w, h).Shift(Size.Width - (HasFrame ? 3 : 1), 0)),
 			                                		StartEmittingDelay = SpinDelay,
 			                                		Speed = SpinSpeed
 			                                });
-
-			ParentWindow.AddControls(valueBar, numEntry);
-			ParentWindow.AddControls(leftButton, rightButton);
-
+			
 			numEntry.EntryChanged += numEntry_EntryChanged;
 
 			valueBar.MouseMoved += valueBar_MouseMoved;
 
 			valueBar.MouseButtonDown += valueBar_MouseButtonDown;
-
-
+			
 			leftButton.Emit += leftButton_Emit;
 			rightButton.Emit += rightButton_Emit;
 		}
 
+		protected internal override void OnAdded() {
+			base.OnAdded();
+			if (ShowLabel)
+				ParentWindow.AddControl(numEntry);
+			ParentWindow.AddControls(valueBar);
+			ParentWindow.AddControls(leftButton, rightButton);
+		}
+
+		protected internal override void OnRemoved() {
+			base.OnRemoved();
+
+			ParentWindow.RemoveControl(numEntry);
+			ParentWindow.RemoveControl(valueBar);
+			ParentWindow.RemoveControl(leftButton);
+			ParentWindow.RemoveControl(rightButton);
+		}
 
 		/// <summary>
 		/// Draws this Slider's label.
 		/// </summary>
 		protected override void Redraw() {
 			base.Redraw();
-
-			Canvas.PrintString(labelRect.TopLeft, Label);
+			
+			if (ShowLabel)
+				Canvas.PrintString(labelRect.TopLeft, Label);
 		}
 
 		#endregion
@@ -280,7 +332,6 @@ namespace Ogui.UI {
 			}
 		}
 
-
 		private int CalculateValue(int pixelPosX) {
 			int charWidth = Canvas.GetCharSize().Width;
 			int currPx = pixelPosX;
@@ -294,7 +345,6 @@ namespace Ogui.UI {
 			return (int) ((float) (MaximumValue - MinimumValue) * pixposPercent) + MinimumValue;
 		}
 
-
 		private void numEntry_EntryChanged(object sender, EventArgs e) {
 			int value = numEntry.CurrentValue;
 
@@ -305,7 +355,6 @@ namespace Ogui.UI {
 			}
 		}
 
-
 		private void valueBar_MouseButtonDown(object sender, MouseEventArgs e) {
 			if (e.MouseData.MouseButton == MouseButton.LeftButton) {
 				int newVal = CalculateValue(e.MouseData.PixelPosition.X);
@@ -315,18 +364,15 @@ namespace Ogui.UI {
 		}
 
 		private void leftButton_Emit(object sender, EventArgs e) {
-			numEntry.TryCommit();
 			if (CurrentValue > MinimumValue)
 				numEntry.TrySetValue(CurrentValue - 1);
 		}
 
 		private void rightButton_Emit(object sender, EventArgs e) {
-			numEntry.TryCommit();
 			if (CurrentValue < MaximumValue)
 				numEntry.TrySetValue(CurrentValue + 1);
 		}
-
-
+		
 		private NumberEntry numEntry;
 		private ValueBar valueBar;
 		private Rect labelRect;
@@ -347,6 +393,12 @@ namespace Ogui.UI {
 
 				if (valueBar != null)
 					valueBar.Dispose();
+
+				if (leftButton != null)
+					leftButton.Dispose();
+
+				if (rightButton != null)
+					rightButton.Dispose();
 			}
 		}
 

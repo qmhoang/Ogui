@@ -116,6 +116,7 @@
     <Compile Include="UI\DefaultPigments.cs" />
     <Compile Include="UI\EmitterButton.cs" />
     <Compile Include="UI\Entry.cs" />
+    <Compile Include="UI\VerticalValueBar.cs" />
     <Compile Include="UI\InputManager.cs" />
     <Compile Include="UI\ListBox.cs" />
     <Compile Include="UI\Manager.cs" />
@@ -135,11 +136,9 @@
     <Compile Include="UI\Tooltip.cs" />
     <Compile Include="UI\TreeView.cs" />
     <Compile Include="UI\ValueBar.cs" />
+    <Compile Include="UI\VScrollBar.cs" />
     <Compile Include="UI\Widget.cs" />
     <Compile Include="UI\Window.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="UI\UI.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DEngine\DEngine\DEngine.csproj">
