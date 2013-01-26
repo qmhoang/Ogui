@@ -7,15 +7,15 @@ using libtcod;
 
 namespace Ogui.UI {
 
-	#region ListBox Helper Classes
+	#region TreeNode Class
 
 	/// <summary>
-	/// Contains the label and tooltip text for each Listitem that will be added
-	/// to a Listbox.
+	/// Contains the label and tooltip text for each TreeNode that will be added
+	/// to a Treeview.
 	/// </summary>
 	public class TreeNode {
 		/// <summary>
-		/// Construct a ListItemData instance given the label and an optional tooltip.
+		/// Construct a TreeNode instance given the label and an optional tooltip.
 		/// </summary>
 		/// <param name="label"></param>
 		/// <param name="toolTip"></param>
@@ -29,12 +29,12 @@ namespace Ogui.UI {
 		}
 
 		/// <summary>
-		/// The label of this list item.
+		/// The label of this tree node.
 		/// </summary>
 		public virtual string Label { get; set; }
 
 		/// <summary>
-		/// The optional tooltip text for this list item.
+		/// The optional tooltip text for this tree node.
 		/// </summary>
 		public virtual string TooltipText { get; set; }
 
@@ -83,7 +83,7 @@ namespace Ogui.UI {
 	#region TreeViewTemplate
 
 	/// <summary>
-	/// This class builds on the Control Template, and adds options specific to a ListBox.
+	/// This class builds on the Control Template, and adds options specific to a TreeView.
 	/// </summary>
 	public class TreeViewTemplate : ControlTemplate {
 		/// <summary>
@@ -102,7 +102,7 @@ namespace Ogui.UI {
 		}
 
 		/// <summary>
-		/// The list of ListItemData elements that will be included in the list box.  Defaults
+		/// The list of ListItemData elements that will be included in the TreeView.  Defaults
 		/// to an empty list.
 		/// </summary>
 		public List<TreeNode> Items { get; set; }
@@ -163,7 +163,7 @@ namespace Ogui.UI {
 		public bool FrameTitle { get; set; }
 
 		/// <summary>
-		/// Calculates the ListBox size based on the properties of this template.
+		/// Calculates the TreeView size based on the properties of this template.
 		/// </summary>
 		/// <returns></returns>
 		public override Size CalculateSize() {
@@ -215,9 +215,8 @@ namespace Ogui.UI {
 	#region TreeView
 
 	/// <summary>
-	/// A ListBox control allows the selection of a single option among a list of
-	/// options presented in rows.  The selection state of an item is persistant, and
-	/// is marked as currently selected.
+	/// A TreeView control allows the selection of a tree-like view of options that can be expanded to more options.
+	/// The selection state of an item is persistant, and is marked as currently selected.
 	/// </summary>
 	public class TreeView : Control {
 		#region Events
@@ -259,7 +258,7 @@ namespace Ogui.UI {
 
 			Queue<TreeNode> nodesToProcess = new Queue<TreeNode>();
 
-			numOfItems = 0;
+			nodeCount = 0;
 
 			foreach (var node in Items)
 				nodesToProcess.Enqueue(node);
@@ -271,8 +270,10 @@ namespace Ogui.UI {
 					foreach (var node in treeNode.Nodes)
 						nodesToProcess.Enqueue(node);
 
-				numOfItems++;
+				nodeCount++;
 			}
+
+			currNumberOfItemsDisplay = nodeCount;
 
 			CalcMetrics(template);
 		}
@@ -318,7 +319,7 @@ namespace Ogui.UI {
 		/// <param name="index"></param>
 		/// <returns></returns>
 		public string GetItemLabel(int index) {
-			if (index < 0 || index >= numOfItems)
+			if (index < 0 || index >= nodeCount)
 				throw (new ArgumentOutOfRangeException("index"));
 
 			return GetNode(index).Label;
@@ -332,10 +333,11 @@ namespace Ogui.UI {
 		/// Draws the title and title frame.
 		/// </summary>
 		protected void DrawTitle() {
-			if (useSmallVersion && HasFrame) {} else {
-				if (!string.IsNullOrEmpty(Title))
+			if (!useSmallVersion || !HasFrame) {
+				if (!string.IsNullOrEmpty(Title)) {
 					Canvas.PrintStringAligned(titleRect, Title, TitleAlignment,
 					                          VerticalAlignment.Center);
+				}
 
 				if (HasFrame &&
 				    this.Size.Width > 2 &&
@@ -362,36 +364,16 @@ namespace Ogui.UI {
 		/// Draws each of the items in the list.
 		/// </summary>
 		protected void DrawItems() {
-//            Stack<TreeNode> nodesToProcess = new Stack<TreeNode>();
-//            Queue<TreeNode> nodesToDraw = new Queue<TreeNode>();
-//
-//            var items = new List<TreeNode>(Items);
-//            items.Reverse();
-//            foreach (var node in items) {
-//                nodesToProcess.Push(node);
-//            }
-//
-//            while (nodesToProcess.Count > 0) {
-//                var treeNode = nodesToProcess.Pop();
-//
-//                
-//                if (treeNode.Expanded)
-//                    foreach (var node in treeNode.Nodes) {
-//                        nodesToProcess.Push(node);                        
-//                    }
-//
-//                nodesToDraw.Enqueue(treeNode);
-//            }
-//
-			int index = 0;
-//
-//            foreach (var treeNode in nodesToDraw) {
-//                DrawItem(index, treeNode);
-//                index++;
-//            }
+			int[] index = {0};
 
-			foreach (var treeNode in Items)
-				NagivateNodes(treeNode, node => DrawItem(index++, node));
+			foreach (var treeNode in Items) {
+				NagivateNodes(treeNode, node =>
+				                        	{
+				                        		if (index[0] >= topIndex && index[0] < numberItemsDisplayed + topIndex)
+				                        			DrawItem(index[0], node);
+				                        		index[0]++;
+				                        	});
+			}
 		}
 
 		/// <summary>
@@ -399,7 +381,7 @@ namespace Ogui.UI {
 		/// </summary>
 		protected void DrawItem(int index, TreeNode item) {
 			//string label = item.HasChildren ? (item.Expanded ? "-" : "+").PadRight(item.Depth + 1) + item.Label;
-			StringBuilder str = new StringBuilder();
+			var str = new StringBuilder();
 			if (!item.HasChildren)
 				str.Append(" ".PadRight(item.Depth + 1));
 			else
@@ -409,21 +391,21 @@ namespace Ogui.UI {
 
 			if (index == CurrentSelected)
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index,
+										  itemsRect.TopLeft.Y + index - topIndex,
 				                          str.ToString(),
 				                          LabelAlignment,
 				                          itemsRect.Size.Width,
 				                          Pigments[PigmentType.ViewSelected]);
 			else if (index == mouseOverIndex)
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index,
+										  itemsRect.TopLeft.Y + index - topIndex,
 				                          str.ToString(),
 				                          LabelAlignment,
 				                          itemsRect.Size.Width,
 				                          Pigments[PigmentType.ViewHilight]);
 			else
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index,
+										  itemsRect.TopLeft.Y + index - topIndex,
 				                          str.ToString(),
 				                          LabelAlignment,
 				                          itemsRect.Size.Width,
@@ -444,14 +426,53 @@ namespace Ogui.UI {
 				index = i;
 			}
 
-			if (index < 0 || index >= numOfItems)
+			if (index < 0 || index >= nodeCount)
 				index = -1;
-			return index;
+			return index + topIndex;
 		}
 
 		#endregion
 
 		#region Message Handlers
+		protected internal override void OnSettingUp() {
+			base.OnSettingUp();
+
+			if (nodeCount > numberItemsDisplayed) {
+				var height = Size.Height;
+				var topLeftPos = ScreenRect.TopRight;
+				if (HasFrame) {
+					height -= 2;
+					topLeftPos.X--;
+					topLeftPos.Y++;
+				}
+				if (!useSmallVersion) {
+					height -= 2;
+					topLeftPos.Y += 2;
+				}
+				scrollBar = new VScrollBar(new VScrollBarTemplate()
+				{
+					Height = height,
+					MinimumValue = 0,
+					MaximumValue = height,
+					StartingValue = 0,
+					TopLeftPos = topLeftPos,
+					SpinDelay = 100,
+					SpinSpeed = 100,
+				});
+				scrollBar.ValueChanged += scrollBar_ValueChanged;
+			}
+		}
+
+		protected internal override void OnAdded() {
+			base.OnAdded();
+			if (scrollBar != null)
+				ParentWindow.AddControl(scrollBar);
+		}
+
+		protected internal override void OnRemoved() {
+			base.OnRemoved();
+			ParentWindow.RemoveControl(scrollBar);
+		}
 
 		/// <summary>
 		/// Draws the title and items.  Override to add custom drawing code.
@@ -498,8 +519,12 @@ namespace Ogui.UI {
 
 			if (mouseOverIndex != -1) {
 				var node = GetNode(mouseOverIndex);
-				if (node.HasChildren)
+				if (node.HasChildren) {
 					node.Expanded = !node.Expanded;
+					int[] childCount = new int[] { 0 };
+					NagivateNodes(node, n => childCount[0]++);
+					currNumberOfItemsDisplay += node.Expanded ? childCount[0] : -childCount[0];					
+				}
 
 				if (CurrentSelected == mouseOverIndex)
 					OnItemSelected(node);
@@ -527,17 +552,26 @@ namespace Ogui.UI {
 		private Rect itemsRect;
 		private int numberItemsDisplayed;
 		private bool useSmallVersion;
-		private int numOfItems;
+		private int nodeCount;
+
+		private int currNumberOfItemsDisplay;
+		private int topIndex;
+		private VScrollBar scrollBar;
 
 		private void CalcMetrics(TreeViewTemplate template) {
-			int nitms = numOfItems;
+			int nitms = nodeCount;
 			int expandTitle = 0;
 
 			int delta = Size.Height - nitms - 1;
-			if (template.HasFrameBorder && !template.FrameTitle)
-				delta -= 3;
 
-			numberItemsDisplayed = numOfItems;
+			if (template.HasFrameBorder) {
+				if (template.FrameTitle)
+					delta -= 1;
+				else
+					delta -= 3;
+			}
+
+			numberItemsDisplayed = nodeCount;
 			if (delta < 0)
 				numberItemsDisplayed += delta;
 			else if (delta > 0)
@@ -571,7 +605,7 @@ namespace Ogui.UI {
 		private TreeNode GetNode(int index) {
 			if (index == 0)
 				return Items[index];
-			if (index > numOfItems)
+			if (index > nodeCount)
 				throw new ArgumentException("out of range", "index");
 
 			TreeNode target = null;
@@ -585,30 +619,14 @@ namespace Ogui.UI {
 				                        	i[0]++;
 				                        });
 
-//            int i = 0;
-//            Queue<TreeNode> nodes = new Queue<TreeNode>();
-//            foreach (var node in Items) {
-//                nodes.Enqueue(node);
-//            }
-//
-//            while (nodes.Count > 0) {
-//                var treeNode = nodes.Dequeue();
-//
-//                if (i == index)
-//                    return treeNode;
-//
-//                if (treeNode.HasChildren && treeNode.Expanded)
-//                    foreach (var node in treeNode.Nodes) {
-//                        nodes.Enqueue(node);
-//                    }
-//
-//                i++;
-//            }
-
 			return target;
 		}
 
 		#endregion
+
+		void scrollBar_ValueChanged(object sender, EventArgs e) {
+			topIndex = scrollBar.CurrentValue;
+		}
 	}
 
 	#endregion

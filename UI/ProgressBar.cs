@@ -10,20 +10,20 @@ namespace Ogui.UI {
 			MinimumValue = 0;
 			MaximumValue = 1;
 			StartingValue = 0;
-			Width = 2;
+			Length = 2;
 		}
 
 		public int MinimumValue { get; set; }
 		public int MaximumValue { get; set; }
 		public int StartingValue { get; set; }
-		public int Width { get; set; }
+		public int Length { get; set; }
 
 		public Pigment BarPigment { get; set; }
 
 		public bool CanHaveKeyboardFocus { get; set; }
 
 		public override Size CalculateSize() {
-			return new Size(Width + 2, 1);
+			return new Size(Length + 2, 1);
 		}
 	}
 

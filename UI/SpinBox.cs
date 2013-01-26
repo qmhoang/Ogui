@@ -217,11 +217,22 @@ namespace Ogui.UI {
 			                               		Speed = SpinSpeed
 			                               });
 
-			ParentWindow.AddControls(downButton, upButton, numEntry);
 
-			upButton.Emit += new EventHandler(upButton_Emit);
-			downButton.Emit += new EventHandler(downButton_Emit);
-			numEntry.EntryChanged += new EventHandler(numEntry_EntryChanged);
+			upButton.Emit += upButton_Emit;
+			downButton.Emit += downButton_Emit;
+			numEntry.EntryChanged += numEntry_EntryChanged;
+		}
+
+		protected internal override void OnAdded() {
+			base.OnAdded();
+			ParentWindow.AddControls(downButton, upButton, numEntry);
+		}
+
+		protected internal override void OnRemoved() {
+			base.OnRemoved();
+			ParentWindow.RemoveControl(numEntry);
+			ParentWindow.RemoveControl(upButton);
+			ParentWindow.RemoveControl(downButton);
 		}
 
 		protected override void Redraw() {
