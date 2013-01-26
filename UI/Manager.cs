@@ -1,6 +1,6 @@
 ﻿namespace Ogui.UI {
 	/// <summary>
-	/// A Manager is basically a Coomponent that can be instatiated and added to a Window.
+	/// A Manager is basically a Component that can be instatiated and added to a Window.
 	/// The proposed purpose of this class is to make division of gui logic more convenient.
 	/// </summary>
 	public class Manager : Component {

@@ -84,8 +84,6 @@ namespace Ogui.UI {
 	/// Redraw().  The Window handles all message dispatch to children automatically.
 	/// </summary>
 	public class Window : Widget {
-		protected static readonly log4net.ILog Logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		#region Constructors
 
 		/// <summary>
@@ -287,6 +285,12 @@ namespace Ogui.UI {
 
 			control.OnRemoved();
 			OnRemoved(new EventArgs<Component>(control));
+		}
+
+		public void RemoveControls(params Control[] controls) {
+			foreach (var control in controls) {
+				RemoveControl(control);
+			}
 		}
 
 
@@ -509,6 +513,9 @@ namespace Ogui.UI {
 		/// Base method draws each of the controls, and the tooltip if applicable.
 		/// </summary>
 		protected internal override void OnDraw() {
+			if (WindowState == WindowState.Hidden || WindowState == WindowState.Quitting)
+				return;
+
 			base.OnDraw();
 
 			// propagate Draw message to all children

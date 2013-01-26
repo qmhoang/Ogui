@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DEngine.Core;
 using Ogui.Core;
 using libtcod;
@@ -222,6 +223,7 @@ namespace Ogui.UI {
 			CurrentSelected = template.InitialSelectedIndex;
 
 			mouseOverIndex = -1;
+			topIndex = 0;
 
 			CalcMetrics(template);
 		}
@@ -281,10 +283,11 @@ namespace Ogui.UI {
 		/// Draws the title and title frame.
 		/// </summary>
 		protected void DrawTitle() {
-			if (useSmallVersion && HasFrame) {} else {
-				if (!string.IsNullOrEmpty(Title))
+			if (!useSmallVersion || !HasFrame) {
+				if (!string.IsNullOrEmpty(Title)) {
 					Canvas.PrintStringAligned(titleRect, Title, TitleAlignment,
 					                          VerticalAlignment.Center);
+				}
 
 				if (HasFrame &&
 				    this.Size.Width > 2 &&
@@ -304,8 +307,9 @@ namespace Ogui.UI {
 		/// Draws each of the items in the list.
 		/// </summary>
 		protected void DrawItems() {
-			for (int i = 0; i < numberItemsDisplayed; i++)
+			for (int i = topIndex; i < numberItemsDisplayed + topIndex; i++)
 				DrawItem(i);
+
 		}
 
 
@@ -318,29 +322,29 @@ namespace Ogui.UI {
 
 			if (index == CurrentSelected) {
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index,
+				                          itemsRect.TopLeft.Y + index - topIndex,
 				                          item.Label,
 				                          LabelAlignment,
-				                          itemsRect.Size.Width,
+										  itemsRect.Size.Width - (HasFrame ? 1 : 0),
 				                          Pigments[PigmentType.ViewSelected]);
 
 				Canvas.PrintChar(itemsRect.TopRight.X,
-				                 itemsRect.TopLeft.Y + index,
+				                 itemsRect.TopLeft.Y + index - topIndex,
 				                 (int) TCODSpecialCharacter.ArrowWest,
 				                 Pigments[PigmentType.ViewSelected]);
 			} else if (index == mouseOverIndex)
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index,
+										  itemsRect.TopLeft.Y + index - topIndex,
 				                          item.Label,
 				                          LabelAlignment,
-				                          itemsRect.Size.Width,
+										  itemsRect.Size.Width - (HasFrame ? 1 : 0),
 				                          Pigments[PigmentType.ViewHilight]);
 			else
 				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index,
+										  itemsRect.TopLeft.Y + index - topIndex,
 				                          item.Label,
 				                          LabelAlignment,
-				                          itemsRect.Size.Width,
+										  itemsRect.Size.Width - (HasFrame ? 1 : 0),
 				                          Pigments[PigmentType.ViewNormal]);
 		}
 
@@ -361,12 +365,53 @@ namespace Ogui.UI {
 
 			if (index < 0 || index >= Items.Count)
 				index = -1;
-			return index;
+			return index + topIndex;
 		}
 
 		#endregion
 
 		#region Message Handlers
+
+		protected internal override void OnSettingUp() {
+			base.OnSettingUp();
+
+			if (Items.Count > numberItemsDisplayed) {
+				var height = Size.Height;
+				var topLeftPos = ScreenRect.TopRight;
+				if (HasFrame) {
+					height -= 2;
+					topLeftPos.X--;
+					topLeftPos.Y++;
+				}
+				if (!useSmallVersion) {
+					height -= 2;
+					topLeftPos.Y += 2;
+				}
+				scrollBar = new VScrollBar(new VScrollBarTemplate()
+				                           {
+				                           		Height = height,
+				                           		MinimumValue = 0,
+				                           		MaximumValue = height,
+				                           		StartingValue = 0,
+				                           		TopLeftPos = topLeftPos,
+				                           		SpinDelay = 100,
+				                           		SpinSpeed = 100,
+				                           });
+				scrollBar.ValueChanged += scrollBar_ValueChanged;
+			}
+
+		}
+
+		protected internal override void OnAdded() {
+			base.OnAdded();
+			if (scrollBar != null)
+				ParentWindow.AddControl(scrollBar);
+		}
+
+		protected internal override void OnRemoved() {
+			base.OnRemoved();
+			ParentWindow.RemoveControl(scrollBar);
+		}
 
 		/// <summary>
 		/// Draws the title and items.  Override to add custom drawing code.
@@ -400,8 +445,7 @@ namespace Ogui.UI {
 			else
 				TooltipText = null;
 		}
-
-
+		
 		/// <summary>
 		/// Detects which, if any, item has been selected by a left mouse button.  Override
 		/// to add custom handling.
@@ -439,13 +483,20 @@ namespace Ogui.UI {
 		private int numberItemsDisplayed;
 		private bool useSmallVersion;
 
+		private int topIndex;
+		private VScrollBar scrollBar;
+		
 		private void CalcMetrics(ListBoxTemplate template) {
 			int nitms = Items.Count;
 			int expandTitle = 0;
 
 			int delta = Size.Height - nitms - 1;
-			if (template.HasFrameBorder && !template.FrameTitle)
-				delta -= 3;
+			if (template.HasFrameBorder) {
+				if (template.FrameTitle)
+					delta -= 1;
+				else
+					delta -= 3;
+			}
 
 			numberItemsDisplayed = Items.Count;
 			if (delta < 0)
@@ -479,6 +530,10 @@ namespace Ogui.UI {
 		}
 
 		#endregion
+
+		void scrollBar_ValueChanged(object sender, EventArgs e) {
+			topIndex = scrollBar.CurrentValue;
+		}
 	}
 
 	#endregion
