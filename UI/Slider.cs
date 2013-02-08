@@ -243,6 +243,7 @@ namespace Ogui.UI {
 			                           		StartingValue = CurrentValue,
 			                           		CommitOnLostFocus = true,
 			                           		ReplaceOnFirstKey = true,
+											CanHaveKeyboardFocus = true,
 			                           		TopLeftPos = this.LocalToScreen(fieldRect.TopLeft)
 			                           });
 
