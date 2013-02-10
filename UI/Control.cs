@@ -41,8 +41,6 @@ namespace Ogui.UI {
 		NorthWest
 	};
 
-	public enum RectPosition {}
-
 	#endregion
 
 	#region ElementPigments

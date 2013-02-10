@@ -215,13 +215,13 @@ namespace Ogui.UI {
 			Point fieldPos;
 			if (HasFrame) {
 				if (!string.IsNullOrEmpty(Label)) {
-					labelRect = new Rect(1, 1, Label.Length + 1, 1);
+					labelRect = new Rect(new Point(1, 1), new Point(Label.Length + 1, 1));
 					fieldPos = new Point(Label.Length + 2, 1);
 				} else
 					fieldPos = new Point(1, 1);
 			} else {
 				if (!string.IsNullOrEmpty(Label)) {
-					labelRect = new Rect(0, 0, Label.Length + 1, 1);
+					labelRect = new Rect(new Point(0, 0), new Point(Label.Length + 1, 1));
 					fieldPos = new Point(Label.Length + 2, 0);
 				} else
 					fieldPos = new Point(0, 0);

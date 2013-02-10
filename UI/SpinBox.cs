@@ -177,7 +177,8 @@ namespace Ogui.UI {
 			base.OnSettingUp();
 
 			if (!string.IsNullOrEmpty(Label)) {
-				labelRect = new Rect(1, 1, Label.Length + 1, 1);
+				labelRect = new Rect(new Point(1, 1), new Point(Label.Length + 1, 1));
+
 				upButtonPos = new Point(Label.Length + 2, 1) + ActualScreenPosition;
 			} else
 				upButtonPos = Point.One + ActualScreenPosition;
