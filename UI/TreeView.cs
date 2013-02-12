@@ -442,12 +442,14 @@ namespace Ogui.UI {
 				var topLeftPos = ScreenRect.TopRight;
 				if (HasFrame) {
 					height -= 2;
-					topLeftPos.X--;
-					topLeftPos.Y++;
+//					topLeftPos.X--;
+//					topLeftPos.Y++;
+					topLeftPos = topLeftPos.Shift(-1, 1);
 				}
 				if (!useSmallVersion) {
 					height -= 2;
-					topLeftPos.Y += 2;
+//					topLeftPos.Y += 2;
+					topLeftPos = topLeftPos.Shift(0, 2);
 				}
 				scrollBar = new VScrollBar(new VScrollBarTemplate()
 				{
