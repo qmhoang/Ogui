@@ -256,22 +256,26 @@ namespace Ogui.UI {
 
 			mouseOverIndex = -1;
 
-			Queue<TreeNode> nodesToProcess = new Queue<TreeNode>();
+//			Queue<TreeNode> nodesToProcess = new Queue<TreeNode>();
 
 			nodeCount = 0;
 
-			foreach (var node in Items)
-				nodesToProcess.Enqueue(node);
-
-			while (nodesToProcess.Count > 0) {
-				var treeNode = nodesToProcess.Dequeue();
-
-				if (treeNode.HasChildren)
-					foreach (var node in treeNode.Nodes)
-						nodesToProcess.Enqueue(node);
-
-				nodeCount++;
+			foreach (var node in Items) {
+				NavigateNodes(node, n => nodeCount++);
 			}
+
+//			foreach (var node in Items)
+//				nodesToProcess.Enqueue(node);
+//
+//			while (nodesToProcess.Count > 0) {
+//				var treeNode = nodesToProcess.Dequeue();
+//
+//				if (treeNode.HasChildren)
+//					foreach (var node in treeNode.Nodes)
+//						nodesToProcess.Enqueue(node);
+//
+//				nodeCount++;
+//			}
 
 			currNumberOfItemsDisplay = nodeCount;
 
@@ -352,12 +356,12 @@ namespace Ogui.UI {
 			}
 		}
 
-		private void NagivateNodes(TreeNode root, Action<TreeNode> action) {
+		private void NavigateNodes(TreeNode root, Action<TreeNode> action) {
 			action(root);
 
 			if (root.Expanded)
 				foreach (var treeNode in root.Nodes)
-					NagivateNodes(treeNode, action);
+					NavigateNodes(treeNode, action);
 		}
 
 		/// <summary>
@@ -367,7 +371,7 @@ namespace Ogui.UI {
 			int[] index = {0};
 
 			foreach (var treeNode in Items) {
-				NagivateNodes(treeNode, node =>
+				NavigateNodes(treeNode, node =>
 				                        	{
 				                        		if (index[0] >= topIndex && index[0] < numberItemsDisplayed + topIndex)
 				                        			DrawItem(index[0], node);
@@ -452,15 +456,15 @@ namespace Ogui.UI {
 					topLeftPos = topLeftPos.Shift(0, 2);
 				}
 				scrollBar = new VScrollBar(new VScrollBarTemplate()
-				{
-					Height = height,
-					MinimumValue = 0,
-					MaximumValue = height,
-					StartingValue = 0,
-					TopLeftPos = topLeftPos,
-					SpinDelay = 100,
-					SpinSpeed = 100,
-				});
+				                           {
+				                           		Height = height,
+				                           		MinimumValue = 0,
+				                           		MaximumValue = height,
+				                           		StartingValue = 0,
+				                           		TopLeftPos = topLeftPos,
+				                           		SpinDelay = 100,
+				                           		SpinSpeed = 100,
+				                           });
 				scrollBar.ValueChanged += scrollBar_ValueChanged;
 			}
 		}
@@ -524,7 +528,7 @@ namespace Ogui.UI {
 				if (node.HasChildren) {
 					node.Expanded = !node.Expanded;
 					int[] childCount = new int[] { 0 };
-					NagivateNodes(node, n => childCount[0]++);
+					NavigateNodes(node, n => childCount[0]++);
 					currNumberOfItemsDisplay += node.Expanded ? childCount[0] : -childCount[0];					
 				}
 
@@ -561,10 +565,10 @@ namespace Ogui.UI {
 		private VScrollBar scrollBar;
 
 		private void CalcMetrics(TreeViewTemplate template) {
-			int nitms = nodeCount;
+			int numItems = nodeCount;
 			int expandTitle = 0;
 
-			int delta = Size.Height - nitms - 1;
+			int delta = Size.Height - numItems - 1;
 
 			if (template.HasFrameBorder) {
 				if (template.FrameTitle)
@@ -614,7 +618,7 @@ namespace Ogui.UI {
 			int[] i = {0};
 
 			foreach (var treeNode in Items)
-				NagivateNodes(treeNode, node =>
+				NavigateNodes(treeNode, node =>
 				                        {
 				                        	if (index == i[0])
 				                        		target = node;
