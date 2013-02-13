@@ -550,8 +550,8 @@ namespace Ogui.UI {
 
 		private List<TreeNode> Items;
 		private int mouseOverIndex;
-		private Rect titleRect;
-		private Rect itemsRect;
+		private Rectangle titleRect;
+		private Rectangle itemsRect;
 		private int numberItemsDisplayed;
 		private bool useSmallVersion;
 		private int nodeCount;
@@ -585,10 +585,10 @@ namespace Ogui.UI {
 
 			if (Title != "")
 				if (template.HasFrameBorder)
-					titleRect = new Rect(Point.One,
+					titleRect = new Rectangle(Point.One,
 					                     new Size(titleWidth - 2, titleHeight));
 				else
-					titleRect = new Rect(Point.Origin,
+					titleRect = new Rectangle(Point.Origin,
 					                     new Size(titleWidth, titleHeight));
 
 			int itemsWidth = Size.Width;
@@ -596,11 +596,11 @@ namespace Ogui.UI {
 
 			if (template.HasFrameBorder)
 				if (template.FrameTitle)
-					itemsRect = new Rect(Point.One, new Size(itemsWidth - 2, itemsHeight));
+					itemsRect = new Rectangle(Point.One, new Size(itemsWidth - 2, itemsHeight));
 				else
-					itemsRect = new Rect(titleRect.BottomLeft.Shift(0, 2), new Size(itemsWidth - 2, itemsHeight));
+					itemsRect = new Rectangle(titleRect.BottomLeft.Shift(0, 2), new Size(itemsWidth - 2, itemsHeight));
 			else
-				itemsRect = new Rect(titleRect.BottomLeft.Shift(0, 1),
+				itemsRect = new Rectangle(titleRect.BottomLeft.Shift(0, 1),
 				                     new Size(itemsWidth, itemsHeight));
 		}
 

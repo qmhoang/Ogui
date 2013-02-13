@@ -156,7 +156,7 @@ namespace Ogui.UI {
 			base.OnSettingUp();
 
 			if (!string.IsNullOrEmpty(Label)) {
-				labelRect = new Rect(new Point(1, 1), new Point(Label.Length + 1, 1));
+				labelRect = new Rectangle(new Point(1, 1), new Point(Label.Length + 1, 1));
 
 				upButtonPos = new Point(Label.Length + 2, 1) + ActualScreenPosition;
 			} else
@@ -164,7 +164,7 @@ namespace Ogui.UI {
 
 			int fieldWidth = NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			Size fieldSize = new Size(fieldWidth, 1);
-			fieldRect = new Rect(upButtonPos.Shift(2, 0), fieldSize);
+			fieldRect = new Rectangle(upButtonPos.Shift(2, 0), fieldSize);
 
 			downButtonPos = fieldRect.TopRight.Shift(1, 0);
 
@@ -262,8 +262,8 @@ namespace Ogui.UI {
 		private NumberEntry numEntry;
 		private EmitterButton downButton;
 		private EmitterButton upButton;
-		private Rect fieldRect;
-		private Rect labelRect;
+		private Rectangle fieldRect;
+		private Rectangle labelRect;
 		private Point upButtonPos;
 		private Point downButtonPos;
 

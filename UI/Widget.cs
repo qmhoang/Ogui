@@ -83,16 +83,16 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Returns widget's rect in screen space coordinates
 		/// </summary>
-		public virtual Rect ScreenRect {
-			get { return new Rect(ActualScreenPosition, Size); }
+		public virtual Rectangle ScreenRect {
+			get { return new Rectangle(ActualScreenPosition, Size); }
 		}
 
 		/// <summary>
 		/// Returns the widget's rect in local space coordinates.  The TopLeft coordinate
 		/// will always be the Origin (0,0).
 		/// </summary>
-		public virtual Rect LocalRect {
-			get { return new Rect(Point.Origin, Size); }
+		public virtual Rectangle LocalRect {
+			get { return new Rectangle(Point.Origin, Size); }
 		}
 
 		/// <summary>

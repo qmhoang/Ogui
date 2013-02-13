@@ -91,8 +91,8 @@ namespace Ogui.UI {
 		/// Calculates the Rect (in screen coordinates) of this control.
 		/// </summary>
 		/// <returns></returns>
-		public Rect CalculateRect() {
-			return new Rect(TopLeftPos, CalculateSize());
+		public Rectangle CalculateRect() {
+			return new Rectangle(TopLeftPos, CalculateSize());
 		}
 
 		#endregion
@@ -227,7 +227,7 @@ namespace Ogui.UI {
 
 		#region Private
 
-		private void AlignSouth(Rect ofRect, int padding) {
+		private void AlignSouth(Rectangle ofRect, int padding) {
 			Point ourCtr = CalculateRect().Center;
 			Point ofCtr = ofRect.Center;
 
@@ -235,7 +235,7 @@ namespace Ogui.UI {
 		}
 
 
-		private void AlignEast(Rect ofRect, int padding) {
+		private void AlignEast(Rectangle ofRect, int padding) {
 			Point ourCtr = CalculateRect().Center;
 			Point ofCtr = ofRect.Center;
 
@@ -243,7 +243,7 @@ namespace Ogui.UI {
 		}
 
 
-		private void AlignNorth(Rect ofRect, int padding) {
+		private void AlignNorth(Rectangle ofRect, int padding) {
 			Point ourCtr = CalculateRect().Center;
 			Point ofCtr = ofRect.Center;
 
@@ -251,7 +251,7 @@ namespace Ogui.UI {
 		}
 
 
-		private void AlignWest(Rect ofRect, int padding) {
+		private void AlignWest(Rectangle ofRect, int padding) {
 			Point ourCtr = CalculateRect().Center;
 			Point ofCtr = ofRect.Center;
 
@@ -259,22 +259,22 @@ namespace Ogui.UI {
 		}
 
 
-		private void AlignNorthEast(Rect ofRect, int padding) {
+		private void AlignNorthEast(Rectangle ofRect, int padding) {
 			SetBottomLeft(ofRect.TopRight.Shift(1 + padding, -(1 + padding)));
 		}
 
 
-		private void AlignSouthEast(Rect ofRect, int padding) {
+		private void AlignSouthEast(Rectangle ofRect, int padding) {
 			TopLeftPos = ofRect.BottomRight.Shift(1 + padding, 1 + padding);
 		}
 
 
-		private void AlignSouthWest(Rect ofRect, int padding) {
+		private void AlignSouthWest(Rectangle ofRect, int padding) {
 			SetTopRight(ofRect.BottomLeft.Shift(-(1 + padding), 1 + padding));
 		}
 
 
-		private void AlignNorthWest(Rect ofRect, int padding) {
+		private void AlignNorthWest(Rectangle ofRect, int padding) {
 			SetBottomRight(ofRect.TopLeft.Shift(-(1 + padding), -(1 + padding)));
 		}
 
@@ -394,8 +394,8 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Returns widget's rect in screen space coordinates
 		/// </summary>
-		public override Rect ScreenRect {
-			get { return new Rect(ActualScreenPosition, Size); }
+		public override Rectangle ScreenRect {
+			get { return new Rectangle(ActualScreenPosition, Size); }
 		}
 
 		protected internal override Point ActualScreenPosition {

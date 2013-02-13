@@ -419,7 +419,7 @@ namespace Ogui.UI {
 		/// Thrown when the specified <paramref name="rect"/> is outside of this Canvas region</exception>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the width or height of the rect is less than 1</exception>
-		public void PrintStringAligned(Rect rect, string text, HorizontalAlignment hAlign,
+		public void PrintStringAligned(Rectangle rect, string text, HorizontalAlignment hAlign,
 		                               VerticalAlignment vAlign, Pigment pigment = null) {
 			if (text == null)
 				throw new ArgumentNullException("text");

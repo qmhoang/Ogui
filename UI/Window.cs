@@ -770,7 +770,7 @@ namespace Ogui.UI {
 		private List<Manager> managerList;
 
 		internal Point AutoPosition(Point nearPos, Size sizeOfControl) {
-			Rect conRect = new Rect(nearPos, sizeOfControl);
+			Rectangle conRect = new Rectangle(nearPos, sizeOfControl);
 			int dx = 0;
 			int dy = 0;
 

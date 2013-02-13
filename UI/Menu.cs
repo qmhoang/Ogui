@@ -352,13 +352,13 @@ namespace Ogui.UI {
 
 		private List<MenuItemData> Items;
 		private int mouseOverIndex;
-		private Rect itemsRect;
+		private Rectangle itemsRect;
 		private int numberItemsDisplayed;
 
 		private void CalcMetrics(MenuTemplate template) {
 			itemsRect = this.LocalRect;
 			if (HasFrame)
-				itemsRect = Rect.Inflate(itemsRect, -1, -1);
+				itemsRect = Rectangle.Inflate(itemsRect, -1, -1);
 
 			int delta = itemsRect.Size.Height - Items.Count;
 

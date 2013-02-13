@@ -409,15 +409,15 @@ namespace Ogui.UI {
 		private const uint blinkDelay = 500;
 
 
-		private Rect labelRect;
-		private Rect fieldRect;
+		private Rectangle labelRect;
+		private Rectangle fieldRect;
 		private int cursorY;
 
 		private void CalcMetrics(EntryTemplate template) {
-			Rect viewRect = this.LocalRect;
+			Rectangle viewRect = this.LocalRect;
 
 			if (template.HasFrameBorder)
-				viewRect = Rect.Inflate(viewRect, -1, -1);
+				viewRect = Rectangle.Inflate(viewRect, -1, -1);
 
 			int remaining = viewRect.Size.Width;
 
@@ -440,8 +440,8 @@ namespace Ogui.UI {
 				labelLength = 0;
 			}
 
-			labelRect = new Rect(viewRect.TopLeft, new Size(labelLength, viewRect.Size.Height));
-			fieldRect = new Rect(labelRect.TopRight.Shift(1, 0),
+			labelRect = new Rectangle(viewRect.TopLeft, new Size(labelLength, viewRect.Size.Height));
+			fieldRect = new Rectangle(labelRect.TopRight.Shift(1, 0),
 			                     new Size(fieldLength, viewRect.Size.Height));
 
 			switch (VerticalAlign) {

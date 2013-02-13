@@ -215,13 +215,13 @@ namespace Ogui.UI {
 			Point fieldPos;
 			if (HasFrame) {
 				if (!string.IsNullOrEmpty(Label)) {
-					labelRect = new Rect(new Point(1, 1), new Point(Label.Length + 1, 1));
+					labelRect = new Rectangle(new Point(1, 1), new Point(Label.Length + 1, 1));
 					fieldPos = new Point(Label.Length + 2, 1);
 				} else
 					fieldPos = new Point(1, 1);
 			} else {
 				if (!string.IsNullOrEmpty(Label)) {
-					labelRect = new Rect(new Point(0, 0), new Point(Label.Length + 1, 1));
+					labelRect = new Rectangle(new Point(0, 0), new Point(Label.Length + 1, 1));
 					fieldPos = new Point(Label.Length + 2, 0);
 				} else
 					fieldPos = new Point(0, 0);
@@ -230,7 +230,7 @@ namespace Ogui.UI {
 
 			int fieldWidth = NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			Size fieldSize = new Size(fieldWidth, 1);
-			fieldRect = new Rect(fieldPos, fieldSize);
+			fieldRect = new Rectangle(fieldPos, fieldSize);
 
 			if (BarPigment == null)
 				BarPigment = DetermineMainPigment();
@@ -376,8 +376,8 @@ namespace Ogui.UI {
 		
 		private NumberEntry numEntry;
 		private ValueBar valueBar;
-		private Rect labelRect;
-		private Rect fieldRect;
+		private Rectangle labelRect;
+		private Rectangle fieldRect;
 
 		private EmitterButton leftButton, rightButton;
 
