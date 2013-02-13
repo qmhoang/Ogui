@@ -169,8 +169,8 @@ namespace Ogui.UI {
 		/// Gets a Rect representing the screen (or the system window).  The UpperLeft position
 		/// will always be the origin (0,0).
 		/// </summary>
-		public static Rect ScreenRect {
-			get { return new Rect(Point.Origin, ScreenSize); }
+		public static Rectangle ScreenRect {
+			get { return new Rectangle(Point.Origin, ScreenSize); }
 		}
 
 

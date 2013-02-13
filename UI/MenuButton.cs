@@ -67,7 +67,7 @@ namespace Ogui.UI {
 		}
 
 		private string labelSelection;
-		private Rect labelSelectionRect;
+		private Rectangle labelSelectionRect;
 		private Menu menu;
 		private List<string> items;
 		private bool rightclickMenu;
@@ -93,12 +93,12 @@ namespace Ogui.UI {
 			CurrentSelected = template.InitialSelection;
 			labelSelection = Label + ": " + items[CurrentSelected];
 
-			labelSelectionRect = new Rect(Point.Origin, Size);
+			labelSelectionRect = new Rectangle(Point.Origin, Size);
 
 			if (template.HasFrameBorder &&
 			    Size.Width > 2 &&
 			    Size.Height > 2)
-				labelSelectionRect = Rect.Inflate(labelSelectionRect, -1, -1);
+				labelSelectionRect = Rectangle.Inflate(labelSelectionRect, -1, -1);
 		}
 
 		protected override void Redraw() {

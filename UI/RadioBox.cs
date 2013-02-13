@@ -359,16 +359,16 @@ namespace Ogui.UI {
 
 		private List<RadioItemData> Items;
 		private int mouseOverIndex;
-		private Rect itemsRect;
+		private Rectangle itemsRect;
 		private int numberItemsDisplayed;
 
-		private Rect radioRect;
-		private Rect labelRect;
+		private Rectangle radioRect;
+		private Rectangle labelRect;
 
 		private void CalcMetrics(RadioGroupTemplate template) {
 			itemsRect = this.LocalRect;
 			if (HasFrame)
-				itemsRect = Rect.Inflate(itemsRect, -1, -1);
+				itemsRect = Rectangle.Inflate(itemsRect, -1, -1);
 
 			int delta = itemsRect.Size.Height - Items.Count;
 
@@ -378,12 +378,12 @@ namespace Ogui.UI {
 				numberItemsDisplayed += delta;
 
 			if (RadioOnLeft) {
-				radioRect = new Rect(itemsRect.TopLeft, new Size(1, 1));
-				labelRect = new Rect(radioRect.TopRight.Shift(2, 0),
+				radioRect = new Rectangle(itemsRect.TopLeft, new Size(1, 1));
+				labelRect = new Rectangle(radioRect.TopRight.Shift(2, 0),
 				                     itemsRect.TopRight);
 			} else {
-				radioRect = new Rect(itemsRect.TopRight, new Size(1, 1));
-				labelRect = new Rect(itemsRect.TopLeft,
+				radioRect = new Rectangle(itemsRect.TopRight, new Size(1, 1));
+				labelRect = new Rectangle(itemsRect.TopLeft,
 				                     radioRect.BottomLeft.Shift(-2, 0));
 			}
 		}

@@ -243,24 +243,24 @@ namespace Ogui.UI {
 		//private int labelPosX;
 		//private int labelFieldLength;
 		//private int labelPosY;
-		private Rect labelRect;
+		private Rectangle labelRect;
 		private Point checkPos;
 
 		private void CalcMetrics(CheckBoxTemplate template) {
-			Rect inner = this.LocalRect;
+			Rectangle inner = this.LocalRect;
 
 			if (template.HasFrameBorder && template.CalculateSize().Height >= 3)
-				inner = Rect.Inflate(inner, -1, -1);
+				inner = Rectangle.Inflate(inner, -1, -1);
 
 			int checkX;
 
 			if (CheckOnLeft) {
 				checkX = inner.Left;
-				labelRect = new Rect(inner.TopLeft.Shift(1, 0),
+				labelRect = new Rectangle(inner.TopLeft.Shift(1, 0),
 				                     inner.BottomRight);
 			} else {
 				checkX = inner.Right;
-				labelRect = new Rect(inner.TopLeft,
+				labelRect = new Rectangle(inner.TopLeft,
 				                     inner.BottomRight.Shift(-1, 0));
 			}
 

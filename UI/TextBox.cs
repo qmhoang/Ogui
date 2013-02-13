@@ -76,10 +76,10 @@ namespace Ogui.UI {
 		protected internal override void OnSettingUp() {
 			base.OnSettingUp();
 
-			Rect textRect;
+			Rectangle textRect;
 
 			if (HasFrame)
-				textRect = Rect.Inflate(this.LocalRect, -1, -1);
+				textRect = Rectangle.Inflate(this.LocalRect, -1, -1);
 			else
 				textRect = this.LocalRect;
 

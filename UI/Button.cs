@@ -127,13 +127,13 @@ namespace Ogui.UI {
 			HasFrame = template.HasFrameBorder;
 			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
 
-			LabelRect = new Rect(Point.Origin, this.Size);
+			LabelRect = new Rectangle(Point.Origin, this.Size);
 			VAlignment = template.VAlignment;
 
 			if (template.HasFrameBorder &&
 			    this.Size.Width > 2 &&
 			    this.Size.Height > 2)
-				LabelRect = Rect.Inflate(LabelRect, -1, -1);
+				LabelRect = Rectangle.Inflate(LabelRect, -1, -1);
 		}
 
 		#endregion
@@ -232,7 +232,7 @@ namespace Ogui.UI {
 
 		#region Private
 
-		private Rect LabelRect { get; set; }
+		private Rectangle LabelRect { get; set; }
 
 		#endregion
 	}
