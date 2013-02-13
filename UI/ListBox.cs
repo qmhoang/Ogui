@@ -489,10 +489,10 @@ namespace Ogui.UI {
 		private VScrollBar scrollBar;
 		
 		private void CalcMetrics(ListBoxTemplate template) {
-			int nitms = Items.Count;
+			int numItems = Items.Count;
 			int expandTitle = 0;
 
-			int delta = Size.Height - nitms - 1;
+			int delta = Size.Height - numItems - 1;
 			if (template.HasFrameBorder) {
 				if (template.FrameTitle)
 					delta -= 1;
