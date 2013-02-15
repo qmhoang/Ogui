@@ -35,7 +35,7 @@ namespace Ogui.UI {
 			float intensity;
 
 			Canvas.PrintChar(0, 0, (int) libtcod.TCODSpecialCharacter.DoubleHorzLine);
-			Canvas.PrintChar(this.LocalRect.BottomRight, (int) libtcod.TCODSpecialCharacter.DoubleHorzLine);
+			Canvas.PrintChar(this.LocalRect.BottomRight.Shift(-1, -1), (int) libtcod.TCODSpecialCharacter.DoubleHorzLine);
 
 			for (int y = 0; y < range; y++) {
 				float fy = (float) (y);

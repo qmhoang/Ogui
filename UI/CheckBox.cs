@@ -257,11 +257,11 @@ namespace Ogui.UI {
 			if (CheckOnLeft) {
 				checkX = inner.Left;
 				labelRect = new Rectangle(inner.TopLeft.Shift(1, 0),
-				                     inner.BottomRight);
+				                     inner.BottomRight.Shift(-1, -1));
 			} else {
-				checkX = inner.Right;
+				checkX = inner.Right - 1;
 				labelRect = new Rectangle(inner.TopLeft,
-				                     inner.BottomRight.Shift(-1, 0));
+				                     inner.BottomRight.Shift(-2, -1));
 			}
 
 			if (labelRect.Size.Width < 1)
@@ -269,7 +269,7 @@ namespace Ogui.UI {
 
 			switch (VerticalAlign) {
 				case VerticalAlignment.Bottom:
-					checkPos = new Point(checkX, labelRect.Bottom);
+					checkPos = new Point(checkX, labelRect.Bottom - 1);
 					break;
 
 				case VerticalAlignment.Center:
