@@ -231,7 +231,7 @@ namespace Ogui.UI {
 			Point ourCtr = CalculateRect().Center;
 			Point ofCtr = ofRect.Center;
 
-			TopLeftPos = new Point(ofCtr.X - ourCtr.X, ofRect.Bottom + 1 + padding);
+			TopLeftPos = new Point(ofCtr.X - ourCtr.X, ofRect.Bottom + padding);
 		}
 
 
@@ -239,7 +239,7 @@ namespace Ogui.UI {
 			Point ourCtr = CalculateRect().Center;
 			Point ofCtr = ofRect.Center;
 
-			TopLeftPos = new Point(ofRect.Right + 1 + padding, ofCtr.Y - ourCtr.Y);
+			TopLeftPos = new Point(ofRect.Right + padding, ofCtr.Y - ourCtr.Y);
 		}
 
 
@@ -260,17 +260,17 @@ namespace Ogui.UI {
 
 
 		private void AlignNorthEast(Rectangle ofRect, int padding) {
-			SetBottomLeft(ofRect.TopRight.Shift(1 + padding, -(1 + padding)));
+			SetBottomLeft(ofRect.TopRight.Shift(padding, -(1 + padding)));
 		}
 
 
 		private void AlignSouthEast(Rectangle ofRect, int padding) {
-			TopLeftPos = ofRect.BottomRight.Shift(1 + padding, 1 + padding);
+			TopLeftPos = ofRect.BottomRight.Shift(padding, padding);
 		}
 
 
 		private void AlignSouthWest(Rectangle ofRect, int padding) {
-			SetTopRight(ofRect.BottomLeft.Shift(-(1 + padding), 1 + padding));
+			SetTopRight(ofRect.BottomLeft.Shift(-(1 + padding), padding));
 		}
 
 

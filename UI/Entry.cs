@@ -316,7 +316,7 @@ namespace Ogui.UI {
 			// Draw cursor
 			if (cursorOn && HasKeyboardFocus) {
 				int cursorX = fieldRect.Left + CursorPos;
-				if (cursorX <= LocalRect.Right)
+				if (cursorX <= LocalRect.Right - 1)
 					Canvas.PrintChar(cursorX,
 					                 cursorY,
 					                 (int) TCODSpecialCharacter.Block1,
@@ -441,7 +441,7 @@ namespace Ogui.UI {
 			}
 
 			labelRect = new Rectangle(viewRect.TopLeft, new Size(labelLength, viewRect.Size.Height));
-			fieldRect = new Rectangle(labelRect.TopRight.Shift(1, 0),
+			fieldRect = new Rectangle(labelRect.TopRight,
 			                     new Size(fieldLength, viewRect.Size.Height));
 
 			switch (VerticalAlign) {
@@ -454,7 +454,7 @@ namespace Ogui.UI {
 					break;
 
 				case VerticalAlignment.Bottom:
-					cursorY = fieldRect.Bottom;
+					cursorY = fieldRect.Bottom - 1;
 					break;
 			}
 		}

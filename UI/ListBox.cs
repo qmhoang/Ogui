@@ -292,7 +292,7 @@ namespace Ogui.UI {
 				if (HasFrame &&
 				    this.Size.Width > 2 &&
 				    this.Size.Height > 2) {
-					int fy = titleRect.Bottom + 1;
+					int fy = titleRect.Bottom;
 
 					Canvas.SetDefaultPigment(DetermineFramePigment());
 					Canvas.DrawHLine(1, fy, Size.Width - 2);
@@ -328,7 +328,7 @@ namespace Ogui.UI {
 										  itemsRect.Size.Width - (HasFrame ? 1 : 0),
 				                          Pigments[PigmentType.ViewSelected]);
 
-				Canvas.PrintChar(itemsRect.TopRight.X,
+				Canvas.PrintChar(itemsRect.TopRight.X - 1,
 				                 itemsRect.TopLeft.Y + index - topIndex,
 				                 (int) TCODSpecialCharacter.ArrowWest,
 				                 Pigments[PigmentType.ViewSelected]);
@@ -377,7 +377,7 @@ namespace Ogui.UI {
 
 			if (Items.Count > numberItemsDisplayed) {
 				var height = Size.Height;
-				var topLeftPos = ScreenRect.TopRight;
+				var topLeftPos = ScreenRect.TopRight.Shift(-1, 0);
 				if (HasFrame) {
 					height -= 2;
 //					topLeftPos.X--;
@@ -525,9 +525,9 @@ namespace Ogui.UI {
 				if (template.FrameTitle)
 					itemsRect = new Rectangle(Point.One, new Size(itemsWidth - 2, itemsHeight));
 				else
-					itemsRect = new Rectangle(titleRect.BottomLeft.Shift(0, 2), new Size(itemsWidth - 2, itemsHeight));
+					itemsRect = new Rectangle(titleRect.BottomLeft.Shift(0, 1), new Size(itemsWidth - 2, itemsHeight));
 			else
-				itemsRect = new Rectangle(titleRect.BottomLeft.Shift(0, 1),
+				itemsRect = new Rectangle(titleRect.BottomLeft,
 				                     new Size(itemsWidth, itemsHeight));
 		}
 

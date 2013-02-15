@@ -239,7 +239,7 @@ namespace Ogui.UI {
 
 			if (!atRequestedPos)
 				if (!ScreenRect.Contains(control.ScreenRect.TopLeft) ||
-				    !ScreenRect.Contains(control.ScreenRect.BottomRight))
+				    !ScreenRect.Contains(control.ScreenRect.BottomRight.Shift(-1, -1)))
 					throw new ArgumentException("The specified control is too large to fit on the screen.");
 
 			CheckNewlyAddedControlMessages(control);
@@ -779,13 +779,13 @@ namespace Ogui.UI {
 
 			if (conRect.Left < 0)
 				dx = -conRect.Left;
-			else if (conRect.Right > screenRight)
-				dx = screenRight - conRect.Right;
+			else if (conRect.Right - 1 > screenRight)
+				dx = screenRight - conRect.Right - 1;
 
 			if (conRect.Top < 0)
 				dy = -conRect.Top;
-			else if (conRect.Bottom > screenBottom)
-				dy = screenBottom - conRect.Bottom;
+			else if (conRect.Bottom - 1 > screenBottom)
+				dy = screenBottom - conRect.Bottom - 1;
 
 			int finalX = nearPos.X + dx;
 			int finalY = nearPos.Y + dy;

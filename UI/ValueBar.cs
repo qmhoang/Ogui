@@ -51,7 +51,7 @@ namespace Ogui.UI {
 			float intensity;
 
 			Canvas.PrintChar(0, 0, (int) libtcod.TCODSpecialCharacter.DoubleVertLine);
-			Canvas.PrintChar(this.LocalRect.TopRight, (int) libtcod.TCODSpecialCharacter.DoubleVertLine);
+			Canvas.PrintChar(this.LocalRect.TopRight.Shift(-1, 0), (int) libtcod.TCODSpecialCharacter.DoubleVertLine);
 
 			for (int x = 0; x < range; x++) {
 				float fx = (float) (x);

@@ -166,7 +166,7 @@ namespace Ogui.UI {
 			Size fieldSize = new Size(fieldWidth, 1);
 			fieldRect = new Rectangle(upButtonPos.Shift(2, 0), fieldSize);
 
-			downButtonPos = fieldRect.TopRight.Shift(1, 0);
+			downButtonPos = fieldRect.TopRight;
 
 			numEntry = new NumberEntry(new NumberEntryTemplate()
 			                           {
@@ -220,15 +220,15 @@ namespace Ogui.UI {
 			if (!string.IsNullOrEmpty(Label)) {
 				Canvas.PrintString(labelRect.TopLeft, Label);
 
-				Canvas.PrintChar(labelRect.TopRight.Shift(0, -1),
+				Canvas.PrintChar(labelRect.TopRight.Shift(-1, -1),
 				                 (int) libtcod.TCODSpecialCharacter.TeeSouth,
 				                 DetermineFramePigment());
 
-				Canvas.PrintChar(labelRect.TopRight.Shift(0, 0),
+				Canvas.PrintChar(labelRect.TopRight.Shift(-1, 0),
 				                 (int) libtcod.TCODSpecialCharacter.VertLine,
 				                 DetermineFramePigment());
 
-				Canvas.PrintChar(labelRect.TopRight.Shift(0, 1),
+				Canvas.PrintChar(labelRect.TopRight.Shift(-1, 1),
 				                 (int) libtcod.TCODSpecialCharacter.TeeNorth,
 				                 DetermineFramePigment());
 			}

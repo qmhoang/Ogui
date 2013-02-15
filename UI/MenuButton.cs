@@ -84,7 +84,7 @@ namespace Ogui.UI {
 			items = template.Items;
 			menu = new Menu(new MenuTemplate()
 			                {
-			                		TopLeftPos = template.CalculateRect().BottomLeft.Shift(0, 1),
+			                		TopLeftPos = template.CalculateRect().BottomLeft,
 			                		Items = items.Select(buttonLabel => new MenuItemData(buttonLabel)).ToList()
 			                });
 

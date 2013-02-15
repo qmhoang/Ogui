@@ -379,12 +379,12 @@ namespace Ogui.UI {
 
 			if (RadioOnLeft) {
 				radioRect = new Rectangle(itemsRect.TopLeft, new Size(1, 1));
-				labelRect = new Rectangle(radioRect.TopRight.Shift(2, 0),
-				                     itemsRect.TopRight);
+				labelRect = new Rectangle(radioRect.TopRight.Shift(1, 0),
+				                     itemsRect.TopRight.Shift(-1, 0));
 			} else {
-				radioRect = new Rectangle(itemsRect.TopRight, new Size(1, 1));
+				radioRect = new Rectangle(itemsRect.TopRight.Shift(-1, 0), new Size(1, 1));
 				labelRect = new Rectangle(itemsRect.TopLeft,
-				                     radioRect.BottomLeft.Shift(-2, 0));
+				                     radioRect.BottomLeft.Shift(-2, -1));
 			}
 		}
 
