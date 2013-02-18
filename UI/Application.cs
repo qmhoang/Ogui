@@ -273,8 +273,9 @@ namespace Ogui.UI {
 		/// Override and add specific logic update code after calling base method.
 		/// </summary>
 		protected virtual void Update() {
-			foreach (var window in windowStack.Where(window => window.WindowState == WindowState.Quitting)) {
-				window.OnRemoved();
+			foreach (var window in windowStack) {
+				if (window.WindowState == WindowState.Quitting)
+					window.OnRemoved();
 			}
 
 			windowStack.RemoveAll(win => win.WindowState == WindowState.Quitting);
@@ -284,9 +285,10 @@ namespace Ogui.UI {
 
 			uint elapsed = TCODSystem.getElapsedMilli();
 
-			foreach (var window in windowStack)
+			foreach (var window in windowStack) {
 				if (window.IsActive)
 					window.Update();
+			}
 
 			CurrentWindow.Input.Update(elapsed);
 		}
