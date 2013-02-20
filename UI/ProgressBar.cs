@@ -34,13 +34,13 @@ namespace Ogui.UI {
 
 		public Pigment BarPigment { get; set; }
 
-		private int _currValue;
+		private int currValue;
 
 		public int CurrentValue {
-			get { return _currValue; }
+			get { return currValue; }
 			set {
 				if (value >= MinimumValue && value <= MaximumValue)
-					_currValue = value;
+					currValue = value;
 			}
 		}
 

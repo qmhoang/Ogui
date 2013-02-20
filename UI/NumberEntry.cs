@@ -147,17 +147,17 @@ namespace Ogui.UI {
 		/// being input.
 		/// </summary>
 		public int CurrentValue {
-			get { return _currentValue; }
+			get { return currentValue; }
 			protected set {
 				if (ValidateValue(value)) {
-					_currentValue = value;
-					CurrentText = _currentValue.ToString();
+					currentValue = value;
+					CurrentText = currentValue.ToString();
 					TextInput = CurrentText;
 				}
 			}
 		}
 
-		private int _currentValue;
+		private int currentValue;
 
 		#endregion
 

@@ -66,12 +66,18 @@ namespace Ogui.UI {
 		public PigmentAlternatives Pigments { get; set; }
 
 		/// <summary>
-		/// Limits the framerate per limit, defaults to 60
+		/// Limits the framerate per limit, defaults to 60.
 		/// </summary>
 		public int FpsLimit { get; set; }
 
+		/// <summary>
+		/// Delay in millisecond between the time when a key is pressed, and keyboard repeat begins.  If 0, keyboard repeat is disabled.  Defaults to 100.
+		/// </summary>
 		public int InitialDelay { get; set; }
 
+		/// <summary>
+		/// Interval in millisecond between keyboard repeat events, defaults to 75
+		/// </summary>
 		public int IntervalDelay { get; set; }
 	}
 
@@ -188,8 +194,6 @@ namespace Ogui.UI {
 		}
 
 
-		private readonly List<Window> windowStack;
-
 		/// <summary>
 		/// Pushes a window into the top of the stack, which will immediately begin to receive
 		/// framework messages.  The stack can be popped and the window below the current stack 
@@ -204,33 +208,15 @@ namespace Ogui.UI {
 			if (windowStack.Contains(win))
 				throw new ArgumentException("Window already exist in the stack", "win");
 
-
-//            Input = new InputManager(win);
 			win.ParentApplication = this;
 			win.Pigments = new PigmentMap(this.Pigments,
 			                              win.PigmentOverrides);
-
+			
 			if (!win.isSetup)
 				win.OnSettingUp();
 			windowStack.Add(win);
 			win.OnAdded();
 		}
-
-//        private void RemoveWindow(Window window) {
-//            Logger.InfoFormat("Removing {0}", window.GetType());
-//            windowStack.Remove(window);
-//            window.OnRemoved();            
-//        }
-//
-//        /// <summary>
-//        /// Pop the current state and change into another one
-//        /// </summary>
-//        /// <param name="newState"></param>
-//        private void ChangeState(Window newState) {
-//            Logger.InfoFormat("Changing current window to {0}", newState.GetType());            
-//            RemoveWindow(CurrentWindow);
-//            Push(newState);
-//        }
 
 		public int StateCount {
 			get { return windowStack.Count; }
@@ -239,11 +225,6 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Protected Properties
-
-//        /// <summary>
-//        /// Get the current InputManager for the current Window.
-//        /// </summary>
-//        protected InputManager Input { get; private set; }
 
 		#endregion
 
@@ -301,6 +282,7 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Private
+		private readonly List<Window> windowStack;
 
 		private int Run() {
 			if (StateCount <= 0) {
@@ -318,13 +300,6 @@ namespace Ogui.UI {
 
 
 		private void Draw() {
-//			var reverse = new Stack<Window>();
-//
-//			for (int i = windowStack.Count - 1; i >= 0; i--) {
-//				reverse.Push(windowStack[i]);
-//				if (!windowStack[i].IsPopup)
-//					break;
-//			}
 			
 			TCODConsole.root.clear();
 			foreach (var window in windowStack)
@@ -366,8 +341,6 @@ namespace Ogui.UI {
 
 					windowStack.Clear();
 				}
-//                if(CurrentWindow != null)
-//                    CurrentWindow.Dispose();
 			alreadyDisposed = true;
 		}
 
