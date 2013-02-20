@@ -215,13 +215,13 @@ namespace Ogui.UI {
 		}
 
 
-		// UNDONE: Implement
-		/// <summary>
-		/// Not implemented.
-		/// </summary>
-		/// <param name="template1"></param>
-		/// <param name="template2"></param>
-		public void AlignBetween(ControlTemplate template1, ControlTemplate template2) {}
+//		// UNDONE: Implement
+//		/// <summary>
+//		/// Not implemented.
+//		/// </summary>
+//		/// <param name="template1"></param>
+//		/// <param name="template2"></param>
+//		public void AlignBetween(ControlTemplate template1, ControlTemplate template2) {}
 
 		#endregion
 
