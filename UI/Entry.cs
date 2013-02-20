@@ -401,7 +401,7 @@ namespace Ogui.UI {
 		#region Private
 
 		private bool cursorOn = true;
-		private bool waitingToCommitText { get; set; }
+		private bool waitingToCommitText;
 		private bool waitingToOverwrite;
 
 
