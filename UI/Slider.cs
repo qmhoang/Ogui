@@ -187,8 +187,10 @@ namespace Ogui.UI {
 				if (newVal > MaximumValue)
 					newVal = MaximumValue;
 
-				if (newVal != currentValue)
+				if (newVal != currentValue) {
 					currentValue = newVal;
+					OnValueChanged();
+				}
 			}
 		}
 
@@ -351,8 +353,7 @@ namespace Ogui.UI {
 
 			if (this.CurrentValue != value) {
 				this.CurrentValue = value;
-				valueBar.CurrentValue = this.CurrentValue;
-				OnValueChanged();
+				valueBar.CurrentValue = this.CurrentValue;				
 			}
 		}
 
