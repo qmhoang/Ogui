@@ -25,6 +25,7 @@ namespace Ogui.UI {
 			FpsLimit = 60;
 			InitialDelay = 100;
 			IntervalDelay = 75;
+			RendererType = TCODRendererType.SDL;
 		}
 
 		/// <summary>
@@ -52,6 +53,11 @@ namespace Ogui.UI {
 		/// Information about the specified font as per TCODFontFlags.
 		/// </summary>
 		public TCODFontFlags FontFlags { get; set; }
+
+		/// <summary>
+		/// What renderer will libtcod use, defaults to the SDL.
+		/// </summary>
+		public TCODRendererType RendererType { get; set; }
 
 		/// <summary>
 		/// Any pigments added to this dictionary will override the defaults for this application
@@ -250,11 +256,10 @@ namespace Ogui.UI {
 		/// <param name="info"></param>
 		protected virtual void Setup(ApplicationInfo info) {
 			if (!string.IsNullOrEmpty(info.Font))
-				TCODConsole.setCustomFont(info.Font,
-				                          (int) info.FontFlags);
+				TCODConsole.setCustomFont(info.Font, (int) info.FontFlags);
 
 			TCODConsole.initRoot(info.ScreenSize.Width, info.ScreenSize.Height, info.Title,
-			                     info.Fullscreen, TCODRendererType.SDL);
+								 info.Fullscreen, info.RendererType);
 			TCODSystem.setFps(info.FpsLimit);
 			TCODConsole.setKeyboardRepeat(info.InitialDelay, info.IntervalDelay);
 
