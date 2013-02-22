@@ -271,7 +271,9 @@ namespace Ogui.UI {
 
 			uint elapsed = TCODSystem.getElapsedMilli();
 
-			foreach (var window in windowStack) {
+			var windowsToUpdate = new List<Window>(windowStack);
+
+			foreach (var window in windowsToUpdate) {
 				if (window.IsActive)
 					window.Update();
 			}
