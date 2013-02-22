@@ -5,8 +5,6 @@ using Ogui.Core;
 
 namespace Ogui.UI {
 	public class TextBoxTemplate : PanelTemplate {
-		public TextBoxTemplate() {}
-
 		public uint TextSpeed { get; set; }
 	}
 
@@ -111,8 +109,7 @@ namespace Ogui.UI {
 		protected override Pigment DetermineMainPigment() {
 			return base.DetermineMainPigment();
 		}
-
-
+		
 		protected override void Dispose(bool isDisposing) {
 			base.Dispose(isDisposing);
 

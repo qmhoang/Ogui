@@ -51,15 +51,33 @@ namespace Ogui.UI {
 
 		private VerticalValueBar valueBar;
 
+		private int minimumValue;
+
 		/// <summary>
 		/// Get the minimum value that this spin control can have.
 		/// </summary>
-		public int MinimumValue { get; private set; }
+		public int MinimumValue {
+			get { return minimumValue; }
+			set {
+				minimumValue = value;
+				if (valueBar != null)
+					valueBar.MinimumValue = value;
+			}
+		}
+
+		private int maximumValue;
 
 		/// <summary>
 		/// Get the maximum value that this spin control can have.
 		/// </summary>
-		public int MaximumValue { get; private set; }
+		public int MaximumValue {
+			get { return maximumValue; }
+			set {
+				maximumValue = value;
+				if (valueBar != null)
+					valueBar.MaximumValue = value;
+			}
+		}
 
 		/// <summary>
 		/// The delay in milliseconds after first clicking on a spin button before
@@ -89,7 +107,7 @@ namespace Ogui.UI {
 		public int CurrentValue {
 			get { return currentValue; }
 
-			protected set {
+			set {
 				int newVal = value;
 
 				if (newVal < MinimumValue)
@@ -130,9 +148,7 @@ namespace Ogui.UI {
 
 		protected internal override void OnSettingUp() {
 			base.OnSettingUp();
-
-
-
+			
 			int fieldWidth = NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			Size fieldSize = new Size(fieldWidth, 1);
 
