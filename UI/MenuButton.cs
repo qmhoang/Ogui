@@ -6,17 +6,6 @@ using DEngine.Core;
 namespace Ogui.UI {
 	public class MenuButtonTemplate : ButtonTemplate {
 		public List<string> Items { get; set; }
-
-		/// <summary>
-		/// Turns the button into a togglable station in which clicking the buttons toggles between all possible states, if true, right click shows all options, defaults to false
-		/// </summary>
-		public bool RightClickMenu { get; set; }
-
-		/// <summary>
-		/// Turns the button into a togglable station in which clicking the buttons toggles between all possible states, if true, left click shows all options, defaults to false
-		/// </summary>
-		public bool LeftClickMenu { get; set; }
-
 		/// <summary>
 		/// The initial index selected, defaults to 0, if greater than maximum number of items will be equal to maximum.  If negative, will be 0
 		/// </summary>
@@ -24,7 +13,6 @@ namespace Ogui.UI {
 
 		public MenuButtonTemplate() {
 			Items = new List<string>();
-			RightClickMenu = false;
 
 			if (InitialSelection >= Items.Count)
 				InitialSelection = Items.Count - 1;
@@ -70,17 +58,12 @@ namespace Ogui.UI {
 		private Rectangle labelSelectionRect;
 		private Menu menu;
 		private List<string> items;
-		private bool rightclickMenu;
-		private bool leftclickMenu;
 
 		public event EventHandler<MenuItemSelectedEventArgs> SelectionChanged;
 
 
 		public MenuButton(MenuButtonTemplate template)
 				: base(template) {
-			rightclickMenu = template.RightClickMenu;
-			leftclickMenu = template.LeftClickMenu;
-
 			items = template.Items;
 			menu = new Menu(new MenuTemplate()
 			                {
@@ -113,18 +96,11 @@ namespace Ogui.UI {
 		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
-			if (mouseData.MouseButton == MouseButton.LeftButton)
-				if (leftclickMenu) {
-					if (!ParentWindow.ContainsControl(menu))
-						ParentWindow.AddControl(menu);
-				} else {
-					CurrentSelected = (CurrentSelected + 1) % items.Count;
-					menu_ItemSelected(this, new MenuItemSelectedEventArgs(CurrentSelected));
-				}
-			else if (mouseData.MouseButton == MouseButton.RightButton)
-				if (rightclickMenu)
-					if (!ParentWindow.ContainsControl(menu))
-						ParentWindow.AddControl(menu);
+			if (mouseData.MouseButton == MouseButton.LeftButton) {
+				CurrentSelected = (CurrentSelected + 1) % items.Count;
+				menu_ItemSelected(this, new MenuItemSelectedEventArgs(CurrentSelected));
+			} else if (mouseData.MouseButton == MouseButton.RightButton)
+				ParentWindow.AddControl(menu);
 		}
 
 		private void menu_ItemSelected(object sender, MenuItemSelectedEventArgs e) {
