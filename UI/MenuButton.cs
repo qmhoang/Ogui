@@ -95,12 +95,13 @@ namespace Ogui.UI {
 
 		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
-
 			if (mouseData.MouseButton == MouseButton.LeftButton) {
 				CurrentSelected = (CurrentSelected + 1) % items.Count;
 				menu_ItemSelected(this, new MenuItemSelectedEventArgs(CurrentSelected));
-			} else if (mouseData.MouseButton == MouseButton.RightButton)
-				ParentWindow.AddControl(menu);
+			} else if (mouseData.MouseButton == MouseButton.RightButton) {
+				menu.ActualScreenPosition = mouseData.Position;
+				ParentWindow.AddControl(menu);				
+			}
 		}
 
 		private void menu_ItemSelected(object sender, MenuItemSelectedEventArgs e) {
