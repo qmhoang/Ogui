@@ -358,7 +358,7 @@ namespace Ogui.UI {
 		private void CalcMetrics(MenuTemplate template) {
 			itemsRect = this.LocalRect;
 			if (HasFrame)
-				itemsRect = Rectangle.Inflate(itemsRect, -1, -1);
+				itemsRect = itemsRect.Inflate(-1, -1);
 
 			int delta = itemsRect.Size.Height - Items.Count;
 

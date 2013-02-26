@@ -81,7 +81,7 @@ namespace Ogui.UI {
 			if (template.HasFrameBorder &&
 			    Size.Width > 2 &&
 			    Size.Height > 2)
-				labelSelectionRect = Rectangle.Inflate(labelSelectionRect, -1, -1);
+				labelSelectionRect = labelSelectionRect.Inflate(-1, -1);
 		}
 
 		protected override void Redraw() {

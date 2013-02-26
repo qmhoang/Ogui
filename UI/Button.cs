@@ -133,7 +133,7 @@ namespace Ogui.UI {
 			if (template.HasFrameBorder &&
 			    this.Size.Width > 2 &&
 			    this.Size.Height > 2)
-				LabelRect = Rectangle.Inflate(LabelRect, -1, -1);
+				LabelRect = LabelRect.Inflate(-1, -1);
 		}
 
 		#endregion

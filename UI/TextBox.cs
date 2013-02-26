@@ -77,7 +77,7 @@ namespace Ogui.UI {
 			Rectangle textRect;
 
 			if (HasFrame)
-				textRect = Rectangle.Inflate(this.LocalRect, -1, -1);
+				textRect = this.LocalRect.Inflate(-1, -1);
 			else
 				textRect = this.LocalRect;
 
