@@ -250,7 +250,7 @@ namespace Ogui.UI {
 			Rectangle inner = this.LocalRect;
 
 			if (template.HasFrameBorder && template.CalculateSize().Height >= 3)
-				inner = Rectangle.Inflate(inner, -1, -1);
+				inner = inner.Inflate(-1, -1);
 
 			int checkX;
 

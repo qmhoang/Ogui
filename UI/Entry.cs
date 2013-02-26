@@ -396,7 +396,7 @@ namespace Ogui.UI {
 			Rectangle viewRect = this.LocalRect;
 
 			if (template.HasFrameBorder)
-				viewRect = Rectangle.Inflate(viewRect, -1, -1);
+				viewRect = viewRect.Inflate(-1, -1);
 
 			int remaining = viewRect.Size.Width;
 
