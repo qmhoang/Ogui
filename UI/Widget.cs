@@ -67,7 +67,7 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <param name="template"></param>
 		protected Widget(WidgetTemplate template) {
-			this.ActualScreenPosition = new Point(0, 0);
+			this.Position = new Point(0, 0);
 			this.Size = template.CalculateSize();
 			this.Canvas = new Canvas(Size);
 
@@ -84,7 +84,7 @@ namespace Ogui.UI {
 		/// Returns widget's rect in screen space coordinates
 		/// </summary>
 		public virtual Rectangle ScreenRect {
-			get { return new Rectangle(ActualScreenPosition, Size); }
+			get { return new Rectangle(ScreenPosition, Size); }
 		}
 
 		/// <summary>
@@ -118,9 +118,9 @@ namespace Ogui.UI {
 		/// <summary>
 		/// The upper left position of this widget in screen space coordinates.
 		/// </summary>
-		protected internal virtual Point ActualScreenPosition {
-			get { return ScreenPosition; }
-			set { ScreenPosition = value; }
+		protected internal virtual Point ScreenPosition {
+			get { return Position; }
+			set { Position = value; }
 		}
 
 		/// <summary>
@@ -177,7 +177,7 @@ namespace Ogui.UI {
 				Draw(this, EventArgs.Empty);
 
 			if (!OwnerDraw)
-				Canvas.ToScreen(this.ActualScreenPosition);
+				Canvas.ToScreen(this.ScreenPosition);
 		}
 
 		#endregion
@@ -185,7 +185,7 @@ namespace Ogui.UI {
 		#region Internal
 
 		internal PigmentAlternatives PigmentOverrides { get; set; }
-		internal Point ScreenPosition;
+		internal Point Position;
 
 		#endregion
 
