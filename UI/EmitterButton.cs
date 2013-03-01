@@ -140,7 +140,8 @@ namespace Ogui.UI {
 
 		private void DoCountDownEnded() {
 			RemoveSchedule(CountdownSchedule);
-			AddSchedule(EmitSchedule);
+			if (!ContainsSchedule(EmitSchedule))
+				AddSchedule(EmitSchedule);
 		}
 
 
