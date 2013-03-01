@@ -99,7 +99,7 @@ namespace Ogui.UI {
 				CurrentSelected = (CurrentSelected + 1) % items.Count;
 				menu_ItemSelected(this, new MenuItemSelectedEventArgs(CurrentSelected));
 			} else if (mouseData.MouseButton == MouseButton.RightButton) {
-				menu.ActualScreenPosition = mouseData.Position;
+				menu.ScreenPosition = mouseData.Position;
 				ParentWindow.AddControl(menu);				
 			}
 		}

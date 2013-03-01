@@ -61,7 +61,6 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <returns></returns>
 		public override Size CalculateSize() {
-//            return Application.ScreenSize;
 			return Size;
 		}
 	}
@@ -99,7 +98,7 @@ namespace Ogui.UI {
 			TooltipBGAlpha = template.TooltipBGAlpha;
 			TooltipFGAlpha = template.TooltipFGAlpha;
 
-			ScreenPosition = template.TopLeftPos;
+			Position = template.TopLeftPos;
 			IsPopup = template.IsPopup;
 
 			Input = new InputManager(this);
@@ -801,12 +800,12 @@ namespace Ogui.UI {
 		}
 
 		private bool CheckNewlyAddedControlPosition(Control control) {
-			Point newPos = AutoPosition(control.ActualScreenPosition,
+			Point newPos = AutoPosition(control.ScreenPosition,
 			                            control.Size);
 
-			if (newPos == control.ActualScreenPosition)
+			if (newPos == control.ScreenPosition)
 				return true;
-			control.ActualScreenPosition = newPos;
+			control.ScreenPosition = newPos;
 			return false;
 		}
 

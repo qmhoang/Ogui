@@ -121,7 +121,6 @@ namespace Ogui.UI {
 			alreadyDisposed = true;
 		}
 
-
 		private void TypeNextChar() {
 			if (buffer.Count == 0)
 				return;

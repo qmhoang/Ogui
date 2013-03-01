@@ -158,9 +158,9 @@ namespace Ogui.UI {
 			if (!string.IsNullOrEmpty(Label)) {
 				labelRect = new Rectangle(new Point(1, 1), new Point(Label.Length + 1, 1));
 
-				upButtonPos = new Point(Label.Length + 2, 1) + ActualScreenPosition;
+				upButtonPos = new Point(Label.Length + 2, 1) + ScreenPosition;
 			} else
-				upButtonPos = Point.One + ActualScreenPosition;
+				upButtonPos = Point.One + ScreenPosition;
 
 			int fieldWidth = NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			Size fieldSize = new Size(fieldWidth, 1);

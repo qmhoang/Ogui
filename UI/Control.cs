@@ -213,8 +213,7 @@ namespace Ogui.UI {
 					break;
 			}
 		}
-
-
+		
 //		// UNDONE: Implement
 //		/// <summary>
 //		/// Not implemented.
@@ -234,14 +233,12 @@ namespace Ogui.UI {
 			TopLeftPos = new Point(ofCtr.X - ourCtr.X, ofRect.Bottom + padding);
 		}
 
-
 		private void AlignEast(Rectangle ofRect, int padding) {
 			Point ourCtr = CalculateRect().Center;
 			Point ofCtr = ofRect.Center;
 
 			TopLeftPos = new Point(ofRect.Right + padding, ofCtr.Y - ourCtr.Y);
 		}
-
 
 		private void AlignNorth(Rectangle ofRect, int padding) {
 			Point ourCtr = CalculateRect().Center;
@@ -250,7 +247,6 @@ namespace Ogui.UI {
 			SetBottomLeft(new Point(ofCtr.X - ourCtr.X, ofRect.Top - (1 + padding)));
 		}
 
-
 		private void AlignWest(Rectangle ofRect, int padding) {
 			Point ourCtr = CalculateRect().Center;
 			Point ofCtr = ofRect.Center;
@@ -258,21 +254,17 @@ namespace Ogui.UI {
 			SetTopRight(new Point(ofRect.Left - (1 + padding), ofCtr.Y - ourCtr.Y));
 		}
 
-
 		private void AlignNorthEast(Rectangle ofRect, int padding) {
 			SetBottomLeft(ofRect.TopRight.Shift(padding, -(1 + padding)));
 		}
-
 
 		private void AlignSouthEast(Rectangle ofRect, int padding) {
 			TopLeftPos = ofRect.BottomRight.Shift(padding, padding);
 		}
 
-
 		private void AlignSouthWest(Rectangle ofRect, int padding) {
 			SetTopRight(ofRect.BottomLeft.Shift(-(1 + padding), padding));
 		}
-
 
 		private void AlignNorthWest(Rectangle ofRect, int padding) {
 			SetBottomRight(ofRect.TopLeft.Shift(-(1 + padding), -(1 + padding)));
@@ -326,7 +318,7 @@ namespace Ogui.UI {
 		/// <param name="template"></param>
 		protected Control(ControlTemplate template)
 				: base(template) {
-			base.ActualScreenPosition = template.TopLeftPos;
+			Position = template.TopLeftPos;
 
 			HasKeyboardFocus = false;
 			CanHaveKeyboardFocus = true;
@@ -395,21 +387,21 @@ namespace Ogui.UI {
 		/// Returns widget's rect in screen space coordinates
 		/// </summary>
 		public override Rectangle ScreenRect {
-			get { return new Rectangle(ActualScreenPosition, Size); }
+			get { return new Rectangle(ScreenPosition, Size); }
 		}
 
-		protected internal override Point ActualScreenPosition {
+		protected internal override Point ScreenPosition {
 			get {
 				if (ParentWindow != null)
-					return base.ActualScreenPosition + ParentWindow.ActualScreenPosition;
+					return Position + ParentWindow.ScreenPosition;
 				else
-					return base.ActualScreenPosition;
+					return Position;
 			}
 			set {
 				if (ParentWindow != null)
-					base.ActualScreenPosition = value + ParentWindow.ActualScreenPosition;
+					Position = value + ParentWindow.ScreenPosition;
 				else
-					base.ActualScreenPosition = value;
+					Position = value;
 			}
 		}
 
