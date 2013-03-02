@@ -43,238 +43,6 @@ namespace Ogui.UI {
 
 	#endregion
 
-	#region ElementPigments
-
-	#endregion
-
-	#region ControlInfo
-
-	/// <summary>
-	/// This class builds on the Widget Template, and offers some layout helper methods for
-	/// positioning controls relative to each other.
-	/// </summary>
-	public abstract class ControlTemplate : WidgetTemplate {
-		#region Constructors
-
-		/// <summary>
-		/// Default constructor initializes properties to their defaults.
-		/// </summary>
-		protected ControlTemplate() {
-			this.Tooltip = null;
-			IsActiveInitially = true;
-		}
-
-		#endregion
-
-		#region Properties
-
-		/// <summary>
-		/// The top left position of this control.  Defaults to the origin (0,0)
-		/// </summary>
-		public Point TopLeftPos { get; set; }
-
-		/// <summary>
-		/// If not null (the default), the text that is displayed as a tooltip.
-		/// </summary>
-		public string Tooltip { get; set; }
-
-		/// <summary>
-		/// If true (the default), this control will be Active when created.
-		/// </summary>
-		public bool IsActiveInitially { get; set; }
-
-		#endregion
-
-		#region Public Methods
-
-		/// <summary>
-		/// Calculates the Rect (in screen coordinates) of this control.
-		/// </summary>
-		/// <returns></returns>
-		public Rectangle CalculateRect() {
-			return new Rectangle(TopLeftPos, CalculateSize());
-		}
-
-		#endregion
-
-		#region Layout Helpers
-
-		/// <summary>
-		/// Layout helper - positions the control by setting the upper right coordinates.
-		/// </summary>
-		/// <param name="topRight"></param>
-		public void SetTopRight(Point topRight) {
-			TopLeftPos = topRight.Shift(1 - CalculateSize().Width, 0);
-		}
-
-
-		/// <summary>
-		/// Layout helper - positions the control by setting the lower right coordinates.
-		/// </summary>
-		/// <param name="bottomRight"></param>
-		public void SetBottomRight(Point bottomRight) {
-			TopLeftPos = bottomRight.Shift(1 - CalculateSize().Width,
-			                               1 - CalculateSize().Height);
-		}
-
-
-		/// <summary>
-		/// Layout helper - positions the control by setting the lower left coordinates.
-		/// </summary>
-		/// <param name="bottomLeft"></param>
-		public void SetBottomLeft(Point bottomLeft) {
-			TopLeftPos = bottomLeft.Shift(0, 1 - CalculateSize().Height);
-		}
-
-
-		/// <summary>
-		/// Layout helper - positions the control by setting the top center coordinates.
-		/// </summary>
-		/// <param name="topCenter"></param>
-		public void SetTopCenter(Point topCenter) {
-			Point ctr = CalculateRect().Center;
-
-			TopLeftPos = new Point(topCenter.X - ctr.X, topCenter.Y);
-		}
-
-
-		/// <summary>
-		/// Layout helper - positions the control by setting the center right coordinates.
-		/// </summary>
-		/// <param name="rightCenter"></param>
-		public void SetRightCenter(Point rightCenter) {
-			Point ctr = CalculateRect().Center;
-
-			SetTopRight(new Point(rightCenter.X, rightCenter.Y - ctr.Y));
-		}
-
-
-		/// <summary>
-		/// Layout helper - positions the control by setting the bottom center coordinates.
-		/// </summary>
-		/// <param name="bottomCenter"></param>
-		public void SetBottomCenter(Point bottomCenter) {
-			Point ctr = CalculateRect().Center;
-
-			SetBottomLeft(new Point(bottomCenter.X - ctr.X, bottomCenter.Y));
-		}
-
-
-		/// <summary>
-		/// Layout helper - positions the control by setting the center left coordinates.
-		/// </summary>
-		/// <param name="leftCenter"></param>
-		public void SetLeftCenter(Point leftCenter) {
-			Point ctr = CalculateRect().Center;
-
-			TopLeftPos = new Point(leftCenter.X, leftCenter.Y - ctr.Y);
-		}
-
-		/// <summary>
-		/// Layout helper - Aligns this control to the specified direction of the spcecified
-		/// control template.  This provides a means to specify control positions relative to
-		/// previously created templates.
-		/// </summary>
-		/// <param name="toDirection"></param>
-		/// <param name="ofControl"></param>
-		/// <param name="padding"></param>
-		public void AlignTo(LayoutDirection toDirection, ControlTemplate ofControl, int padding = 0) {
-			switch (toDirection) {
-				case LayoutDirection.North:
-					AlignNorth(ofControl.CalculateRect(), padding);
-					break;
-
-				case LayoutDirection.NorthEast:
-					AlignNorthEast(ofControl.CalculateRect(), padding);
-					break;
-
-				case LayoutDirection.East:
-					AlignEast(ofControl.CalculateRect(), padding);
-					break;
-
-				case LayoutDirection.SouthEast:
-					AlignSouthEast(ofControl.CalculateRect(), padding);
-					break;
-
-				case LayoutDirection.South:
-					AlignSouth(ofControl.CalculateRect(), padding);
-					break;
-
-				case LayoutDirection.SouthWest:
-					AlignSouthWest(ofControl.CalculateRect(), padding);
-					break;
-
-				case LayoutDirection.West:
-					AlignWest(ofControl.CalculateRect(), padding);
-					break;
-
-				case LayoutDirection.NorthWest:
-					AlignNorthWest(ofControl.CalculateRect(), padding);
-					break;
-			}
-		}
-		
-//		// UNDONE: Implement
-//		/// <summary>
-//		/// Not implemented.
-//		/// </summary>
-//		/// <param name="template1"></param>
-//		/// <param name="template2"></param>
-//		public void AlignBetween(ControlTemplate template1, ControlTemplate template2) {}
-
-		#endregion
-
-		#region Private
-
-		private void AlignSouth(Rectangle ofRect, int padding) {
-			Point ourCtr = CalculateRect().Center;
-			Point ofCtr = ofRect.Center;
-
-			TopLeftPos = new Point(ofCtr.X - ourCtr.X, ofRect.Bottom + padding);
-		}
-
-		private void AlignEast(Rectangle ofRect, int padding) {
-			Point ourCtr = CalculateRect().Center;
-			Point ofCtr = ofRect.Center;
-
-			TopLeftPos = new Point(ofRect.Right + padding, ofCtr.Y - ourCtr.Y);
-		}
-
-		private void AlignNorth(Rectangle ofRect, int padding) {
-			Point ourCtr = CalculateRect().Center;
-			Point ofCtr = ofRect.Center;
-
-			SetBottomLeft(new Point(ofCtr.X - ourCtr.X, ofRect.Top - (1 + padding)));
-		}
-
-		private void AlignWest(Rectangle ofRect, int padding) {
-			Point ourCtr = CalculateRect().Center;
-			Point ofCtr = ofRect.Center;
-
-			SetTopRight(new Point(ofRect.Left - (1 + padding), ofCtr.Y - ourCtr.Y));
-		}
-
-		private void AlignNorthEast(Rectangle ofRect, int padding) {
-			SetBottomLeft(ofRect.TopRight.Shift(padding, -(1 + padding)));
-		}
-
-		private void AlignSouthEast(Rectangle ofRect, int padding) {
-			TopLeftPos = ofRect.BottomRight.Shift(padding, padding);
-		}
-
-		private void AlignSouthWest(Rectangle ofRect, int padding) {
-			SetTopRight(ofRect.BottomLeft.Shift(-(1 + padding), padding));
-		}
-
-		private void AlignNorthWest(Rectangle ofRect, int padding) {
-			SetBottomRight(ofRect.TopLeft.Shift(-(1 + padding), -(1 + padding)));
-		}
-
-		#endregion
-	}
-
-	#endregion
-
 	#region Control
 
 	/// <summary>
@@ -283,6 +51,11 @@ namespace Ogui.UI {
 	/// </summary>
 	public abstract class Control : Widget {
 		#region Events
+
+		/// <summary>
+		/// Raised when control's autosize property is changed.
+		/// </summary>
+		public event EventHandler AutoSizeChanged;
 
 		/// <summary>
 		/// Raised when control has taken the keyboard focus.  This typically happens after
@@ -315,27 +88,33 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Construct a Control instance from the given template.
 		/// </summary>
-		/// <param name="template"></param>
-		protected Control(ControlTemplate template)
-				: base(template) {
-			Position = template.TopLeftPos;
-
+		protected Control() {
 			HasKeyboardFocus = false;
 			CanHaveKeyboardFocus = true;
 
 			IsActive = true;
 
 			this.HasFrame = true;
-			this.TooltipText = template.Tooltip;
+			this.TooltipText = null;
 
 			this.HilightWhenMouseOver = false;
 
-			this.IsActive = template.IsActiveInitially;
+			this.IsActive = true;
+			this.AutoSize = true;
 		}
 
 		#endregion
 
 		#region Public Properties
+
+		/// <summary>
+		/// Gets or sets a value that indicates whether the control resizes based on its contents.  
+		/// If true, the control automatically resizes itself based on content.  Otherwise, false.  Defaults to true.
+		/// </summary>
+		public bool AutoSize {
+			get { return autoSize; }
+			set { autoSize = value; }
+		}
 
 		/// <summary>
 		/// True if currently has keyboard focus.  This is set automatically by
@@ -353,7 +132,7 @@ namespace Ogui.UI {
 		/// If false, notifies framework that it does not want to receive user input messages.  This
 		/// control will stil receive system messages.  Input messages will propagate under
 		/// inactive controls - this allows inactive controls to be placed over other controls
-		/// without blocking messages.
+		/// without blocking messages.  Defaults to true.
 		/// </summary>
 		public bool IsActive { get; set; }
 
@@ -379,7 +158,7 @@ namespace Ogui.UI {
 		public bool HasFrame { get; protected set; }
 
 		/// <summary>
-		/// Set to a non-empty string to display a tooltip over this control on a hover action.
+		/// Set to a non-empty string to display a tooltip over this control on a hover action.  Defaults to empty string.
 		/// </summary>
 		public string TooltipText { get; set; }
 
@@ -430,6 +209,191 @@ namespace Ogui.UI {
 			return new Point(localPos.X + ScreenRect.TopLeft.X, localPos.Y + ScreenRect.TopLeft.Y);
 		}
 
+		#endregion
+
+		#region Layout Helpers
+		#region Public Methods
+
+		/// <summary>
+		/// Calculates the Rect (in screen coordinates) of this control.
+		/// </summary>
+		/// <returns></returns>
+		protected Rectangle CalculateRect() {
+			return new Rectangle(Position, Size);
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Layout helper - positions the control by setting the upper right coordinates.
+		/// </summary>
+		/// <param name="topRight"></param>
+		public void SetTopRight(Point topRight) {
+			Position = topRight.Shift(1 - Size.Width, 0);
+		}
+
+
+		/// <summary>
+		/// Layout helper - positions the control by setting the lower right coordinates.
+		/// </summary>
+		/// <param name="bottomRight"></param>
+		public void SetBottomRight(Point bottomRight) {
+			Position = bottomRight.Shift(1 - Size.Width,
+										   1 - Size.Height);
+		}
+
+
+		/// <summary>
+		/// Layout helper - positions the control by setting the lower left coordinates.
+		/// </summary>
+		/// <param name="bottomLeft"></param>
+		public void SetBottomLeft(Point bottomLeft) {
+			Position = bottomLeft.Shift(0, 1 - Size.Height);
+		}
+
+
+		/// <summary>
+		/// Layout helper - positions the control by setting the top center coordinates.
+		/// </summary>
+		/// <param name="topCenter"></param>
+		public void SetTopCenter(Point topCenter) {
+			Point ctr = CalculateRect().Center;
+
+			Position = new Point(topCenter.X - ctr.X, topCenter.Y);
+		}
+
+
+		/// <summary>
+		/// Layout helper - positions the control by setting the center right coordinates.
+		/// </summary>
+		/// <param name="rightCenter"></param>
+		public void SetRightCenter(Point rightCenter) {
+			Point ctr = CalculateRect().Center;
+
+			SetTopRight(new Point(rightCenter.X, rightCenter.Y - ctr.Y));
+		}
+
+
+		/// <summary>
+		/// Layout helper - positions the control by setting the bottom center coordinates.
+		/// </summary>
+		/// <param name="bottomCenter"></param>
+		public void SetBottomCenter(Point bottomCenter) {
+			Point ctr = CalculateRect().Center;
+
+			SetBottomLeft(new Point(bottomCenter.X - ctr.X, bottomCenter.Y));
+		}
+
+
+		/// <summary>
+		/// Layout helper - positions the control by setting the center left coordinates.
+		/// </summary>
+		/// <param name="leftCenter"></param>
+		public void SetLeftCenter(Point leftCenter) {
+			Point ctr = CalculateRect().Center;
+
+			Position = new Point(leftCenter.X, leftCenter.Y - ctr.Y);
+		}
+
+		/// <summary>
+		/// Layout helper - Aligns this control to the specified direction of the spcecified
+		/// control template.  This provides a means to specify control positions relative to
+		/// previously created templates.
+		/// </summary>
+		/// <param name="toDirection"></param>
+		/// <param name="ofControl"></param>
+		/// <param name="padding"></param>
+		public void AlignTo(LayoutDirection toDirection, Control ofControl, int padding = 0) {
+			switch (toDirection) {
+				case LayoutDirection.North:
+					AlignNorth(ofControl.CalculateRect(), padding);
+					break;
+
+				case LayoutDirection.NorthEast:
+					AlignNorthEast(ofControl.CalculateRect(), padding);
+					break;
+
+				case LayoutDirection.East:
+					AlignEast(ofControl.CalculateRect(), padding);
+					break;
+
+				case LayoutDirection.SouthEast:
+					AlignSouthEast(ofControl.CalculateRect(), padding);
+					break;
+
+				case LayoutDirection.South:
+					AlignSouth(ofControl.CalculateRect(), padding);
+					break;
+
+				case LayoutDirection.SouthWest:
+					AlignSouthWest(ofControl.CalculateRect(), padding);
+					break;
+
+				case LayoutDirection.West:
+					AlignWest(ofControl.CalculateRect(), padding);
+					break;
+
+				case LayoutDirection.NorthWest:
+					AlignNorthWest(ofControl.CalculateRect(), padding);
+					break;
+			}
+		}
+
+		//		// UNDONE: Implement
+		//		/// <summary>
+		//		/// Not implemented.
+		//		/// </summary>
+		//		/// <param name="template1"></param>
+		//		/// <param name="template2"></param>
+		//		public void AlignBetween(ControlTemplate template1, ControlTemplate template2) {}
+
+		#region Private
+
+		private void AlignSouth(Rectangle ofRect, int padding) {
+			Point ourCtr = CalculateRect().Center;
+			Point ofCtr = ofRect.Center;
+
+			Position = new Point(ofCtr.X - ourCtr.X, ofRect.Bottom + padding);
+		}
+
+		private void AlignEast(Rectangle ofRect, int padding) {
+			Point ourCtr = CalculateRect().Center;
+			Point ofCtr = ofRect.Center;
+
+			Position = new Point(ofRect.Right + padding, ofCtr.Y - ourCtr.Y);
+		}
+
+		private void AlignNorth(Rectangle ofRect, int padding) {
+			Point ourCtr = CalculateRect().Center;
+			Point ofCtr = ofRect.Center;
+
+			SetBottomLeft(new Point(ofCtr.X - ourCtr.X, ofRect.Top - (1 + padding)));
+		}
+
+		private void AlignWest(Rectangle ofRect, int padding) {
+			Point ourCtr = CalculateRect().Center;
+			Point ofCtr = ofRect.Center;
+
+			SetTopRight(new Point(ofRect.Left - (1 + padding), ofCtr.Y - ourCtr.Y));
+		}
+
+		private void AlignNorthEast(Rectangle ofRect, int padding) {
+			SetBottomLeft(ofRect.TopRight.Shift(padding, -(1 + padding)));
+		}
+
+		private void AlignSouthEast(Rectangle ofRect, int padding) {
+			Position = ofRect.BottomRight.Shift(padding, padding);
+		}
+
+		private void AlignSouthWest(Rectangle ofRect, int padding) {
+			SetTopRight(ofRect.BottomLeft.Shift(-(1 + padding), padding));
+		}
+
+		private void AlignNorthWest(Rectangle ofRect, int padding) {
+			SetBottomRight(ofRect.TopLeft.Shift(-(1 + padding), -(1 + padding)));
+		}
+
+		#endregion
 		#endregion
 
 		#region Protected Properties
@@ -516,6 +480,13 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Message Handlers
+		/// <summary>
+		/// Override to add custom code when AutoSize is changed.
+		/// </summary>
+		protected internal virtual void OnAutoSizeChanged() {
+			if (AutoSizeChanged != null)
+				AutoSizeChanged(this, EventArgs.Empty);
+		}
 
 		/// <summary>
 		/// This method sets HasKeyboardFocus to true, and raises the TakeKBFocus event.  Override
@@ -612,6 +583,9 @@ namespace Ogui.UI {
 		}
 
 		#endregion
+
+		private bool autoSize;
+
 	}
 
 	#endregion

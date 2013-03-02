@@ -3,48 +3,6 @@ using DEngine.Core;
 using Ogui.Core;
 
 namespace Ogui.UI {
-	//public interface ITemplate
-	//{
-	//    Size CalculateSize();
-	//}
-
-	/// <summary>
-	/// The abstract base class for widget templates.  When subclassing a type of Widget, consider
-	/// also subclassing WidgetTemplate to provide an interface for the client to specify
-	/// options, and override CalculateSize to ensure that the widget is created with the correct
-	/// size.
-	/// </summary>
-	public abstract class WidgetTemplate {
-		/// <summary>
-		/// Default constructor initializes properties to their defaults.
-		/// </summary>
-		protected WidgetTemplate() {
-			OwnerDraw = false;
-			Pigments = new PigmentAlternatives();
-		}
-
-		/// <summary>
-		/// If true, then base classes will not do any drawing to the canvas, including clearing
-		/// or blitting to the screen.  This property is present so that subclasses can implement
-		/// specialized drawing code for optimization or that would otherwise be difficult to 
-		/// implement using overrides/events.  Defaults to false.
-		/// </summary>
-		public bool OwnerDraw { get; set; }
-
-		/// <summary>
-		/// Any pigments added to this dictionary will override the default pigments for the widget.
-		/// Use this to define custom pigments for a widget and any of its children.
-		/// Defaults to an empty collection.
-		/// </summary>
-		public PigmentAlternatives Pigments { get; set; }
-
-		/// <summary>
-		/// An override of this method should return the exact and final size of the widget.  This size is
-		/// used during the contruction of an object from a template.
-		/// </summary>
-		public abstract Size CalculateSize();
-	}
-
 	/// <summary>
 	/// Base class for any component that gets drawn on the screen.  A widget provides
 	/// a Canvas for drawing operations.
@@ -65,15 +23,14 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Construct a Widget instance from the given template.
 		/// </summary>
-		/// <param name="template"></param>
-		protected Widget(WidgetTemplate template) {
+		protected Widget() {
 			this.Position = new Point(0, 0);
-			this.Size = template.CalculateSize();
+			this.Size = new Size(0, 0);
 			this.Canvas = new Canvas(Size);
 
-			this.OwnerDraw = template.OwnerDraw;
+			this.OwnerDraw = false;
 
-			this.PigmentOverrides = template.Pigments.Copy();
+			this.PigmentOverrides = new PigmentAlternatives();
 		}
 
 		#endregion
@@ -103,7 +60,7 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Get the the size of the widget.
 		/// </summary>
-		public Size Size { get; private set; }
+		public abstract Size Size { get; set; }
 
 		/// <summary>
 		/// Get the pigment map for this widget.  Alternatives can be set or removed
@@ -127,7 +84,7 @@ namespace Ogui.UI {
 		/// If true, then base classes will not do any drawing to the canvas, including clearing
 		/// or blitting to the screen.  This property is present so that subclasses can implement
 		/// specialized drawing code for optimization or that would otherwise be difficult to 
-		/// implement using overrides/events.
+		/// implement using overrides/events.  Defaults to false.
 		/// </summary>
 		protected bool OwnerDraw { get; set; }
 

@@ -287,7 +287,7 @@ namespace Ogui.UI {
 
 		private int Run() {
 			if (StateCount <= 0) {
-				Window win = new Window(new WindowTemplate());
+				Window win = new Window();
 				Push(win);
 			}
 

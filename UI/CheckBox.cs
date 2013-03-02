@@ -1,124 +1,7 @@
-﻿//Copyright (c) 2010 Shane Baker
-//
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
-
-//The above copyright notice and this permission notice shall be included in
-//all copies or substantial portions of the Software.
-
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//THE SOFTWARE.
-//
-
-using System;
+﻿using System;
 using DEngine.Core;
 
 namespace Ogui.UI {
-	/// <summary>
-	/// Contains the data needed to construct a CheckBox object.  A CheckBox will, by default, automatically
-	/// generate its width based on the Label and MinimumWidth properties of the template, leaving space for
-	/// the check element, and will always
-	/// have a height of 3 (1 space for the label and 2 spaces for the borders).
-	/// </summary>
-	public class CheckBoxTemplate : ControlTemplate {
-		/// <summary>
-		/// Default constructor, sets all properties to the default.
-		/// </summary>
-		public CheckBoxTemplate() {
-			this.Label = "";
-			this.MinimumWidth = 0;
-			LabelAlignment = HorizontalAlignment.Left;
-			CheckOnLeft = true;
-			HilightWhenMouseOver = false;
-			CanHaveKeyboardFocus = false;
-			HasFrameBorder = true;
-			VerticalAlign = VerticalAlignment.Center;
-		}
-
-
-		/// <summary>
-		/// Set this to manually size the check box.  If empty (the default), then the 
-		/// check box will be autosized.
-		/// </summary>
-		public Size AutoSizeOverride { get; set; }
-
-		/// <summary>
-		/// The text displayed by the checkbox.  Defaults to empty string ""
-		/// </summary>
-		public string Label { get; set; }
-
-		/// <summary>
-		/// The minimum width of the button when autosizing.  This property is ignored if MinimumWidth is less 
-		/// than the automatically calculated size.  Defaults to 0.
-		/// </summary>
-		public int MinimumWidth { get; set; }
-
-		/// <summary>
-		/// If there is extra spacing in the label area, the label gets aligned
-		/// according to this.  Defautls to HorizontalAlignment.Left
-		/// </summary>
-		public HorizontalAlignment LabelAlignment { get; set; }
-
-		/// <summary>
-		/// The vertical alignment of the label and check element.  Defaults to
-		/// VerticalAlignment.Center
-		/// </summary>
-		public VerticalAlignment VerticalAlign { get; set; }
-
-		/// <summary>
-		/// If true, the check field is placed left of the label, otherwise on the 
-		/// right.  Defaults to true.
-		/// </summary>
-		public bool CheckOnLeft { get; set; }
-
-		/// <summary>
-		/// True if the checkbox will draw itself with hilight colors when under the mouse
-		/// pointer.  Defaults to false.
-		/// </summary>
-		public bool HilightWhenMouseOver { get; set; }
-
-		/// <summary>
-		/// Set to true if this control can take the keyboard focus.
-		/// Defaults to false.
-		/// </summary>
-		public bool CanHaveKeyboardFocus { get; set; }
-
-		/// <summary>
-		/// If true, a border will be drawn around the check box.  If autosizing, space for the
-		/// frame will be added.  Defaults to true.
-		/// </summary>
-		public bool HasFrameBorder { get; set; }
-
-		/// <summary>
-		/// Auto generates the size of the control based on the other options.
-		/// </summary>
-		/// <returns></returns>
-		public override Size CalculateSize() {
-			if (!AutoSizeOverride.IsEmpty)
-				return AutoSizeOverride;
-
-			int width = Canvas.TextLength(Label) + 1;
-			int height = 1;
-
-			if (HasFrameBorder) {
-				width += 2;
-				height += 2;
-			}
-			width = Math.Max(width, MinimumWidth);
-
-			return new Size(width, height);
-		}
-	}
-
 	/// <summary>
 	/// Represents a check box control.  A CheckBox has a label and a checkable element that displays the 
 	/// current state of the IsChecked property.  This state
@@ -140,26 +23,22 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Construct a CheckBox instance from the given template.
 		/// </summary>
-		/// <param name="template"></param>
-		public CheckBox(CheckBoxTemplate template)
-				: base(template) {
-			HasFrame = template.HasFrameBorder;
+		public CheckBox() {
+			HasFrame = true;
 
 			if (Size.Height < 3 || Size.Width < 3)
 				HasFrame = false;
 
-			HilightWhenMouseOver = template.HilightWhenMouseOver;
-			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
+			HilightWhenMouseOver = false;
+			CanHaveKeyboardFocus = false;
 
-			this.Label = template.Label;
-			if (Label == null)
-				Label = "";
+			this.Label = String.Empty;
+			
+			this.CheckOnLeft = true;
+			this.LabelAlignment = HorizontalAlignment.Left;
+			this.VerticalAlign = VerticalAlignment.Center;
 
-			this.CheckOnLeft = template.CheckOnLeft;
-			this.LabelAlignment = template.LabelAlignment;
-			this.VerticalAlign = template.VerticalAlign;
-
-			CalcMetrics(template);
+			CalcMetrics();
 		}
 
 		#endregion
@@ -170,12 +49,18 @@ namespace Ogui.UI {
 		/// Get or set the current checked state of the checkbox.  Setting this property will
 		/// not raise a CheckBoxToggled event.
 		/// </summary>
-		public bool IsChecked { get; set; }
+		public bool IsChecked {
+			get { return isChecked; }
+			set { isChecked = value; }
+		}
 
 		/// <summary>
 		/// Get the label string
 		/// </summary>
-		public string Label { get; private set; }
+		public string Label {
+			get { return label; }
+			private set { label = value; }
+		}
 
 		/// <summary>
 		/// True if the check element appears left of the label, otherwise on right side
@@ -246,10 +131,13 @@ namespace Ogui.UI {
 		private Rectangle labelRect;
 		private Point checkPos;
 
-		private void CalcMetrics(CheckBoxTemplate template) {
+		private bool isChecked;
+		private string label;
+
+		private void CalcMetrics() {
 			Rectangle inner = this.LocalRect;
 
-			if (template.HasFrameBorder && template.CalculateSize().Height >= 3)
+			if (HasFrame && Size.Height >= 3)
 				inner = inner.Inflate(-1, -1);
 
 			int checkX;
@@ -265,7 +153,7 @@ namespace Ogui.UI {
 			}
 
 			if (labelRect.Size.Width < 1)
-				Label = "";
+				Label = String.Empty;
 
 			switch (VerticalAlign) {
 				case VerticalAlignment.Bottom:
