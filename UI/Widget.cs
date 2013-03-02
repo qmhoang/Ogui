@@ -58,7 +58,7 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Get the Canvas object associated with this widget.
 		/// </summary>
-		public Canvas Canvas { get; private set; }
+		public Canvas Canvas { get; protected set; }
 
 		/// <summary>
 		/// Get the the size of the widget.
@@ -136,8 +136,6 @@ namespace Ogui.UI {
 			if (SizeChanged != null)
 				SizeChanged(this, EventArgs.Empty);
 
-			if (Canvas != null)
-				Canvas.Dispose();
 			Canvas = new Canvas(Size);
 		}
 

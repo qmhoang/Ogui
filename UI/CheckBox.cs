@@ -70,6 +70,7 @@ namespace Ogui.UI {
 				}
 				
 				Size = new Size(width, height);
+				CalcMetrics();
 			}
 		}
 
@@ -162,9 +163,6 @@ namespace Ogui.UI {
 				labelRect = new Rectangle(inner.TopLeft,
 				                     inner.BottomRight.Shift(-2, -1));
 			}
-
-			if (labelRect.Size.Width < 1)
-				Label = String.Empty;
 
 			switch (VerticalAlign) {
 				case VerticalAlignment.Bottom:
