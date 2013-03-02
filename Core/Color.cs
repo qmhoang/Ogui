@@ -3,10 +3,10 @@ using libtcod;
 
 namespace Ogui.Core {
 	/// <summary>
-	/// This class wraps a TCODColor in an immutable data type.  Provides nearly identical
-	/// functionality as TCODColor.
+	/// This class wraps a TCODColor.  Provides nearly identical
+	/// functionality as TCODColor.  Should autobox a TCODColor also.
 	/// </summary>
-	public class Color : IDisposable {
+	public sealed class Color : IDisposable {
 		#region Constructors
 
 		/// <summary>
@@ -18,11 +18,7 @@ namespace Ogui.Core {
 			if (tcodColor == null)
 				throw new ArgumentNullException("tcodColor");
 
-			red = tcodColor.Red;
-			green = tcodColor.Green;
-			blue = tcodColor.Blue;
-
-			color = new TCODColor(red, green, blue);
+			color = tcodColor;
 		}
 
 		/// <summary>
@@ -32,10 +28,6 @@ namespace Ogui.Core {
 		/// <param name="green"></param>
 		/// <param name="blue"></param>
 		public Color(byte red, byte green, byte blue) {
-			this.red = red;
-			this.green = green;
-			this.blue = blue;
-
 			color = new TCODColor(red, green, blue);
 		}
 
@@ -52,13 +44,8 @@ namespace Ogui.Core {
 
 			r = r >> 16;
 			g = g >> 8;
-
-
-			this.red = (byte) r;
-			this.green = (byte) g;
-			this.blue = (byte) b;
-
-			color = new TCODColor(red, green, blue);
+			
+			color = new TCODColor(r, g, b);
 		}
 
 		#endregion
@@ -68,142 +55,99 @@ namespace Ogui.Core {
 		/// <summary>
 		/// Get the red value of color, 0-255
 		/// </summary>
-		public byte Red {
-			get { return red; }
-		}
+		public byte Red { get { return color.Red; } }
 
 		/// <summary>
 		/// Get the green value of color, 0-255
 		/// </summary>
-		public byte Green {
-			get { return green; }
-		}
+		public byte Green { get { return color.Green; } }
 
 		/// <summary>
 		/// Get the blue value of the color, 0-255
 		/// </summary>
-		public byte Blue {
-			get { return blue; }
-		}
+		public byte Blue { get { return color.Blue; } }
 
 		#endregion
 
 		#region Public Methods
 
+		public static implicit operator TCODColor(Color color) {
+			return color.color;
+		}
+
 		/// <summary>
 		/// Scales saturation by given amount (0.0 --> 1.0)
-		/// Returns new instance - original instance is unchanged
 		/// </summary>
 		public Color ScaleSaturation(float scale) {
-			TCODColor ret = new TCODColor();
-
-			float h, s, v;
-			color.getHSV(out h, out s, out v);
-
-			ret.setHSV(h, s * scale, v);
-
-			return new Color(ret);
+			color.scaleHSV(scale, 1.0f);
+			return this;		
 		}
 
 		/// <summary>
 		/// Scales value (brightness) by given amount (0.0 --> 1.0)
-		/// Returns new instance - original instance is unchanged
 		/// </summary>
 		/// <param name="scale"></param>
 		/// <returns></returns>
 		public Color ScaleValue(float scale) {
-			TCODColor ret = new TCODColor();
-
-			float h, s, v;
-			color.getHSV(out h, out s, out v);
-
-			ret.setHSV(h, s, v * scale);
-
-			return new Color(ret);
+			color.scaleHSV(1.0f, scale);
+			return this;			
 		}
 
 		/// <summary>
 		/// Replaces hue with given hue (0.0 --> 360.0)
-		/// Returns new instance - original instance is unchanged
 		/// </summary>
 		/// <param name="hue"></param>
 		/// <returns></returns>
 		public Color ReplaceHue(float hue) {
-			TCODColor ret = new TCODColor();
-
-			float h, s, v;
-			color.getHSV(out h, out s, out v);
-
-			ret.setHSV(hue, s, v);
-
-			return new Color(ret);
+			color.setHue(hue);
+			return this;
 		}
 
 		/// <summary>
 		/// Replaces saturation with given saturation (0.0 --> 1.0)
-		/// Returns new instance - original instance is unchanged
 		/// </summary>
 		/// <param name="saturation"></param>
 		/// <returns></returns>
 		public Color ReplaceSaturation(float saturation) {
-			TCODColor ret = new TCODColor();
-
-			float h, s, v;
-			color.getHSV(out h, out s, out v);
-
-			ret.setHSV(h, saturation, v);
-
-			return new Color(ret);
+			color.setSaturation(saturation);
+			return this;
 		}
 
 		/// <summary>
 		/// Replaces value (brightness) with given value (0.0 --> 1.0)
-		/// Returns new instance - original instance is unchanged
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public Color ReplaceValue(float value) {
-			TCODColor ret = new TCODColor();
-
-			float h, s, v;
-			color.getHSV(out h, out s, out v);
-
-			ret.setHSV(h, s, value);
-
-			return new Color(ret);
+			color.setValue(value);
+			return this;
 		}
 
 		/// <summary>
 		/// Returns hue (0.0 --> 360.0)
 		/// </summary>
-		/// <returns></returns>
-		public float GetHue() {
-			float h, s, v;
-			color.getHSV(out h, out s, out v);
-
-			return h;
+		/// <value></value>
+		public float Hue {
+			get { return color.getHue(); }
+			set { ReplaceHue(value); }
 		}
 
 		/// <summary>
 		/// Returns saturation (0.0 --> 1.0)
 		/// </summary>
-		/// <returns></returns>
-		public float GetSaturation() {
-			float h, s, v;
-			color.getHSV(out h, out s, out v);
-
-			return s;
+		/// <value></value>
+		public float Saturation {
+			get { return color.getSaturation(); }
+			set { ReplaceSaturation(value); }
 		}
 
 		/// <summary>
 		/// Returns value (brightness) (0.0 --> 1.0)
 		/// </summary>
-		/// <returns></returns>
-		public float GetValue() {
-			float h, s, v;
-			color.getHSV(out h, out s, out v);
-
-			return v;
+		/// <value></value>
+		public float Value {
+			get { return color.getValue(); }
+			set { ReplaceValue(value); }
 		}
 
 		/// <summary>
@@ -211,7 +155,7 @@ namespace Ogui.Core {
 		/// </summary>
 		/// <returns></returns>
 		public TCODColor TCODColor {
-			get { return new TCODColor(color.Red, color.Green, color.Blue); }
+			get { return color; }
 		}
 
 		/// <summary>
@@ -240,9 +184,9 @@ namespace Ogui.Core {
 
 		private string CodeString {
 			get {
-				char r = (char) (Math.Max(this.red, (byte) 1));
-				char g = (char) (Math.Max(this.green, (byte) 1));
-				char b = (char) (Math.Max(this.blue, (byte) 1));
+				char r = (char) (Math.Max(this.Red, (byte) 1));
+				char g = (char) (Math.Max(this.Green, (byte) 1));
+				char b = (char) (Math.Max(this.Blue, (byte) 1));
 
 				string str = r.ToString() + g.ToString() + b.ToString();
 
@@ -251,23 +195,22 @@ namespace Ogui.Core {
 		}
 
 		/// Returns the foreground color code string.
-		public static readonly string CodeForeground = "\x06";
+		public const string CodeForeground = "\x06";
 
 		/// Returns the background color code string.
-		public static readonly string CodeBackground = "\x07";
+		public const string CodeBackground = "\x07";
 
 		/// Returns the stop color code string.
-		public static readonly string StopColorCode = "\x08";
+		public const string StopColorCode = "\x08";
 
 		public override string ToString() {
-			return red.ToString("x2") + green.ToString("x2") + blue.ToString("x2");
+			return Red.ToString("x2") + Green.ToString("x2") + Blue.ToString("x2");
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private readonly byte red, green, blue;
 		private readonly TCODColor color;
 
 		#endregion
@@ -313,7 +256,7 @@ namespace Ogui.Core {
 		/// Override to add custom disposing code.
 		/// </summary>
 		/// <param name="isDisposing"></param>
-		protected virtual void Dispose(bool isDisposing) {
+		private void Dispose(bool isDisposing) {
 			if (alreadyDisposed)
 				return;
 			if (isDisposing)

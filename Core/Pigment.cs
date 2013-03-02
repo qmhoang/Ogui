@@ -15,29 +15,17 @@ namespace Ogui.Core {
 		/// <param name="foreground"></param>
 		/// <param name="background"></param>
 		/// <param name="bgFlag"></param>
-		public Pigment(Color foreground, Color background, TCODBackgroundFlag bgFlag) {
+		public Pigment(Color foreground, Color background, TCODBackgroundFlag bgFlag = TCODBackgroundFlag.Set) {
 			fgColor = foreground;
 			bgColor = background;
 			this.bgFlag = bgFlag;
 		}
 
 		/// <summary>
-		/// BGFlag defaults to TCODBackgroundFlag.Set
-		/// </summary>
-		public Pigment(Color foreground, Color background)
-				: this(foreground, background, TCODBackgroundFlag.Set) {}
-
-		/// <summary>
 		/// Construct a Pigment given foreground and background colors and background flag.
 		/// </summary>
-		public Pigment(long foreground, long background, TCODBackgroundFlag bgFlag)
+		public Pigment(long foreground, long background, TCODBackgroundFlag bgFlag = TCODBackgroundFlag.Set)
 				: this(new Color(foreground), new Color(background), bgFlag) {}
-
-		/// <summary>
-		/// BGFlag defaults to TCODBackgroundFlag.Set
-		/// </summary>
-		public Pigment(long foreground, long background)
-				: this(foreground, background, TCODBackgroundFlag.Set) {}
 
 		#endregion
 
