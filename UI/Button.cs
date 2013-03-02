@@ -4,100 +4,6 @@ using Ogui.Core;
 
 namespace Ogui.UI {
 
-	#region Button Template class
-
-	/// <summary>
-	/// Contains the data needed to construct a Button object.  A button will, by default, automatically
-	/// generate its size based on the Label and MinimumWidth properties of the template, and will always
-	/// have a height of 3 (1 space for the label and 2 spaces for the borders).  Otherwise,
-	/// specify a custom size using the AutoSizeOverride property.
-	/// </summary>
-	public class ButtonTemplate : ControlTemplate {
-		/// <summary>
-		/// Default constructor initializes properties to their defaults.
-		/// </summary>
-		public ButtonTemplate() {
-			this.LabelAlignment = HorizontalAlignment.Left;
-			this.Label = "";
-			this.MinimumWidth = 0;
-			HilightWhenMouseOver = true;
-			CanHaveKeyboardFocus = false;
-			HasFrameBorder = true;
-			VAlignment = VerticalAlignment.Center;
-		}
-
-
-		/// <summary>
-		/// The text displayed by the button.  Defaults to empty string ""
-		/// </summary>
-		public string Label { get; set; }
-
-		/// <summary>
-		/// The minimum width of the button.  This property is ignored if either AutoSizeOverride
-		/// is set to a non-zero size, or if MinimumWidth is less than the automatically calculated
-		/// size.  Defaults to 0.
-		/// </summary>
-		public int MinimumWidth { get; set; }
-
-		/// <summary>
-		/// The horizontal alignment of the label.  Defaults to HorizontalAlignment.Left.
-		/// </summary>
-		public HorizontalAlignment LabelAlignment { get; set; }
-
-		/// <summary>
-		/// True if the button will draw itself with hilight colors when under the mouse
-		/// pointer.  Defaults to true.
-		/// </summary>
-		public bool HilightWhenMouseOver { get; set; }
-
-		/// <summary>
-		/// Set to true if this button can take the keyboard focus by being left-clicked on.
-		/// Defaults to false.
-		/// </summary>
-		public bool CanHaveKeyboardFocus { get; set; }
-
-		/// <summary>
-		/// If true, the button will have a frame drawn around it.  If autosizing, space
-		/// for the frame will be added.  Defaults to true.
-		/// </summary>
-		public bool HasFrameBorder { get; set; }
-
-		/// <summary>
-		/// Use this to manually provide a size for the button.  If empty (the default), then
-		/// the button will atuosize.
-		/// </summary>
-		public Size AutoSizeOverride { get; set; }
-
-		/// <summary>
-		/// The vertical alignment of the label.  Only used if the AutoSizeOverride property
-		/// has been set to a height of greater than 1.  Defaults to VerticalAlignment.Center.
-		/// </summary>
-		public VerticalAlignment VAlignment { get; set; }
-
-
-		/// <summary>
-		/// Auto generates the size of the button based on the other options.
-		/// </summary>
-		/// <returns></returns>
-		public override Size CalculateSize() {
-			if (AutoSizeOverride.IsEmpty) {
-				int len = Canvas.TextLength(Label);
-				int width = len;
-				int height = 1;
-
-				if (HasFrameBorder) {
-					width += 2;
-					height += 2;
-				}
-
-				return new Size(Math.Max(width, MinimumWidth), height);
-			} else
-				return AutoSizeOverride;
-		}
-	}
-
-	#endregion
-
 	#region Button Class
 
 	/// <summary>
@@ -119,21 +25,14 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Constructs a Button instance given the template.
 		/// </summary>
-		public Button(ButtonTemplate template)
-				: base(template) {
-			this.Label = template.Label;
-			this.LabelAlignment = template.LabelAlignment;
-			HilightWhenMouseOver = template.HilightWhenMouseOver;
-			HasFrame = template.HasFrameBorder;
-			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
-
-			LabelRect = new Rectangle(Point.Origin, this.Size);
-			VAlignment = template.VAlignment;
-
-			if (template.HasFrameBorder &&
-			    this.Size.Width > 2 &&
-			    this.Size.Height > 2)
-				LabelRect = LabelRect.Inflate(-1, -1);
+		public Button() {
+			this.Label = String.Empty;
+			this.LabelAlignment = HorizontalAlignment.Left;
+			HilightWhenMouseOver = true;
+			HasFrame = true;
+			CanHaveKeyboardFocus = false;
+			
+			VAlignment = VerticalAlignment.Center;
 		}
 
 		#endregion
@@ -141,25 +40,45 @@ namespace Ogui.UI {
 		#region Public Properties
 
 		/// <summary>
-		/// Get the button Label.
+		/// Get the button Label.  Defaults to empty string ""
 		/// </summary>
-		public string Label { get; private set; }
+		public string Label {
+			get { return label; }
+			private set {
+				label = value;
+
+				if (AutoSize) {
+					int len = Canvas.TextLength(Label);
+					int width = len;
+					int height = 1;
+
+					if (HasFrame) {
+						width += 2;
+						height += 2;
+					}
+
+					Size = new Size(width, height);
+				}
+			}
+		}
 
 		/// <summary>
-		/// Get or set the label's horizontal alignment.
+		/// Get or set the label's horizontal alignment.  Defaults to HorizontalAlignment.Left.
 		/// </summary>
 		public HorizontalAlignment LabelAlignment { get; set; }
 
 		/// <summary>
 		/// Get or set the label's vertical alignment.  This will only have an effect if
 		/// the height of the button is larger than 3 as specified by the AutoSizeOverride
-		/// property of the creating template.
+		/// property of the creating template.  Defaults to VerticalAlignment.Center.
 		/// </summary>
 		protected VerticalAlignment VAlignment { get; set; }
 
 		#endregion
 
 		#region  Protected Methods
+
+		public override Size Size { get; set; }
 
 		/// <summary>
 		/// This base method clears the Canvas, draws the frame (if any), and draws the label, unless
@@ -168,11 +87,22 @@ namespace Ogui.UI {
 		/// </summary>
 		protected override void Redraw() {
 			base.Redraw();
-			if (!OwnerDraw)
-				Canvas.PrintStringAligned(LabelRect,
-				                          Label,
-				                          LabelAlignment,
-				                          VAlignment);
+			if (!OwnerDraw) {
+				if (HasFrame &&
+				this.Size.Width > 2 &&
+				this.Size.Height > 2) {
+					Canvas.PrintStringAligned(new Rectangle(Point.One, new Size(Size.Width - 2, Size.Height - 2)),
+					                          Label,
+					                          LabelAlignment,
+					                          VAlignment);
+				} else {
+					Canvas.PrintStringAligned(new Rectangle(Point.Origin, Size),
+											  Label,
+											  LabelAlignment,
+											  VAlignment);
+				}
+			}
+				
 		}
 
 
@@ -231,9 +161,7 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Private
-
-		private Rectangle LabelRect { get; set; }
-
+		private string label;
 		#endregion
 	}
 

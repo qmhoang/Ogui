@@ -6,67 +6,6 @@ using Ogui.Core;
 
 namespace Ogui.UI {
 
-	#region Window Template Class
-
-	/// <summary>
-	/// When subclassing a type of Window, consider
-	/// also subclassing WindowTemplate to provide an interface for the client to specify
-	/// options.
-	/// </summary>
-	public class WindowTemplate : WidgetTemplate {
-		/// <summary>
-		/// Default constructor initializes properties to their defaults.
-		/// </summary>
-		public WindowTemplate() {
-			HasFrame = false;
-
-			TooltipFGAlpha = 1.0f;
-			TooltipBGAlpha = 0.6f;
-			Size = Application.ScreenSize;
-			TopLeftPos = Point.Zero;
-		}
-
-		/// <summary>
-		/// True if a frame is drawn around the window initially.
-		/// </summary>
-		public bool HasFrame { get; set; }
-
-		/// <summary>
-		/// The foreground alpha for any tooltips shown on this window.  Default to 1.0.
-		/// </summary>
-		public float TooltipFGAlpha { get; set; }
-
-		/// <summary>
-		/// The background alpha for any tooltips shown on this window.  Defaults to 0.6.
-		/// </summary>
-		public float TooltipBGAlpha { get; set; }
-
-		/// <summary>
-		/// The size of the panel, defaults to Application width x height.
-		/// </summary>
-		public Size Size { get; set; }
-
-		/// <summary>
-		/// The top left position of this control.  Defaults to the origin (0,0)
-		/// </summary>
-		public Point TopLeftPos { get; set; }
-
-		/// <summary>
-		/// If set to true, window will not obscure windows below it.
-		/// </summary>
-		public bool IsPopup { get; set; }
-
-		/// <summary>
-		/// Returns the screen size.
-		/// </summary>
-		/// <returns></returns>
-		public override Size CalculateSize() {
-			return Size;
-		}
-	}
-
-	#endregion
-
 	public enum WindowState {
 		Active,
 		Hidden,
@@ -88,20 +27,23 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Construct a Window instance from the given template.
 		/// </summary>
-		/// <param name="template"></param>
-		public Window(WindowTemplate template)
-				: base(template) {
+		
+		public Window() {
 			this.controlList = new List<Control>();
 			this.managerList = new List<Manager>();
 
-			HasFrame = template.HasFrame;
-			TooltipBGAlpha = template.TooltipBGAlpha;
-			TooltipFGAlpha = template.TooltipFGAlpha;
-
-			Position = template.TopLeftPos;
-			IsPopup = template.IsPopup;
+			HasFrame = false;
+			TooltipBGAlpha = 0.6f;
+			TooltipFGAlpha = 1.0f;
 
 			Input = new InputManager(this);
+			/*
+			 * HasFrame = false;
+
+			TooltipFGAlpha = 1.0f;
+			TooltipBGAlpha = 0.6f;
+			Size = Application.ScreenSize;
+			TopLeftPos = Point.Zero;*/
 		}
 
 		#endregion
@@ -114,32 +56,25 @@ namespace Ogui.UI {
 		public Application ParentApplication { get; internal set; }
 
 		/// <summary>
-		/// If true, a frame will be drawn around the border of the window.
+		/// If true, a frame will be drawn around the border of the window.  Defaults to false.
 		/// </summary>
 		public bool HasFrame { get; set; }
 
 		/// <summary>
-		/// The foreground alpha for any tooltips shown on this window.
+		/// The foreground alpha for any tooltips shown on this window.  Default to 1.0f.
 		/// </summary>
 		public float TooltipFGAlpha { get; protected set; }
 
 		/// <summary>
-		/// The background alpha for any tooltips shown on this window.
+		/// The background alpha for any tooltips shown on this window.  Default to 0.6f.
 		/// </summary>
 		public float TooltipBGAlpha { get; protected set; }
-
-		/// <summary>
-		/// Normally when one screen is brought up over the top of another,
-		/// the first screen will transition off to make room for the new
-		/// one. This property indicates whether the screen is only a small
-		/// popup, in which case screens underneath it do not need to bother
-		/// transitioning off.
-		/// </summary>
-		public bool IsPopup { get; protected set; }
 
 		public WindowState WindowState { get; protected set; }
 
 		public InputManager Input { get; protected set; }
+
+		public override Size Size { get; set; }
 
 		/// <summary>
 		/// Checks whether this screen is active and can respond to user input.
