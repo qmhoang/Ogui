@@ -44,7 +44,6 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Public Properties
-
 		/// <summary>
 		/// Get or set the current checked state of the checkbox.  Setting this property will
 		/// not raise a CheckBoxToggled event.
@@ -59,7 +58,19 @@ namespace Ogui.UI {
 		/// </summary>
 		public string Label {
 			get { return label; }
-			private set { label = value; }
+			set {
+				label = value;
+
+				int width = Canvas.TextLength(Label) + 1;
+				int height = 1;
+
+				if (HasFrame) {
+					width += 2;
+					height += 2;
+				}
+				
+				Size = new Size(width, height);
+			}
 		}
 
 		/// <summary>

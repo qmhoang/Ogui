@@ -44,7 +44,7 @@ namespace Ogui.UI {
 		/// </summary>
 		public string Label {
 			get { return label; }
-			private set {
+			set {
 				label = value;
 
 				if (AutoSize) {
@@ -77,8 +77,6 @@ namespace Ogui.UI {
 		#endregion
 
 		#region  Protected Methods
-
-		public override Size Size { get; set; }
 
 		/// <summary>
 		/// This base method clears the Canvas, draws the frame (if any), and draws the label, unless
@@ -132,7 +130,11 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Message Handlers
+		protected internal override void OnSizeChanged() {
+			base.OnSizeChanged();
 
+
+		}
 		/// <summary>
 		/// Called when a mouse button is released while over this button.  Triggers proper
 		/// events.  Override to add custom handling.

@@ -37,6 +37,8 @@ namespace Ogui.UI {
 			TooltipFGAlpha = 1.0f;
 
 			Input = new InputManager(this);
+			Size = Application.ScreenSize;
+
 			/*
 			 * HasFrame = false;
 
@@ -73,8 +75,6 @@ namespace Ogui.UI {
 		public WindowState WindowState { get; protected set; }
 
 		public InputManager Input { get; protected set; }
-
-		public override Size Size { get; set; }
 
 		/// <summary>
 		/// Checks whether this screen is active and can respond to user input.

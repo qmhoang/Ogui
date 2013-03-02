@@ -91,6 +91,9 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\DEngine\DEngine\bin\Debug\DEngine.dll</HintPath>
+    </Reference>
     <Reference Include="libtcod-net">
       <HintPath>..\..\Code Libraries\libtcod 1.5.1 c#\libtcod-net.dll</HintPath>
     </Reference>
@@ -139,12 +142,6 @@
     <Compile Include="UI\VScrollBar.cs" />
     <Compile Include="UI\Widget.cs" />
     <Compile Include="UI\Window.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DEngine\DEngine\DEngine.csproj">
-      <Project>{FAA2CEF2-1844-4043-A582-AD4CDE346ADD}</Project>
-      <Name>DEngine</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
