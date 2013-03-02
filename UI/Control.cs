@@ -51,7 +51,6 @@ namespace Ogui.UI {
 	/// </summary>
 	public abstract class Control : Widget {
 		#region Events
-
 		/// <summary>
 		/// Raised when control's autosize property is changed.
 		/// </summary>
@@ -585,7 +584,6 @@ namespace Ogui.UI {
 		#endregion
 
 		private bool autoSize;
-
 	}
 
 	#endregion

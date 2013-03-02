@@ -9,6 +9,10 @@ namespace Ogui.UI {
 	/// </summary>
 	public abstract class Widget : Component, IDisposable {
 		#region Events
+		/// <summary>
+		/// Raised when a control's size is changed.
+		/// </summary>
+		public event EventHandler SizeChanged;
 
 		/// <summary>
 		/// Raised when the the Widget receives a draw message from the framework.  Subscribers
@@ -26,8 +30,6 @@ namespace Ogui.UI {
 		protected Widget() {
 			this.Position = new Point(0, 0);
 			this.Size = new Size(0, 0);
-			this.Canvas = new Canvas(Size);
-
 			this.OwnerDraw = false;
 
 			this.PigmentOverrides = new PigmentAlternatives();
@@ -36,7 +38,8 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Public Properties
-
+		public PigmentAlternatives PigmentOverrides { get; set; }
+		public Point Position { get; set; }
 		/// <summary>
 		/// Returns widget's rect in screen space coordinates
 		/// </summary>
@@ -60,7 +63,13 @@ namespace Ogui.UI {
 		/// <summary>
 		/// Get the the size of the widget.
 		/// </summary>
-		public abstract Size Size { get; set; }
+		public Size Size {
+			get { return size; }
+			set {
+				size = value;
+				OnSizeChanged();
+			}
+		}
 
 		/// <summary>
 		/// Get the pigment map for this widget.  Alternatives can be set or removed
@@ -120,6 +129,17 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Message Handlers
+		/// <summary>
+		/// Override to add custom code when AutoSize is changed.
+		/// </summary>
+		protected internal virtual void OnSizeChanged() {
+			if (SizeChanged != null)
+				SizeChanged(this, EventArgs.Empty);
+
+			if (Canvas != null)
+				Canvas.Dispose();
+			Canvas = new Canvas(Size);
+		}
 
 		/// <summary>
 		/// Called during the drawing phase of the application loop.  Base method calls Redraw(), 
@@ -141,9 +161,10 @@ namespace Ogui.UI {
 
 		#region Internal
 
-		internal PigmentAlternatives PigmentOverrides { get; set; }
-		internal Point Position;
+		#endregion
 
+		#region Private
+		private Size size;
 		#endregion
 
 		#region Dispose
