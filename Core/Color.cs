@@ -21,6 +21,11 @@ namespace Ogui.Core {
 			color = tcodColor;
 		}
 
+		// todo look if C# does copy constructors
+		public Color(Color color) : this(color.Red, color.Green, color.Blue) {
+			
+		}
+
 		/// <summary>
 		/// Constructs a Color from the provided reg, green and blue values (0-255 for each)
 		/// </summary>
@@ -71,9 +76,9 @@ namespace Ogui.Core {
 
 		#region Public Methods
 
-		public static implicit operator TCODColor(Color color) {
-			return color.color;
-		}
+//		public static implicit operator TCODColor(Color color) {
+//			return color.color;
+//		}
 
 		/// <summary>
 		/// Scales saturation by given amount (0.0 --> 1.0)

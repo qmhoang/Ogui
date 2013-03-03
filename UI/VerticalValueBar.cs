@@ -45,11 +45,12 @@ namespace Ogui.UI {
 				else
 					intensity = 0f;
 
-				bg = DetermineMainPigment().Background.ReplaceValue(
-						Math.Max(minimumBGIntensity, intensity));
+				// NOTE LOOK RIGHT HERE FOR COLOR FIX!!!
+				bg = new Color(DetermineMainPigment().Background);
+				bg.ReplaceValue(Math.Max(minimumBGIntensity, intensity));
 
-				fg = DetermineMainPigment().Foreground.ReplaceValue(
-						Math.Max(minimumFGIntensity, intensity));
+				fg = new Color(DetermineMainPigment().Foreground);
+				fg.ReplaceValue(Math.Max(minimumFGIntensity, intensity));
 
 				Canvas.PrintChar(0, y + 1,
 				                 (int) libtcod.TCODSpecialCharacter.HorzLine,
