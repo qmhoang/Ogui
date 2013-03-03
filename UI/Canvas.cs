@@ -211,12 +211,6 @@ namespace Ogui.UI {
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="lPos"/> is outside of this Canvas region</exception>
 		public void PrintChar(Point lPos, int character, Pigment pigment = null) {
-			if (lPos.X < 0 || lPos.X >= Size.Width)
-				throw new ArgumentOutOfRangeException("lPos", "The specified x coordinate is invalid.");
-
-			if (lPos.Y < 0 || lPos.Y >= Size.Height)
-				throw new ArgumentOutOfRangeException("lPos", "The specified y coordinate is invalid.");
-
 			PrintChar(lPos.X, lPos.Y, character, pigment);
 		}
 
@@ -255,15 +249,6 @@ namespace Ogui.UI {
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="lPos"/> is outside of this Canvas region</exception>
 		public void PrintString(Point lPos, string text, Pigment pigment = null) {
-			if (text == null)
-				throw new ArgumentNullException("text");
-
-			if (lPos.X < 0 || lPos.X >= Size.Width)
-				throw new ArgumentOutOfRangeException("lPos", "The specified x coordinate is invalid.");
-
-			if (lPos.Y < 0 || lPos.Y >= Size.Height)
-				throw new ArgumentOutOfRangeException("lPos", "The specified y coordinate is invalid.");
-
 			PrintString(lPos.X, lPos.Y, text, pigment);
 		}
 
@@ -316,19 +301,6 @@ namespace Ogui.UI {
 		/// Thrown when the specified field length is less than 1</exception>
 		public void PrintStringAligned(Point lPos, string text,
 		                               HorizontalAlignment alignment, int fieldLength, Pigment pigment = null) {
-			if (text == null)
-				throw new ArgumentNullException("text");
-
-			if (lPos.X < 0 || lPos.X >= Size.Width)
-				throw new ArgumentOutOfRangeException("lPos", "The specified x coordinate is invalid.");
-
-			if (lPos.Y < 0 || lPos.Y >= Size.Height)
-				throw new ArgumentOutOfRangeException("lPos", "The specified y coordinate is invalid.");
-
-			if (fieldLength < 1)
-				throw new ArgumentOutOfRangeException("fieldLength",
-				                                      "The field length must equal to or greater than 1");
-
 			PrintStringAligned(lPos.X, lPos.Y, text, alignment, fieldLength, pigment);
 		}
 
@@ -388,21 +360,6 @@ namespace Ogui.UI {
 		/// Thrown when the width or height of the field size is less than 1</exception>
 		public void PrintStringAligned(Point lPos, string text, HorizontalAlignment hAlign,
 		                               VerticalAlignment vAlign, Size fieldSize, Pigment pigment = null) {
-			if (text == null)
-				throw new ArgumentNullException("text");
-
-			if (lPos.X < 0 || lPos.X >= Size.Width)
-				throw new ArgumentOutOfRangeException("lPos", "The specified x coordinate is invalid.");
-
-			if (lPos.Y < 0 || lPos.Y >= Size.Height)
-				throw new ArgumentOutOfRangeException("lPos", "The specified y coordinate is invalid.");
-
-			if (fieldSize.Width < 1)
-				throw new ArgumentOutOfRangeException("fieldSize", "The specified width of fieldSize is less than 1");
-
-			if (fieldSize.Height < 1)
-				throw new ArgumentOutOfRangeException("fieldSize", "The specified height of fieldSize is less than 1");
-
 			PrintStringAligned(lPos.X, lPos.Y, text, hAlign, vAlign, fieldSize, pigment);
 		}
 
@@ -421,21 +378,6 @@ namespace Ogui.UI {
 		/// Thrown when the width or height of the rect is less than 1</exception>
 		public void PrintStringAligned(Rectangle rect, string text, HorizontalAlignment hAlign,
 		                               VerticalAlignment vAlign, Pigment pigment = null) {
-			if (text == null)
-				throw new ArgumentNullException("text");
-
-			if (rect.TopLeft.X < 0 || rect.TopLeft.X >= Size.Width)
-				throw new ArgumentOutOfRangeException("rect", "The specified x coordinate is invalid.");
-
-			if (rect.TopLeft.Y < 0 || rect.TopLeft.Y >= Size.Height)
-				throw new ArgumentOutOfRangeException("rect", "The specified y coordinate is invalid.");
-
-			if (rect.Size.Width < 1)
-				throw new ArgumentOutOfRangeException("rect", "The specified width of rect is less than 1");
-
-			if (rect.Size.Height < 1)
-				throw new ArgumentOutOfRangeException("rect", "The specified height of rect is less than 1");
-
 			PrintStringAligned(rect.TopLeft.X, rect.TopLeft.Y,
 			                   text,
 			                   hAlign, vAlign,
@@ -470,12 +412,6 @@ namespace Ogui.UI {
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="startPos"/> is outside of this Canvas region</exception>
 		public void DrawHLine(Point startPos, int length, Pigment pigment = null) {
-			if (startPos.X < 0 || startPos.X >= Size.Width)
-				throw new ArgumentOutOfRangeException("startPos", "The specified x coordinate is invalid.");
-
-			if (startPos.Y < 0 || startPos.Y >= Size.Height)
-				throw new ArgumentOutOfRangeException("startPos", "The specified y coordinate is invalid.");
-
 			DrawHLine(startPos.X, startPos.Y, length, pigment);
 		}
 
@@ -506,12 +442,6 @@ namespace Ogui.UI {
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the specified <paramref name="startPos"/> is outside of this Canvas region</exception>
 		public void DrawVLine(Point startPos, int length, Pigment pigment = null) {
-			if (startPos.X < 0 || startPos.X >= Size.Width)
-				throw new ArgumentOutOfRangeException("startPos", "The specified x coordinate is invalid.");
-
-			if (startPos.Y < 0 || startPos.Y >= Size.Height)
-				throw new ArgumentOutOfRangeException("startPos", "The specified y coordinate is invalid.");
-
 			DrawVLine(startPos.X, startPos.Y, length, pigment);
 		}
 
@@ -608,9 +538,6 @@ namespace Ogui.UI {
 		/// <param name="destPos"></param>
 		/// <exception cref="System.ArgumentNullException">Thrown when <paramref name="source"/> is null</exception>
 		public void Blit(Canvas source, Point destPos) {
-			if (source == null)
-				throw new ArgumentNullException("source");
-
 			Blit(source, destPos.X, destPos.Y);
 		}
 
