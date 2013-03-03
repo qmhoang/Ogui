@@ -21,7 +21,7 @@ namespace Ogui.UI {
 			Font = null;
 			FontFlags = TCODFontFlags.LayoutAsciiInColumn;
 			Pigments = new PigmentAlternatives();
-			FpsLimit = 60;
+			UpdatesPerSecondLimit = 60;
 			InitialDelay = 100;
 			IntervalDelay = 75;
 			RendererType = TCODRendererType.SDL;
@@ -65,7 +65,12 @@ namespace Ogui.UI {
 		public PigmentAlternatives Pigments { get; set; }
 
 		/// <summary>
-		/// Limits the framerate per limit, defaults to 60.
+		/// Limits the number of times update is called per second, defaults to 60.
+		/// </summary>
+		public int UpdatesPerSecondLimit { get; set; }
+
+		/// <summary>
+		/// Limits the number of times draw is called per second, defaults to 60.
 		/// </summary>
 		public int FpsLimit { get; set; }
 
@@ -128,6 +133,16 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Public Properties
+
+		/// <summary>
+		/// Limits the number of times update is called per second, defaults to 60.
+		/// </summary>
+		public int UpdatesPerSecondLimit { get; private set; }
+
+		/// <summary>
+		/// Limits the number of times draw is called per second, defaults to 60.
+		/// </summary>
+		public int FpsLimit { get; private set; } 
 
 		/// <summary>
 		/// True if the application wants to quit.  Set to true to quit.
@@ -238,9 +253,16 @@ namespace Ogui.UI {
 			if (!string.IsNullOrEmpty(info.Font))
 				TCODConsole.setCustomFont(info.Font, (int) info.FontFlags);
 
+			FpsLimit = info.FpsLimit;
+			fpsFrameLength = FpsLimit == 0 ? 0 : MilliSecondsPerSecond / FpsLimit;
+			lastDrawMilli = 0;
+
+			UpdatesPerSecondLimit = info.UpdatesPerSecondLimit;
+			
+
 			TCODConsole.initRoot(info.ScreenSize.Width, info.ScreenSize.Height, info.Title,
 								 info.Fullscreen, info.RendererType);
-			TCODSystem.setFps(info.FpsLimit);
+			TCODSystem.setFps(info.UpdatesPerSecondLimit);
 			TCODConsole.setKeyboardRepeat(info.InitialDelay, info.IntervalDelay);
 
 			TCODMouse.showCursor(true);
@@ -283,8 +305,6 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Private
-		private readonly List<Window> windowStack;
-
 		private int Run() {
 			if (StateCount <= 0) {
 				Window win = new Window(new WindowTemplate());
@@ -301,13 +321,23 @@ namespace Ogui.UI {
 
 
 		private void Draw() {
-			
-			TCODConsole.root.clear();
-			foreach (var window in windowStack)
-				window.OnDraw();
-			TCODConsole.flush();
+			var elapsedMilli = TCODSystem.getElapsedMilli();
+
+			if (elapsedMilli - lastDrawMilli > fpsFrameLength) {
+				lastDrawMilli = elapsedMilli;
+				TCODConsole.root.clear();
+				foreach (var window in windowStack)
+					window.OnDraw();
+				TCODConsole.flush();
+			}			
 		}
 
+		private uint lastDrawMilli;
+		private int fpsFrameLength;
+
+		private const int MilliSecondsPerSecond = 1000;
+
+		private readonly List<Window> windowStack;
 		#endregion
 
 		#region Dispose
