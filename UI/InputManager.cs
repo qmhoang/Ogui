@@ -88,7 +88,7 @@ namespace Ogui.UI {
 
 		#region Mouse Input
 
-		private void PollMouse(uint totalElapsed) {
+		private void PollMouse(uint elapsedTime) {
 			MouseData mouse = new MouseData(TCODMouse.getStatus());
 
 			CheckMouseButtons(mouse);
@@ -101,17 +101,16 @@ namespace Ogui.UI {
 			//    lastMousePosition = mouse.Position;
 			//    lastMouseMoveTime = totalElapsed;
 			//}
-			if ((mouse.PixelPosition != lastMousePixelPosition) && ((totalElapsed - lastMouseMoveTime) > delayUntilNextClick)) {
+			if ((mouse.PixelPosition != lastMousePixelPosition)) {
 				DoMouseMove(mouse);
 
 				lastMousePosition = mouse.Position;
 				lastMousePixelPosition = mouse.PixelPosition;
-				lastMouseMoveTime = totalElapsed;
+				lastMouseMoveTime = elapsedTime;
 			}
 
 			// check for hover
-			if ((totalElapsed - lastMouseMoveTime) > hoverMSTol &&
-			    isHovering == false)
+			if (isHovering == false)
 				StartHover(mouse);
 		}
 
