@@ -323,21 +323,19 @@ namespace Ogui.UI {
 			}
 
 			while (!TCODConsole.isWindowClosed() && !IsQuitting) {
-//				var newUpdateMilli = TCODSystem.getElapsedMilli();
-//				var elapsedUpdateTime = newUpdateMilli - lastUpdateMilli;
+				var newUpdateMilli = TCODSystem.getElapsedMilli();
+				var elapsedUpdateTime = newUpdateMilli - lastUpdateMilli;
 //				if (elapsedUpdateTime > upsFrameLength) {
-//					lastUpdateMilli = newUpdateMilli;
-//					Update(1);
+					lastUpdateMilli = newUpdateMilli;
+					Update(elapsedUpdateTime);
 //				}
-//
-//				var newDrawMilli = TCODSystem.getElapsedMilli();
-//				var elapsedDrawTime = newDrawMilli - lastDrawMilli;
+
+				var newDrawMilli = TCODSystem.getElapsedMilli();
+				var elapsedDrawTime = newDrawMilli - lastDrawMilli;
 //				if (elapsedDrawTime > fpsFrameLength) {
-//					lastDrawMilli = newDrawMilli;
-//					Draw(1);
+					lastDrawMilli = newDrawMilli;
+					Draw(elapsedDrawTime);
 //				}
-				Update(1);
-				Draw(1);
 			}
 
 			return 0;
