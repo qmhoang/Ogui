@@ -3,10 +3,10 @@ using libtcod;
 
 namespace Ogui.UI {
 	public class SolidProgressBar : ProgressBar {
-		private libtcod.TCODSpecialCharacter block;
+		private libtcod.TCODSpecialCharacter _block;
 
 		public SolidProgressBar(ProgressBarTemplate template, libtcod.TCODSpecialCharacter block = TCODSpecialCharacter.HorzLine) : base(template) {
-			this.block = block;
+			this._block = block;
 		}
 
 		protected override void Redraw() {
@@ -18,7 +18,7 @@ namespace Ogui.UI {
 
 			for (int x = 0; x < barValue; x++)
 				Canvas.PrintChar(x, 0,
-				                 (int) block,
+				                 (int) _block,
 				                 DetermineMainPigment());
 		}
 	}

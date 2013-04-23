@@ -14,7 +14,7 @@ namespace Ogui.UI {
 		/// <param name="position"></param>
 		public TooltipEventArgs(string text, Point position) {
 			this.Text = text;
-			this.mousePosition = position;
+			this._mousePosition = position;
 		}
 
 
@@ -24,7 +24,7 @@ namespace Ogui.UI {
 		public string Text { get; set; }
 
 
-		private readonly Point mousePosition;
+		private readonly Point _mousePosition;
 
 		/// <summary>
 		/// Get the mouse position related to the Tooltip event, in screen space
@@ -32,41 +32,41 @@ namespace Ogui.UI {
 		/// origin point of a hover action.
 		/// </summary>
 		public Point MousePosition {
-			get { return mousePosition; }
+			get { return _mousePosition; }
 		}
 	}
 
 	internal class Tooltip : IDisposable {
 		public Tooltip(string text, Point sPos, Window parentWindow) {
-			size = new Size(Canvas.TextLength(text) + 2, 3);
-			this.parentWindow = parentWindow;
+			_size = new Size(Canvas.TextLength(text) + 2, 3);
+			this._parentWindow = parentWindow;
 
 			AutoPosition(sPos);
 
-			canvas = new Canvas(size);
+			_canvas = new Canvas(_size);
 
-			canvas.SetDefaultPigment(parentWindow.Pigments[PigmentType.Tooltip]);
-			canvas.PrintFrame("");
+			_canvas.SetDefaultPigment(parentWindow.Pigments[PigmentType.Tooltip]);
+			_canvas.PrintFrame("");
 
-			canvas.PrintString(1, 1, text);
+			_canvas.PrintString(1, 1, text);
 		}
 
 
 		public void DrawToScreen() {
-			canvas.ToScreenAlpha(sPos, parentWindow.TooltipFGAlpha,
-			                     parentWindow.TooltipBGAlpha);
+			_canvas.ToScreenAlpha(_sPos, _parentWindow.TooltipFGAlpha,
+			                     _parentWindow.TooltipBGAlpha);
 		}
 
 
 		private void AutoPosition(Point nearPos) {
-			sPos = parentWindow.AutoPosition(nearPos.Shift(2, 2), size);
+			_sPos = _parentWindow.AutoPosition(nearPos.Shift(2, 2), _size);
 		}
 
 
-		private Canvas canvas;
-		private Size size;
-		private Point sPos;
-		private Window parentWindow;
+		private Canvas _canvas;
+		private Size _size;
+		private Point _sPos;
+		private Window _parentWindow;
 
 		#region Dispose
 
@@ -85,8 +85,8 @@ namespace Ogui.UI {
 			if (alreadyDisposed)
 				return;
 			if (isDisposing)
-				if (canvas != null)
-					canvas.Dispose();
+				if (_canvas != null)
+					_canvas.Dispose();
 			alreadyDisposed = true;
 		}
 

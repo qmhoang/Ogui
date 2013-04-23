@@ -86,7 +86,7 @@ namespace Ogui.UI {
 	/// a panel provides little default drawing or message handling code.
 	/// </summary>
 	public class Panel : Control {
-		private string title;
+		private string _title;
 
 		/// <summary>
 		/// Construct a Panel instance from the given template.
@@ -99,7 +99,7 @@ namespace Ogui.UI {
 			this.CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
 			this.HilightWhenMouseOver = template.HilightedWhenMouseOver;
 
-			this.title = template.Title;
+			this._title = template.Title;
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace Ogui.UI {
 		/// </summary>
 		protected override void DrawFrame(Pigment pigment = null) {
 			if (this.Size.Width > 2 && this.Size.Height > 2)
-				Canvas.PrintFrame(title, pigment);
+				Canvas.PrintFrame(_title, pigment);
 		}
 
 		/// <summary>

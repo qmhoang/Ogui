@@ -129,8 +129,8 @@ namespace Ogui.UI {
 		/// </summary>
 		public Application() {
 			IsQuitting = false;
-			windowsStack = new List<Window>();
-			windowsToUpdate = new List<Window>();
+			_windowsStack = new List<Window>();
+			_windowsToUpdate = new List<Window>();
 		}
 
 		#endregion
@@ -173,14 +173,14 @@ namespace Ogui.UI {
 
 			Run();
 
-			while (windowsStack.Count > 0) {
-				windowsStack.ForEach(w =>
+			while (_windowsStack.Count > 0) {
+				_windowsStack.ForEach(w =>
 				{
 					w.OnQuitting();
 					w.Dispose();
 				});
 
-				windowsStack.Clear();
+				_windowsStack.Clear();
 			}
 		}
 
@@ -207,7 +207,7 @@ namespace Ogui.UI {
 		/// Get the Application's current window.
 		/// </summary>
 		public Window CurrentWindow {
-			get { return windowsStack[windowsStack.Count - 1]; }
+			get { return _windowsStack[_windowsStack.Count - 1]; }
 		}
 
 
@@ -222,21 +222,21 @@ namespace Ogui.UI {
 		public void Push(Window win) {
 			if (win == null)
 				throw new ArgumentNullException("win");
-			if (windowsStack.Contains(win))
+			if (_windowsStack.Contains(win))
 				throw new ArgumentException("Window already exist in the stack", "win");
 
 			win.ParentApplication = this;
 			win.Pigments = new PigmentMap(this.Pigments,
 										  win.PigmentOverrides);
 
-			if (!win.isSetup)
+			if (!win.IsSetup)
 				win.OnSettingUp();
-			windowsStack.Add(win);
+			_windowsStack.Add(win);
 			win.OnAdded();
 		}
 
 		public int StateCount {
-			get { return windowsStack.Count; }
+			get { return _windowsStack.Count; }
 		}
 
 		#endregion
@@ -246,8 +246,6 @@ namespace Ogui.UI {
 		#endregion
 
 		#region Protected Methods
-
-		private bool delayFPS;
 		/// <summary>
 		/// Called after Application.Start has been called.  Override and place application specific
 		/// setup code here after calling base method.
@@ -258,14 +256,14 @@ namespace Ogui.UI {
 				TCODConsole.setCustomFont(info.Font, (int)info.FontFlags);
 
 			FpsLimit = info.FpsLimit;
-			fpsFrameLength = FpsLimit == 0 ? 0 : MilliSecondsPerSecond / FpsLimit;
-			lastDrawMilli = 0;
+			_fpsFrameLength = FpsLimit == 0 ? 0 : MilliSecondsPerSecond / FpsLimit;
+			_lastDrawMilli = 0;
 
 			UpdatesPerSecondLimit = info.UpdatesPerSecondLimit;
-			upsFrameLength = UpdatesPerSecondLimit == 0 ? 0 : MilliSecondsPerSecond / UpdatesPerSecondLimit;
-			lastUpdateMilli = 0;
+			_upsFrameLength = UpdatesPerSecondLimit == 0 ? 0 : MilliSecondsPerSecond / UpdatesPerSecondLimit;
+			_lastUpdateMilli = 0;
 
-			delayFPS = FpsLimit > UpdatesPerSecondLimit;
+			_delayFps = FpsLimit > UpdatesPerSecondLimit;
 
 			TCODSystem.setFps(FpsLimit);
 
@@ -289,23 +287,23 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <param name="elapsedTime">Elapsed time in milliseconds since last time update was called</param>
 		protected virtual void Update(uint elapsedTime) {
-			foreach (var window in windowsStack) {
+			foreach (var window in _windowsStack) {
 				if (window.WindowState == WindowState.Quitting)
 					window.OnRemoved();
 			}
 
-			windowsStack.RemoveAll(win => win.WindowState == WindowState.Quitting);
+			_windowsStack.RemoveAll(win => win.WindowState == WindowState.Quitting);
 
 			if (UpdateEventHandler != null)
 				UpdateEventHandler(this, EventArgs.Empty);
 
-			windowsToUpdate.Clear();
+			_windowsToUpdate.Clear();
 
-			foreach (var window in windowsStack) {
-				windowsToUpdate.Add(window);
+			foreach (var window in _windowsStack) {
+				_windowsToUpdate.Add(window);
 			}
 
-			foreach (var window in windowsToUpdate) {
+			foreach (var window in _windowsToUpdate) {
 				if (window.IsActive)
 					window.Update();
 			}
@@ -324,16 +322,16 @@ namespace Ogui.UI {
 
 			while (!TCODConsole.isWindowClosed() && !IsQuitting) {
 				var newUpdateMilli = TCODSystem.getElapsedMilli();
-				var elapsedUpdateTime = newUpdateMilli - lastUpdateMilli;
+				var elapsedUpdateTime = newUpdateMilli - _lastUpdateMilli;
 //				if (elapsedUpdateTime > upsFrameLength) {
-					lastUpdateMilli = newUpdateMilli;
+					_lastUpdateMilli = newUpdateMilli;
 					Update(elapsedUpdateTime);
 //				}
 
 				var newDrawMilli = TCODSystem.getElapsedMilli();
-				var elapsedDrawTime = newDrawMilli - lastDrawMilli;
+				var elapsedDrawTime = newDrawMilli - _lastDrawMilli;
 //				if (elapsedDrawTime > fpsFrameLength) {
-					lastDrawMilli = newDrawMilli;
+					_lastDrawMilli = newDrawMilli;
 					Draw(elapsedDrawTime);
 //				}
 			}
@@ -344,21 +342,23 @@ namespace Ogui.UI {
 
 		private void Draw(uint elapsedTime) {
 			TCODConsole.root.clear();
-			foreach (var window in windowsStack)
+			foreach (var window in _windowsStack)
 				window.OnDraw();
 			TCODConsole.flush();
 		}
 
-		private uint lastDrawMilli;
-		private int fpsFrameLength;
+		private uint _lastDrawMilli;
+		private int _fpsFrameLength;
 
-		private uint lastUpdateMilli;
-		private int upsFrameLength;
+		private uint _lastUpdateMilli;
+		private int _upsFrameLength;
 
 		private const int MilliSecondsPerSecond = 1000;
 
-		private readonly List<Window> windowsStack;
-		private readonly List<Window> windowsToUpdate; 
+		private readonly List<Window> _windowsStack;
+		private readonly List<Window> _windowsToUpdate;
+
+		private bool _delayFps;
 		#endregion
 
 		#region Dispose
@@ -388,10 +388,10 @@ namespace Ogui.UI {
 			if (alreadyDisposed)
 				return;
 			if (isDisposing)
-				while (windowsStack.Count > 0) {
-					windowsStack.ForEach(w => w.Dispose());
+				while (_windowsStack.Count > 0) {
+					_windowsStack.ForEach(w => w.Dispose());
 
-					windowsStack.Clear();
+					_windowsStack.Clear();
 				}
 			alreadyDisposed = true;
 		}

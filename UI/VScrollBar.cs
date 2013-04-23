@@ -46,36 +46,54 @@ namespace Ogui.UI {
 		public event EventHandler ValueChanged;
 
 		#endregion
-
-		private EmitterButton topButton, bottomButton;
-
-		private VerticalValueBar valueBar;
-
-		private int minimumValue;
-
+		#region Public Properties
 		/// <summary>
 		/// Get the minimum value that this spin control can have.
 		/// </summary>
 		public int MinimumValue {
-			get { return minimumValue; }
+			get { return _minimumValue; }
 			set {
-				minimumValue = value;
-				if (valueBar != null)
-					valueBar.MinimumValue = value;
+				_minimumValue = value;
+				if (_valueBar != null)
+					_valueBar.MinimumValue = value;
 			}
 		}
 
-		private int maximumValue;
 
 		/// <summary>
 		/// Get the maximum value that this spin control can have.
 		/// </summary>
 		public int MaximumValue {
-			get { return maximumValue; }
+			get { return _maximumValue; }
 			set {
-				maximumValue = value;
-				if (valueBar != null)
-					valueBar.MaximumValue = value;
+				_maximumValue = value;
+				if (_valueBar != null)
+					_valueBar.MaximumValue = value;
+			}
+		}
+
+		/// <summary>
+		/// Get the current value of the slider.
+		/// </summary>
+		public int CurrentValue {
+			get { return _currentValue; }
+
+			set {
+				int newVal = value;
+
+				if (newVal < MinimumValue)
+					newVal = MinimumValue;
+
+				if (newVal > MaximumValue)
+					newVal = MaximumValue;
+
+
+				_currentValue = newVal;
+
+				if (_valueBar != null)
+					_valueBar.CurrentValue = _currentValue;
+
+				OnValueChanged();
 			}
 		}
 
@@ -92,6 +110,7 @@ namespace Ogui.UI {
 		protected uint SpinSpeed { get; set; }
 
 		public Pigment BarPigment { get; set; }
+		#endregion
 
 		/// <summary>
 		/// Called when this.CurrentValue has changed to a different value.
@@ -100,33 +119,6 @@ namespace Ogui.UI {
 			if (ValueChanged != null)
 				ValueChanged(this, EventArgs.Empty);
 		}
-
-		/// <summary>
-		/// Get the current value of the slider.
-		/// </summary>
-		public int CurrentValue {
-			get { return currentValue; }
-
-			set {
-				int newVal = value;
-
-				if (newVal < MinimumValue)
-					newVal = MinimumValue;
-
-				if (newVal > MaximumValue)
-					newVal = MaximumValue;
-
-				if (newVal != currentValue)
-					currentValue = newVal;
-
-				if (valueBar != null)
-					valueBar.CurrentValue = CurrentValue;
-
-				OnValueChanged();
-			}
-		}
-
-		private int currentValue;
 
 		public VScrollBar(VScrollBarTemplate template) : base(template) {
 			MinimumValue = template.MinimumValue;
@@ -155,7 +147,7 @@ namespace Ogui.UI {
 			if (BarPigment == null)
 				BarPigment = DetermineMainPigment();
 
-			valueBar = new VerticalValueBar(new VerticalValueBarTemplate()
+			_valueBar = new VerticalValueBar(new VerticalValueBarTemplate()
 			                                {
 			                                		TopLeftPos = this.LocalToScreen(new Point(0, 0)),
 			                                		Length = this.Size.Height - 2,
@@ -165,7 +157,7 @@ namespace Ogui.UI {
 			                                		BarPigment = this.BarPigment,
 			                                });
 
-			topButton = new EmitterButton(new EmitterButtonTemplate()
+			_topButton = new EmitterButton(new EmitterButtonTemplate()
 			                              {
 			                              		HasFrameBorder = false,
 												Label = Char.ToString((char)libtcod.TCODSpecialCharacter.ArrowNorthNoTail),
@@ -174,7 +166,7 @@ namespace Ogui.UI {
 			                              		Speed = SpinSpeed
 			                              });
 
-			bottomButton = new EmitterButton(new EmitterButtonTemplate()
+			_bottomButton = new EmitterButton(new EmitterButtonTemplate()
 			                                 {
 			                                 		HasFrameBorder = false,
 													Label = Char.ToString((char)libtcod.TCODSpecialCharacter.ArrowSouthNoTail),
@@ -183,25 +175,25 @@ namespace Ogui.UI {
 			                                 		Speed = SpinSpeed
 			                                 });
 
-			valueBar.MouseMoved += valueBar_MouseMoved;
+			_valueBar.MouseMoved += valueBar_MouseMoved;
 
-			valueBar.MouseButtonDown += valueBar_MouseButtonDown;
+			_valueBar.MouseButtonDown += valueBar_MouseButtonDown;
 
-			topButton.Emit += topButton_Emit;
-			bottomButton.Emit += bottomButton_Emit;
+			_topButton.Emit += topButton_Emit;
+			_bottomButton.Emit += bottomButton_Emit;
 		}
 
 		protected internal override void OnAdded() {
 			base.OnAdded();
-			ParentWindow.AddControls(valueBar);
-			ParentWindow.AddControls(topButton, bottomButton);
+			ParentWindow.AddControls(_valueBar);
+			ParentWindow.AddControls(_topButton, _bottomButton);
 		}
 
 		protected internal override void OnRemoved() {
 			base.OnRemoved();
-			ParentWindow.RemoveControl(valueBar);
-			ParentWindow.RemoveControl(topButton);
-			ParentWindow.RemoveControl(bottomButton);
+			ParentWindow.RemoveControl(_valueBar);
+			ParentWindow.RemoveControl(_topButton);
+			ParentWindow.RemoveControl(_bottomButton);
 		}
 
 		private void valueBar_MouseMoved(object sender, MouseEventArgs e) {
@@ -230,29 +222,38 @@ namespace Ogui.UI {
 			int charHeight = Canvas.GetCharSize().Height;
 			int currPy = pixelPosY;
 
-			currPy = currPy - (charHeight * valueBar.ScreenRect.Top) - 2 * charHeight;
+			currPy = currPy - (charHeight * _valueBar.ScreenRect.Top) - 2 * charHeight;
 
-			int widthInPy = (valueBar.Size.Height - 4) * charHeight;
+			int widthInPy = (_valueBar.Size.Height - 4) * charHeight;
 
 			float pixposPercent = (float)currPy / (float)widthInPy;
 
 			return (int)((float)(MaximumValue - MinimumValue) * pixposPercent) + MinimumValue;
 		}
 
-		#region		
+		#region Private Fields
+		private EmitterButton _topButton, _bottomButton;
+
+		private VerticalValueBar _valueBar;
+
+		private int _minimumValue, _maximumValue;
+		private int _currentValue;
+		#endregion
+
+		#region	Disposable
 		protected override void Dispose(bool isDisposing) {
 			base.Dispose(isDisposing);
 
 			if (isDisposing) {
 
-				if (valueBar != null)
-					valueBar.Dispose();
+				if (_valueBar != null)
+					_valueBar.Dispose();
 
-				if (topButton != null)
-					topButton.Dispose();
+				if (_topButton != null)
+					_topButton.Dispose();
 
-				if (bottomButton != null)
-					bottomButton.Dispose();
+				if (_bottomButton != null)
+					_bottomButton.Dispose();
 			}
 		}
 

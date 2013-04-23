@@ -121,7 +121,7 @@ namespace Ogui.UI {
 			this.LabelAlign = template.LabelAlign;
 
 			this.CurrentText = "";
-			this.waitingToCommitText = false;
+			this._waitingToCommitText = false;
 			this.TextInput = CurrentText;
 
 			CalcMetrics(template);
@@ -262,7 +262,7 @@ namespace Ogui.UI {
 		protected internal override void OnSettingUp() {
 			base.OnSettingUp();
 
-			AddSchedule(new Schedule(ToggleCursor, blinkDelay));
+			AddSchedule(new Schedule(ToggleCursor, BlinkDelay));
 		}
 
 
@@ -275,29 +275,29 @@ namespace Ogui.UI {
 
 			// Draw label
 			if (!string.IsNullOrEmpty(Label))
-				Canvas.PrintStringAligned(labelRect, Label,
+				Canvas.PrintStringAligned(_labelRect, Label,
 				                          LabelAlign,
 				                          VerticalAlign);
 
 			// Draw input field
-			if (waitingToOverwrite)
-				Canvas.PrintStringAligned(fieldRect,
+			if (_waitingToOverwrite)
+				Canvas.PrintStringAligned(_fieldRect,
 				                          TextInput,
 				                          HorizontalAlignment.Left,
 				                          VerticalAlign,
 				                          Pigments[PigmentType.ViewSelected]);
 			else
-				Canvas.PrintStringAligned(fieldRect,
+				Canvas.PrintStringAligned(_fieldRect,
 				                          TextInput,
 				                          HorizontalAlignment.Left,
 				                          VerticalAlign);
 
 			// Draw cursor
-			if (cursorOn && HasKeyboardFocus) {
-				int cursorX = fieldRect.Left + CursorPos;
+			if (_cursorOn && HasKeyboardFocus) {
+				int cursorX = _fieldRect.Left + CursorPos;
 				if (cursorX <= LocalRect.Right - 1)
 					Canvas.PrintChar(cursorX,
-					                 cursorY,
+					                 _cursorY,
 					                 (int) TCODSpecialCharacter.Block1,
 					                 Pigments[PigmentType.ViewSelected]);
 			}
@@ -321,10 +321,10 @@ namespace Ogui.UI {
 
 			if (keyData.Character != 0 &&
 			    ValidateCharacter(keyData.Character)) {
-				if (waitingToOverwrite) {
+				if (_waitingToOverwrite) {
 					TextInput = keyData.Character.ToString();
 					CursorPos = 1;
-					waitingToOverwrite = false;
+					_waitingToOverwrite = false;
 				} else if (TextInput.Length < MaximumCharacters) {
 					TextInput += keyData.Character;
 					CursorPos++;
@@ -334,11 +334,11 @@ namespace Ogui.UI {
 				TextInput = TextInput.Substring(0, TextInput.Length - 1);
 				CursorPos--;
 			} else if (keyData.KeyCode == TCODKeyCode.Enter) {
-				waitingToCommitText = true;
+				_waitingToCommitText = true;
 				ParentWindow.ReleaseKeyboard(this);
 			} else if (keyData.KeyCode == TCODKeyCode.Escape) {
 				TextInput = CurrentText;
-				waitingToCommitText = true;
+				_waitingToCommitText = true;
 				ParentWindow.ReleaseKeyboard(this);
 			}
 		}
@@ -351,11 +351,11 @@ namespace Ogui.UI {
 		protected internal override void OnTakeKeyboardFocus() {
 			base.OnTakeKeyboardFocus();
 
-			waitingToCommitText = false;
+			_waitingToCommitText = false;
 			TextInput = CurrentText;
 
 			if (ReplaceOnFirstKey)
-				waitingToOverwrite = true;
+				_waitingToOverwrite = true;
 
 			this.CursorPos = CurrentText.Length;
 		}
@@ -368,29 +368,29 @@ namespace Ogui.UI {
 		protected internal override void OnReleaseKeyboardFocus() {
 			base.OnReleaseKeyboardFocus();
 
-			if (waitingToCommitText || CommitOnLostFocus)
+			if (_waitingToCommitText || CommitOnLostFocus)
 				TryCommit();
 			else
 				TextInput = CurrentText;
-			waitingToOverwrite = false;
+			_waitingToOverwrite = false;
 		}
 
 		#endregion
 
 		#region Private
 
-		private bool cursorOn = true;
-		private bool waitingToCommitText;
-		private bool waitingToOverwrite;
+		private bool _cursorOn = true;
+		private bool _waitingToCommitText;
+		private bool _waitingToOverwrite;
 
 
 		// TODO: consider making definable, not a constant
-		private const uint blinkDelay = 500;
+		private const uint BlinkDelay = 500;
 
 
-		private Rectangle labelRect;
-		private Rectangle fieldRect;
-		private int cursorY;
+		private Rectangle _labelRect;
+		private Rectangle _fieldRect;
+		private int _cursorY;
 
 		private void CalcMetrics(EntryTemplate template) {
 			Rectangle viewRect = this.LocalRect;
@@ -419,30 +419,30 @@ namespace Ogui.UI {
 				labelLength = 0;
 			}
 
-			labelRect = new Rectangle(viewRect.TopLeft, new Size(labelLength, viewRect.Size.Height));
-			fieldRect = new Rectangle(labelRect.TopRight,
+			_labelRect = new Rectangle(viewRect.TopLeft, new Size(labelLength, viewRect.Size.Height));
+			_fieldRect = new Rectangle(_labelRect.TopRight,
 			                     new Size(fieldLength, viewRect.Size.Height));
 
 			switch (VerticalAlign) {
 				case VerticalAlignment.Top:
-					cursorY = fieldRect.Top;
+					_cursorY = _fieldRect.Top;
 					break;
 
 				case VerticalAlignment.Center:
-					cursorY = fieldRect.Center.Y;
+					_cursorY = _fieldRect.Center.Y;
 					break;
 
 				case VerticalAlignment.Bottom:
-					cursorY = fieldRect.Bottom - 1;
+					_cursorY = _fieldRect.Bottom - 1;
 					break;
 			}
 		}
 
 		private void ToggleCursor() {
-			if (cursorOn)
-				cursorOn = false;
+			if (_cursorOn)
+				_cursorOn = false;
 			else
-				cursorOn = true;
+				_cursorOn = true;
 		}
 
 		#endregion

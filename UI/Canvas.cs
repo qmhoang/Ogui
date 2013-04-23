@@ -92,7 +92,7 @@ namespace Ogui.UI {
 			    size.Height > Application.ScreenSize.Height)
 				throw new ArgumentOutOfRangeException("size", "The specified size must be equal to or smaller than the screen size");
 
-			defaultPigment = new Pigment(0xffffff, 0x000000);
+			_defaultPigment = new Pigment(0xffffff, 0x000000);
 			Console = new TCODConsole(size.Width, size.Height);
 			Size = size;
 		}
@@ -132,7 +132,7 @@ namespace Ogui.UI {
 			if (pigment == null)
 				throw new ArgumentNullException("pigment");
 
-			defaultPigment = pigment;
+			_defaultPigment = pigment;
 			SetPigment(pigment);
 		}
 
@@ -202,7 +202,7 @@ namespace Ogui.UI {
 			Console.putChar(x, y, character);
 
 			if (pigment != null)
-				SetPigment(defaultPigment);
+				SetPigment(_defaultPigment);
 		}
 
 		/// <summary>
@@ -238,7 +238,7 @@ namespace Ogui.UI {
 			Print(x, y, text);
 
 			if (pigment != null)
-				SetPigment(defaultPigment);
+				SetPigment(_defaultPigment);
 		}
 
 		/// <summary>
@@ -403,7 +403,7 @@ namespace Ogui.UI {
 			Console.hline(startX, startY, length);
 
 			if (pigment != null)
-				SetPigment(defaultPigment);
+				SetPigment(_defaultPigment);
 		}
 
 		/// <summary>
@@ -433,7 +433,7 @@ namespace Ogui.UI {
 			Console.vline(x, y, length);
 
 			if (pigment != null)
-				SetPigment(defaultPigment);
+				SetPigment(_defaultPigment);
 		}
 
 		/// <summary>
@@ -596,7 +596,7 @@ namespace Ogui.UI {
 				                   title);
 
 			if (pigment != null)
-				SetPigment(defaultPigment);
+				SetPigment(_defaultPigment);
 		}
 
 		/// <summary>
@@ -694,7 +694,7 @@ namespace Ogui.UI {
 			}
 		}
 
-		private Pigment defaultPigment;
+		private Pigment _defaultPigment;
 
 		/// <summary>
 		/// Returns the length (width) of the given text string when printed, taking into account

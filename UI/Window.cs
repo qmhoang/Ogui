@@ -176,7 +176,7 @@ namespace Ogui.UI {
 			managerAddList.Add(manager);
 			manager.ParentWindow = this;
 
-			if (!manager.isSetup)
+			if (!manager.IsSetup)
 				manager.OnSettingUp();
 
 			manager.OnAdded();
@@ -246,7 +246,7 @@ namespace Ogui.UI {
 			control.Pigments = new PigmentMap(Pigments,
 			                                  control.PigmentOverrides);
 
-			if (!control.isSetup)
+			if (!control.IsSetup)
 				control.OnSettingUp();
 
 			control.OnAdded();

@@ -17,7 +17,7 @@ namespace Ogui.UI {
 			if (component == null)
 				throw new ArgumentNullException("component");
 
-			attachedComponent = component;
+			_attachedComponent = component;
 		}
 
 		#endregion
@@ -51,23 +51,23 @@ namespace Ogui.UI {
 
 		#region Private Fields
 
-		private readonly Component attachedComponent;
-		private Point lastMousePosition;
-		private Point lastMousePixelPosition;
-		private MouseButton lastMouseButton;
-		private float lastMouseMoveTime;
-		private bool isHovering;
-		private Point startLBDown;
-		private bool isDragging;
+		private readonly Component _attachedComponent;
+		private Point _lastMousePosition;
+		private Point _lastMousePixelPosition;
+		private MouseButton _lastMouseButton;
+		private float _lastMouseMoveTime;
+		private bool _isHovering;
+		private Point _startLBDown;
+		private bool _isDragging;
 
 		#endregion
 
 		#region Private Constants
 
 		// NOTE: consider making these configurable instead of constants
-		private const int dragPixelTol = 24;
-		private const float hoverMSTol = 600f;
-		private const int delayUntilNextClick = 100;
+		private const int DragPixelTol = 24;
+		private const float HoverMSTol = 600f;
+		private const int DelayUntilNextClick = 100;
 
 		#endregion
 
@@ -79,9 +79,9 @@ namespace Ogui.UI {
 
 			if (key.KeyCode != TCODKeyCode.NoKey)
 				if (key.Pressed)
-					attachedComponent.OnKeyPressed(new KeyboardData(key));
+					_attachedComponent.OnKeyPressed(new KeyboardData(key));
 				else
-					attachedComponent.OnKeyReleased(new KeyboardData(key));
+					_attachedComponent.OnKeyReleased(new KeyboardData(key));
 		}
 
 		#endregion
@@ -101,93 +101,93 @@ namespace Ogui.UI {
 			//    lastMousePosition = mouse.Position;
 			//    lastMouseMoveTime = totalElapsed;
 			//}
-			if ((mouse.PixelPosition != lastMousePixelPosition)) {
+			if ((mouse.PixelPosition != _lastMousePixelPosition)) {
 				DoMouseMove(mouse);
 
-				lastMousePosition = mouse.Position;
-				lastMousePixelPosition = mouse.PixelPosition;
-				lastMouseMoveTime = elapsedTime;
+				_lastMousePosition = mouse.Position;
+				_lastMousePixelPosition = mouse.PixelPosition;
+				_lastMouseMoveTime = elapsedTime;
 			}
 
 			// check for hover
-			if (isHovering == false)
+			if (_isHovering == false)
 				StartHover(mouse);
 		}
 
 
 		private void CheckMouseButtons(MouseData mouse) {
-			if (mouse.MouseButton != lastMouseButton) {
-				if (lastMouseButton == MouseButton.None)
+			if (mouse.MouseButton != _lastMouseButton) {
+				if (_lastMouseButton == MouseButton.None)
 					DoMouseButtonDown(mouse);
 				else
-					DoMouseButtonUp(new MouseData(lastMouseButton, mouse.Position, mouse.PixelPosition));
+					DoMouseButtonUp(new MouseData(_lastMouseButton, mouse.Position, mouse.PixelPosition));
 
-				lastMouseButton = mouse.MouseButton;
+				_lastMouseButton = mouse.MouseButton;
 			}
 		}
 
 
 		private void StartHover(MouseData mouse) {
-			attachedComponent.OnMouseHoverBegin(mouse);
+			_attachedComponent.OnMouseHoverBegin(mouse);
 
-			isHovering = true;
+			_isHovering = true;
 		}
 
 
 		private void StopHover(MouseData mouse) {
-			attachedComponent.OnMouseHoverEnd(mouse);
+			_attachedComponent.OnMouseHoverEnd(mouse);
 
-			isHovering = false;
+			_isHovering = false;
 		}
 
 
 		private void StartDrag(MouseData mouse) {
-			isDragging = true;
+			_isDragging = true;
 
 			// TODO fix this, it does not pass origin of drag as intended
-			attachedComponent.OnMouseDragBegin(mouse.Position);
+			_attachedComponent.OnMouseDragBegin(mouse.Position);
 		}
 
 
 		private void StopDrag(MouseData mouse) {
-			isDragging = false;
+			_isDragging = false;
 
-			attachedComponent.OnMouseDragEnd(mouse.Position);
+			_attachedComponent.OnMouseDragEnd(mouse.Position);
 		}
 
 
 		private void DoMouseMove(MouseData mouse) {
 			StopHover(mouse);
 
-			attachedComponent.OnMouseMoved(mouse);
+			_attachedComponent.OnMouseMoved(mouse);
 
 			// check for BeginDrag
 			if (mouse.MouseButton == MouseButton.LeftButton) {
-				int delta = Math.Abs(mouse.PixelPosition.X - startLBDown.X) +
-				            Math.Abs(mouse.PixelPosition.Y - startLBDown.Y);
+				int delta = Math.Abs(mouse.PixelPosition.X - _startLBDown.X) +
+				            Math.Abs(mouse.PixelPosition.Y - _startLBDown.Y);
 
-				if (delta > dragPixelTol && isDragging == false)
+				if (delta > DragPixelTol && _isDragging == false)
 					StartDrag(mouse);
 			}
 		}
 
 
 		private void DoMouseButtonDown(MouseData mouse) {
-			if (isDragging)
+			if (_isDragging)
 				StopDrag(mouse);
 
 			if (mouse.MouseButton == MouseButton.LeftButton)
-				startLBDown = mouse.PixelPosition;
+				_startLBDown = mouse.PixelPosition;
 
-			attachedComponent.OnMouseButtonDown(mouse);
+			_attachedComponent.OnMouseButtonDown(mouse);
 		}
 
 
 		private void DoMouseButtonUp(MouseData mouse) {
-			if (isDragging)
+			if (_isDragging)
 				StopDrag(mouse);
 
-			attachedComponent.OnMouseButtonUp(mouse);
+			_attachedComponent.OnMouseButtonUp(mouse);
 		}
 
 		#endregion

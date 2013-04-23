@@ -192,8 +192,8 @@ namespace Ogui.UI {
 			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
 
 			LabelAlignment = template.LabelAlignment;
-			Items = template.Items;
-			mouseOverIndex = -1;
+			_items = template.Items;
+			_mouseOverIndex = -1;
 
 			CalcMetrics(template);
 		}
@@ -217,10 +217,10 @@ namespace Ogui.UI {
 		/// <param name="index"></param>
 		/// <returns></returns>
 		public string GetItemLabel(int index) {
-			if (index < 0 || index >= Items.Count)
+			if (index < 0 || index >= _items.Count)
 				throw new ArgumentOutOfRangeException("index");
 
-			return Items[index].Label;
+			return _items[index].Label;
 		}
 
 		#endregion
@@ -231,7 +231,7 @@ namespace Ogui.UI {
 		/// Draws all of the menu items.
 		/// </summary>
 		protected void DrawItems() {
-			for (int i = 0; i < numberItemsDisplayed; i++)
+			for (int i = 0; i < _numberItemsDisplayed; i++)
 				DrawItem(i);
 		}
 
@@ -241,21 +241,21 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <param name="index"></param>
 		protected void DrawItem(int index) {
-			MenuItemData item = Items[index];
+			MenuItemData item = _items[index];
 
-			if (index == mouseOverIndex)
-				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index,
+			if (index == _mouseOverIndex)
+				Canvas.PrintStringAligned(_itemsRect.TopLeft.X,
+				                          _itemsRect.TopLeft.Y + index,
 				                          item.Label,
 				                          LabelAlignment,
-				                          itemsRect.Size.Width,
+				                          _itemsRect.Size.Width,
 				                          Pigments[PigmentType.ViewHilight]);
 			else
-				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index,
+				Canvas.PrintStringAligned(_itemsRect.TopLeft.X,
+				                          _itemsRect.TopLeft.Y + index,
 				                          item.Label,
 				                          LabelAlignment,
-				                          itemsRect.Size.Width,
+				                          _itemsRect.Size.Width,
 				                          Pigments[PigmentType.ViewNormal]);
 		}
 
@@ -269,9 +269,9 @@ namespace Ogui.UI {
 		protected int GetItemAt(Point lPos) {
 			int index = -1;
 
-			if (itemsRect.Contains(lPos))
-				index = lPos.Y - itemsRect.Top;
-			if (index < 0 || index >= Items.Count)
+			if (_itemsRect.Contains(lPos))
+				index = lPos.Y - _itemsRect.Top;
+			if (index < 0 || index >= _items.Count)
 				index = -1;
 			return index;
 		}
@@ -300,10 +300,10 @@ namespace Ogui.UI {
 
 			Point lPos = ScreenToLocal(mouseData.Position);
 
-			mouseOverIndex = GetItemAt(lPos);
+			_mouseOverIndex = GetItemAt(lPos);
 
-			if (mouseOverIndex != -1)
-				TooltipText = Items[mouseOverIndex].TooltipText;
+			if (_mouseOverIndex != -1)
+				TooltipText = _items[_mouseOverIndex].TooltipText;
 			else
 				TooltipText = null;
 		}
@@ -317,8 +317,8 @@ namespace Ogui.UI {
 		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
-			if (mouseOverIndex != -1)
-				OnItemSelected(mouseOverIndex);
+			if (_mouseOverIndex != -1)
+				OnItemSelected(_mouseOverIndex);
 		}
 
 
@@ -350,22 +350,22 @@ namespace Ogui.UI {
 
 		#region Private
 
-		private List<MenuItemData> Items;
-		private int mouseOverIndex;
-		private Rectangle itemsRect;
-		private int numberItemsDisplayed;
+		private List<MenuItemData> _items;
+		private int _mouseOverIndex;
+		private Rectangle _itemsRect;
+		private int _numberItemsDisplayed;
 
 		private void CalcMetrics(MenuTemplate template) {
-			itemsRect = this.LocalRect;
+			_itemsRect = this.LocalRect;
 			if (HasFrame)
-				itemsRect = itemsRect.Inflate(-1, -1);
+				_itemsRect = _itemsRect.Inflate(-1, -1);
 
-			int delta = itemsRect.Size.Height - Items.Count;
+			int delta = _itemsRect.Size.Height - _items.Count;
 
-			numberItemsDisplayed = Items.Count;
+			_numberItemsDisplayed = _items.Count;
 
 			if (delta < 0)
-				numberItemsDisplayed += delta;
+				_numberItemsDisplayed += delta;
 		}
 
 		#endregion

@@ -224,27 +224,27 @@ namespace Ogui.UI {
 			base.Redraw();
 
 			if (!string.IsNullOrEmpty(Label))
-				Canvas.PrintStringAligned(labelRect,
+				Canvas.PrintStringAligned(_labelRect,
 				                          Label,
 				                          LabelAlignment,
 				                          VerticalAlign);
 
 			if (IsActive)
 				if (IsChecked)
-					Canvas.PrintChar(checkPos, 225, Pigments[PigmentType.ViewNormal]);
+					Canvas.PrintChar(_checkPos, 225, Pigments[PigmentType.ViewNormal]);
 				else
-					Canvas.PrintChar(checkPos, 224, Pigments[PigmentType.ViewNormal]);
+					Canvas.PrintChar(_checkPos, 224, Pigments[PigmentType.ViewNormal]);
 		}
 
 		#endregion
 
-		#region Private 
+		#region Private
 
 		//private int labelPosX;
 		//private int labelFieldLength;
 		//private int labelPosY;
-		private Rectangle labelRect;
-		private Point checkPos;
+		private Rectangle _labelRect;
+		private Point _checkPos;
 
 		private void CalcMetrics(CheckBoxTemplate template) {
 			Rectangle inner = this.LocalRect;
@@ -256,28 +256,28 @@ namespace Ogui.UI {
 
 			if (CheckOnLeft) {
 				checkX = inner.Left;
-				labelRect = new Rectangle(inner.TopLeft.Shift(1, 0),
+				_labelRect = new Rectangle(inner.TopLeft.Shift(1, 0),
 				                     inner.BottomRight.Shift(-1, -1));
 			} else {
 				checkX = inner.Right - 1;
-				labelRect = new Rectangle(inner.TopLeft,
+				_labelRect = new Rectangle(inner.TopLeft,
 				                     inner.BottomRight.Shift(-2, -1));
 			}
 
-			if (labelRect.Size.Width < 1)
+			if (_labelRect.Size.Width < 1)
 				Label = "";
 
 			switch (VerticalAlign) {
 				case VerticalAlignment.Bottom:
-					checkPos = new Point(checkX, labelRect.Bottom - 1);
+					_checkPos = new Point(checkX, _labelRect.Bottom - 1);
 					break;
 
 				case VerticalAlignment.Center:
-					checkPos = new Point(checkX, labelRect.Center.Y);
+					_checkPos = new Point(checkX, _labelRect.Center.Y);
 					break;
 
 				case VerticalAlignment.Top:
-					checkPos = new Point(checkX, labelRect.Top);
+					_checkPos = new Point(checkX, _labelRect.Top);
 					break;
 			}
 		}

@@ -51,44 +51,44 @@ namespace Ogui.UI {
 		/// Get the label of the current selected item.
 		/// </summary>
 		public string CurrentSelectedData {
-			get { return items[CurrentSelected]; }
+			get { return _items[CurrentSelected]; }
 		}
 
-		private string labelSelection;
-		private Rectangle labelSelectionRect;
-		private Menu menu;
-		private List<string> items;
+		private string _labelSelection;
+		private Rectangle _labelSelectionRect;
+		private Menu _menu;
+		private List<string> _items;
 
 		public event EventHandler<MenuItemSelectedEventArgs> SelectionChanged;
 
 
 		public MenuButton(MenuButtonTemplate template)
 				: base(template) {
-			items = template.Items;
-			menu = new Menu(new MenuTemplate()
+			_items = template.Items;
+			_menu = new Menu(new MenuTemplate()
 			                {
 			                		TopLeftPos = template.CalculateRect().BottomLeft,
-			                		Items = items.Select(buttonLabel => new MenuItemData(buttonLabel)).ToList()
+			                		Items = _items.Select(buttonLabel => new MenuItemData(buttonLabel)).ToList()
 			                });
 
-			menu.ItemSelected += menu_ItemSelected;
+			_menu.ItemSelected += menu_ItemSelected;
 
 			CurrentSelected = template.InitialSelection;
-			labelSelection = Label + ": " + items[CurrentSelected];
+			_labelSelection = Label + ": " + _items[CurrentSelected];
 
-			labelSelectionRect = new Rectangle(Point.Origin, Size);
+			_labelSelectionRect = new Rectangle(Point.Origin, Size);
 
 			if (template.HasFrameBorder &&
 			    Size.Width > 2 &&
 			    Size.Height > 2)
-				labelSelectionRect = labelSelectionRect.Inflate(-1, -1);
+				_labelSelectionRect = _labelSelectionRect.Inflate(-1, -1);
 		}
 
 		protected override void Redraw() {
 			base.Redraw();
 			if (!OwnerDraw)
-				Canvas.PrintStringAligned(labelSelectionRect,
-				                          labelSelection,
+				Canvas.PrintStringAligned(_labelSelectionRect,
+				                          _labelSelection,
 				                          LabelAlignment,
 				                          VAlignment);
 		}
@@ -96,17 +96,17 @@ namespace Ogui.UI {
 		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 			if (mouseData.MouseButton == MouseButton.LeftButton) {
-				CurrentSelected = (CurrentSelected + 1) % items.Count;
+				CurrentSelected = (CurrentSelected + 1) % _items.Count;
 				menu_ItemSelected(this, new MenuItemSelectedEventArgs(CurrentSelected));
 			} else if (mouseData.MouseButton == MouseButton.RightButton) {
-				menu.ScreenPosition = mouseData.Position;
-				ParentWindow.AddControl(menu);				
+				_menu.ScreenPosition = mouseData.Position;
+				ParentWindow.AddControl(_menu);				
 			}
 		}
 
 		private void menu_ItemSelected(object sender, MenuItemSelectedEventArgs e) {
 			CurrentSelected = e.Index;
-			labelSelection = Label + ": " + items[CurrentSelected];
+			_labelSelection = Label + ": " + _items[CurrentSelected];
 
 			EventHandler<MenuItemSelectedEventArgs> handler = SelectionChanged;
 			if (handler != null)

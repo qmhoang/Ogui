@@ -193,14 +193,14 @@ namespace Ogui.UI {
 			HilightRadioMouseOver = template.HilightRadioMouseOver;
 			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
 			LabelAlignment = template.LabelAlignment;
-			Items = template.Items;
-			mouseOverIndex = -1;
+			_items = template.Items;
+			_mouseOverIndex = -1;
 			RadioOnLeft = template.RadioOnLeft;
 			Title = template.Title;
 
 			CurrentSelected = template.InitialSelectedIndex;
 
-			if (CurrentSelected < 0 || CurrentSelected >= Items.Count)
+			if (CurrentSelected < 0 || CurrentSelected >= _items.Count)
 				CurrentSelected = 0;
 
 			CalcMetrics(template);
@@ -244,7 +244,7 @@ namespace Ogui.UI {
 		/// Draws all of the items.
 		/// </summary>
 		protected void DrawItems() {
-			for (int i = 0; i < numberItemsDisplayed; i++)
+			for (int i = 0; i < _numberItemsDisplayed; i++)
 				DrawItem(i);
 		}
 
@@ -253,21 +253,21 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <param name="index"></param>
 		protected void DrawItem(int index) {
-			RadioItemData item = Items[index];
+			RadioItemData item = _items[index];
 			Pigment pigment;
 
-			if (mouseOverIndex == index && HilightRadioMouseOver)
+			if (_mouseOverIndex == index && HilightRadioMouseOver)
 				pigment = Pigments[PigmentType.ViewHilight];
 			else
 				pigment = DetermineMainPigment();
 
-			if (labelRect.Size.Width > 0 &&
+			if (_labelRect.Size.Width > 0 &&
 			    !string.IsNullOrEmpty(item.Label))
-				Canvas.PrintStringAligned(labelRect.TopLeft.X,
-				                          labelRect.TopLeft.Y + index,
+				Canvas.PrintStringAligned(_labelRect.TopLeft.X,
+				                          _labelRect.TopLeft.Y + index,
 				                          item.Label,
 				                          LabelAlignment,
-				                          labelRect.Size.Width,
+				                          _labelRect.Size.Width,
 				                          pigment);
 			char rc;
 
@@ -276,8 +276,8 @@ namespace Ogui.UI {
 			else
 				rc = (char) 9;
 
-			Canvas.PrintChar(radioRect.TopLeft.X,
-			                 radioRect.TopLeft.Y + index,
+			Canvas.PrintChar(_radioRect.TopLeft.X,
+			                 _radioRect.TopLeft.Y + index,
 			                 rc,
 			                 pigment);
 		}
@@ -291,9 +291,9 @@ namespace Ogui.UI {
 		protected int GetItemAt(Point lPos) {
 			int index = -1;
 
-			if (itemsRect.Contains(lPos))
-				index = lPos.Y - itemsRect.Top;
-			if (index < 0 || index >= Items.Count)
+			if (_itemsRect.Contains(lPos))
+				index = lPos.Y - _itemsRect.Top;
+			if (index < 0 || index >= _items.Count)
 				index = -1;
 			return index;
 		}
@@ -322,10 +322,10 @@ namespace Ogui.UI {
 
 			Point lPos = ScreenToLocal(mouseData.Position);
 
-			mouseOverIndex = GetItemAt(lPos);
+			_mouseOverIndex = GetItemAt(lPos);
 
-			if (mouseOverIndex != -1)
-				TooltipText = Items[mouseOverIndex].TooltipText;
+			if (_mouseOverIndex != -1)
+				TooltipText = _items[_mouseOverIndex].TooltipText;
 			else
 				TooltipText = null;
 		}
@@ -338,8 +338,8 @@ namespace Ogui.UI {
 		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
-			if (mouseOverIndex != -1)
-				OnItemSelected(mouseOverIndex);
+			if (_mouseOverIndex != -1)
+				OnItemSelected(_mouseOverIndex);
 		}
 
 		/// <summary>
@@ -357,34 +357,34 @@ namespace Ogui.UI {
 
 		#region Private
 
-		private List<RadioItemData> Items;
-		private int mouseOverIndex;
-		private Rectangle itemsRect;
-		private int numberItemsDisplayed;
+		private List<RadioItemData> _items;
+		private int _mouseOverIndex;
+		private Rectangle _itemsRect;
+		private int _numberItemsDisplayed;
 
-		private Rectangle radioRect;
-		private Rectangle labelRect;
+		private Rectangle _radioRect;
+		private Rectangle _labelRect;
 
 		private void CalcMetrics(RadioGroupTemplate template) {
-			itemsRect = this.LocalRect;
+			_itemsRect = this.LocalRect;
 			if (HasFrame)
-				itemsRect = itemsRect.Inflate(-1, -1);
+				_itemsRect = _itemsRect.Inflate(-1, -1);
 
-			int delta = itemsRect.Size.Height - Items.Count;
+			int delta = _itemsRect.Size.Height - _items.Count;
 
-			numberItemsDisplayed = Items.Count;
+			_numberItemsDisplayed = _items.Count;
 
 			if (delta < 0)
-				numberItemsDisplayed += delta;
+				_numberItemsDisplayed += delta;
 
 			if (RadioOnLeft) {
-				radioRect = new Rectangle(itemsRect.TopLeft, new Size(1, 1));
-				labelRect = new Rectangle(radioRect.TopRight.Shift(1, 0),
-				                     itemsRect.TopRight.Shift(-1, 0));
+				_radioRect = new Rectangle(_itemsRect.TopLeft, new Size(1, 1));
+				_labelRect = new Rectangle(_radioRect.TopRight.Shift(1, 0),
+				                     _itemsRect.TopRight.Shift(-1, 0));
 			} else {
-				radioRect = new Rectangle(itemsRect.TopRight.Shift(-1, 0), new Size(1, 1));
-				labelRect = new Rectangle(itemsRect.TopLeft,
-				                     radioRect.BottomLeft.Shift(-2, -1));
+				_radioRect = new Rectangle(_itemsRect.TopRight.Shift(-1, 0), new Size(1, 1));
+				_labelRect = new Rectangle(_itemsRect.TopLeft,
+				                     _radioRect.BottomLeft.Shift(-2, -1));
 			}
 		}
 
