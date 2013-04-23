@@ -202,7 +202,7 @@ namespace Ogui.UI {
 		/// <param name="template"></param>
 		public ListBox(ListBoxTemplate template)
 				: base(template) {
-			Items = template.Items;
+			_items = template.Items;
 			Title = template.Title;
 			if (Title == null)
 				Title = "";
@@ -214,7 +214,7 @@ namespace Ogui.UI {
 				template.HasFrameBorder = false;
 
 			HasFrame = template.HasFrameBorder;
-			useSmallVersion = template.FrameTitle;
+			_useSmallVersion = template.FrameTitle;
 			HilightWhenMouseOver = template.HilightWhenMouseOver;
 			CanHaveKeyboardFocus = template.CanHaveKeyboardFocus;
 
@@ -222,8 +222,8 @@ namespace Ogui.UI {
 			TitleAlignment = template.TitleAlignment;
 			CurrentSelected = template.InitialSelectedIndex;
 
-			mouseOverIndex = -1;
-			topIndex = 0;
+			_mouseOverIndex = -1;
+			_topIndex = 0;
 
 			CalcMetrics(template);
 		}
@@ -256,7 +256,7 @@ namespace Ogui.UI {
 		/// Get the label of the current selected item.
 		/// </summary>
 		public string CurrentSelectedData {
-			get { return Items[CurrentSelected].Label; }
+			get { return _items[CurrentSelected].Label; }
 		}
 
 		#endregion
@@ -269,10 +269,10 @@ namespace Ogui.UI {
 		/// <param name="index"></param>
 		/// <returns></returns>
 		public string GetItemLabel(int index) {
-			if (index < 0 || index >= Items.Count)
+			if (index < 0 || index >= _items.Count)
 				throw (new ArgumentOutOfRangeException("index"));
 
-			return Items[index].Label;
+			return _items[index].Label;
 		}
 
 		#endregion
@@ -283,16 +283,16 @@ namespace Ogui.UI {
 		/// Draws the title and title frame.
 		/// </summary>
 		protected void DrawTitle() {
-			if (!useSmallVersion || !HasFrame) {
+			if (!_useSmallVersion || !HasFrame) {
 				if (!string.IsNullOrEmpty(Title)) {
-					Canvas.PrintStringAligned(titleRect, Title, TitleAlignment,
+					Canvas.PrintStringAligned(_titleRect, Title, TitleAlignment,
 					                          VerticalAlignment.Center);
 				}
 
 				if (HasFrame &&
 				    this.Size.Width > 2 &&
 				    this.Size.Height > 2) {
-					int fy = titleRect.Bottom;
+					int fy = _titleRect.Bottom;
 
 					Canvas.SetDefaultPigment(DetermineFramePigment());
 					Canvas.DrawHLine(1, fy, Size.Width - 2);
@@ -307,7 +307,7 @@ namespace Ogui.UI {
 		/// Draws each of the items in the list.
 		/// </summary>
 		protected void DrawItems() {
-			for (int i = topIndex; i < numberItemsDisplayed + topIndex; i++)
+			for (int i = _topIndex; i < _numberItemsDisplayed + _topIndex; i++)
 				DrawItem(i);
 
 		}
@@ -318,33 +318,33 @@ namespace Ogui.UI {
 		/// </summary>
 		/// <param name="index"></param>
 		protected void DrawItem(int index) {
-			ListItemData item = Items[index];
+			ListItemData item = _items[index];
 
 			if (index == CurrentSelected) {
-				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-				                          itemsRect.TopLeft.Y + index - topIndex,
+				Canvas.PrintStringAligned(_itemsRect.TopLeft.X,
+				                          _itemsRect.TopLeft.Y + index - _topIndex,
 				                          item.Label,
 				                          LabelAlignment,
-										  itemsRect.Size.Width - (HasFrame ? 1 : 0),
+										  _itemsRect.Size.Width - (HasFrame ? 1 : 0),
 				                          Pigments[PigmentType.ViewSelected]);
 
-				Canvas.PrintChar(itemsRect.TopRight.X - 1,
-				                 itemsRect.TopLeft.Y + index - topIndex,
+				Canvas.PrintChar(_itemsRect.TopRight.X - 1,
+				                 _itemsRect.TopLeft.Y + index - _topIndex,
 				                 (int) TCODSpecialCharacter.ArrowWest,
 				                 Pigments[PigmentType.ViewSelected]);
-			} else if (index == mouseOverIndex)
-				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-										  itemsRect.TopLeft.Y + index - topIndex,
+			} else if (index == _mouseOverIndex)
+				Canvas.PrintStringAligned(_itemsRect.TopLeft.X,
+										  _itemsRect.TopLeft.Y + index - _topIndex,
 				                          item.Label,
 				                          LabelAlignment,
-										  itemsRect.Size.Width - (HasFrame ? 1 : 0),
+										  _itemsRect.Size.Width - (HasFrame ? 1 : 0),
 				                          Pigments[PigmentType.ViewHilight]);
 			else
-				Canvas.PrintStringAligned(itemsRect.TopLeft.X,
-										  itemsRect.TopLeft.Y + index - topIndex,
+				Canvas.PrintStringAligned(_itemsRect.TopLeft.X,
+										  _itemsRect.TopLeft.Y + index - _topIndex,
 				                          item.Label,
 				                          LabelAlignment,
-										  itemsRect.Size.Width - (HasFrame ? 1 : 0),
+										  _itemsRect.Size.Width - (HasFrame ? 1 : 0),
 				                          Pigments[PigmentType.ViewNormal]);
 		}
 
@@ -358,14 +358,14 @@ namespace Ogui.UI {
 		protected int GetItemAt(Point lPos) {
 			int index = -1;
 
-			if (itemsRect.Contains(lPos)) {
-				int i = lPos.Y - itemsRect.Top;
+			if (_itemsRect.Contains(lPos)) {
+				int i = lPos.Y - _itemsRect.Top;
 				index = i;
 			}
 
-			if (index < 0 || index >= Items.Count)
+			if (index < 0 || index >= _items.Count)
 				index = -1;
-			return index + topIndex;
+			return index + _topIndex;
 		}
 
 		#endregion
@@ -375,7 +375,7 @@ namespace Ogui.UI {
 		protected internal override void OnSettingUp() {
 			base.OnSettingUp();
 
-			if (Items.Count > numberItemsDisplayed) {
+			if (_items.Count > _numberItemsDisplayed) {
 				var height = Size.Height;
 				var topLeftPos = ScreenRect.TopRight.Shift(-1, 0);
 				if (HasFrame) {
@@ -384,12 +384,12 @@ namespace Ogui.UI {
 //					topLeftPos.Y++;
 					topLeftPos = topLeftPos.Shift(-1, 1);
 				}
-				if (!useSmallVersion) {
+				if (!_useSmallVersion) {
 					height -= 2;
 //					topLeftPos.Y += 2;
 					topLeftPos = topLeftPos.Shift(0, 2);
 				}
-				scrollBar = new VScrollBar(new VScrollBarTemplate()
+				_scrollBar = new VScrollBar(new VScrollBarTemplate()
 				                           {
 				                           		Height = height,
 				                           		MinimumValue = 0,
@@ -399,20 +399,20 @@ namespace Ogui.UI {
 				                           		SpinDelay = 100,
 				                           		SpinSpeed = 100,
 				                           });
-				scrollBar.ValueChanged += scrollBar_ValueChanged;
+				_scrollBar.ValueChanged += scrollBar_ValueChanged;
 			}
 
 		}
 
 		protected internal override void OnAdded() {
 			base.OnAdded();
-			if (scrollBar != null)
-				ParentWindow.AddControl(scrollBar);
+			if (_scrollBar != null)
+				ParentWindow.AddControl(_scrollBar);
 		}
 
 		protected internal override void OnRemoved() {
 			base.OnRemoved();
-			ParentWindow.RemoveControl(scrollBar);
+			ParentWindow.RemoveControl(_scrollBar);
 		}
 
 		/// <summary>
@@ -427,7 +427,7 @@ namespace Ogui.UI {
 
 		protected override void DrawFrame(Pigment pigment = null) {
 			if (this.Size.Width > 2 && this.Size.Height > 2)
-				Canvas.PrintFrame(useSmallVersion ? Title : null, pigment);
+				Canvas.PrintFrame(_useSmallVersion ? Title : null, pigment);
 		}
 
 		/// <summary>
@@ -440,10 +440,10 @@ namespace Ogui.UI {
 
 			Point lPos = ScreenToLocal(mouseData.Position);
 
-			mouseOverIndex = GetItemAt(lPos);
+			_mouseOverIndex = GetItemAt(lPos);
 
-			if (mouseOverIndex != -1)
-				TooltipText = Items[mouseOverIndex].TooltipText;
+			if (_mouseOverIndex != -1)
+				TooltipText = _items[_mouseOverIndex].TooltipText;
 			else
 				TooltipText = null;
 		}
@@ -456,9 +456,9 @@ namespace Ogui.UI {
 		protected internal override void OnMouseButtonDown(MouseData mouseData) {
 			base.OnMouseButtonDown(mouseData);
 
-			if (mouseOverIndex != -1)
-				if (CurrentSelected != mouseOverIndex) {
-					CurrentSelected = mouseOverIndex;
+			if (_mouseOverIndex != -1)
+				if (CurrentSelected != _mouseOverIndex) {
+					CurrentSelected = _mouseOverIndex;
 					OnItemSelected(CurrentSelected);
 				}
 		}
@@ -478,18 +478,18 @@ namespace Ogui.UI {
 
 		#region Private
 
-		private List<ListItemData> Items;
-		private int mouseOverIndex;
-		private Rectangle titleRect;
-		private Rectangle itemsRect;
-		private int numberItemsDisplayed;
-		private bool useSmallVersion;
+		private List<ListItemData> _items;
+		private int _mouseOverIndex;
+		private Rectangle _titleRect;
+		private Rectangle _itemsRect;
+		private int _numberItemsDisplayed;
+		private bool _useSmallVersion;
 
-		private int topIndex;
-		private VScrollBar scrollBar;
+		private int _topIndex;
+		private VScrollBar _scrollBar;
 		
 		private void CalcMetrics(ListBoxTemplate template) {
-			int numItems = Items.Count;
+			int numItems = _items.Count;
 			int expandTitle = 0;
 
 			int delta = Size.Height - numItems - 1;
@@ -500,9 +500,9 @@ namespace Ogui.UI {
 					delta -= 3;
 			}
 
-			numberItemsDisplayed = Items.Count;
+			_numberItemsDisplayed = _items.Count;
 			if (delta < 0)
-				numberItemsDisplayed += delta;
+				_numberItemsDisplayed += delta;
 			else if (delta > 0)
 				expandTitle = delta;
 
@@ -512,29 +512,29 @@ namespace Ogui.UI {
 
 			if (Title != "")
 				if (template.HasFrameBorder)
-					titleRect = new Rectangle(Point.One,
+					_titleRect = new Rectangle(Point.One,
 					                     new Size(titleWidth - 2, titleHeight));
 				else
-					titleRect = new Rectangle(Point.Origin,
+					_titleRect = new Rectangle(Point.Origin,
 					                     new Size(titleWidth, titleHeight));
 
 			int itemsWidth = Size.Width;
-			int itemsHeight = numberItemsDisplayed;
+			int itemsHeight = _numberItemsDisplayed;
 
 			if (template.HasFrameBorder)
 				if (template.FrameTitle)
-					itemsRect = new Rectangle(Point.One, new Size(itemsWidth - 2, itemsHeight));
+					_itemsRect = new Rectangle(Point.One, new Size(itemsWidth - 2, itemsHeight));
 				else
-					itemsRect = new Rectangle(titleRect.BottomLeft.Shift(0, 1), new Size(itemsWidth - 2, itemsHeight));
+					_itemsRect = new Rectangle(_titleRect.BottomLeft.Shift(0, 1), new Size(itemsWidth - 2, itemsHeight));
 			else
-				itemsRect = new Rectangle(titleRect.BottomLeft,
+				_itemsRect = new Rectangle(_titleRect.BottomLeft,
 				                     new Size(itemsWidth, itemsHeight));
 		}
 
 		#endregion
 
 		void scrollBar_ValueChanged(object sender, EventArgs e) {
-			topIndex = scrollBar.CurrentValue;
+			_topIndex = _scrollBar.CurrentValue;
 		}
 	}
 

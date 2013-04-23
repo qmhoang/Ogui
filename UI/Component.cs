@@ -260,13 +260,13 @@ namespace Ogui.UI {
 		/// Override to add specific setup code.
 		/// </summary>
 		protected internal virtual void OnSettingUp() {
-			if (isSetup)
+			if (IsSetup)
 				return;
 
 			if (SettingUp != null)
 				SettingUp(this, EventArgs.Empty);
 
-			isSetup = true;
+			IsSetup = true;
 		}
 
 		/// <summary>
@@ -418,7 +418,7 @@ namespace Ogui.UI {
 		private List<Schedule> scheduleList = new List<Schedule>();
 		private List<Schedule> scheduleRemoveList = new List<Schedule>();
 		private List<Schedule> scheduleAddList = new List<Schedule>();
-		internal bool isSetup;
+		internal bool IsSetup;
 
 		#endregion
 	}

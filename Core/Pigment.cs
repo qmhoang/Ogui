@@ -16,9 +16,9 @@ namespace Ogui.Core {
 		/// <param name="background"></param>
 		/// <param name="bgFlag"></param>
 		public Pigment(Color foreground, Color background, TCODBackgroundFlag bgFlag) {
-			fgColor = foreground;
-			bgColor = background;
-			this.bgFlag = bgFlag;
+			_fgColor = foreground;
+			_bgColor = background;
+			this._bgFlag = bgFlag;
 		}
 
 		/// <summary>
@@ -47,21 +47,21 @@ namespace Ogui.Core {
 		/// Get the foreground color
 		/// </summary>
 		public Color Foreground {
-			get { return fgColor; }
+			get { return _fgColor; }
 		}
 
 		/// <summary>
 		/// Get the background color
 		/// </summary>
 		public Color Background {
-			get { return bgColor; }
+			get { return _bgColor; }
 		}
 
 		/// <summary>
 		/// Get the background flag;
 		/// </summary>
 		public TCODBackgroundFlag BackgroundFlag {
-			get { return bgFlag; }
+			get { return _bgFlag; }
 		}
 
 		#endregion
@@ -128,9 +128,9 @@ namespace Ogui.Core {
 
 		#region Private Fields
 
-		private readonly Color fgColor;
-		private readonly Color bgColor;
-		private readonly TCODBackgroundFlag bgFlag;
+		private readonly Color _fgColor;
+		private readonly Color _bgColor;
+		private readonly TCODBackgroundFlag _bgFlag;
 
 		#endregion
 
@@ -161,8 +161,8 @@ namespace Ogui.Core {
 			if (alreadyDisposed)
 				return;
 			if (isDisposing) {
-				bgColor.Dispose();
-				fgColor.Dispose();
+				_bgColor.Dispose();
+				_fgColor.Dispose();
 			}
 			alreadyDisposed = true;
 		}

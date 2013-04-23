@@ -107,9 +107,9 @@ namespace Ogui.UI {
 		/// <param name="screenPos"></param>
 		/// <param name="pixelPos"></param>
 		public MouseData(MouseButton button, Point screenPos, Point pixelPos) {
-			this.pixelPosition = pixelPos;
-			this.position = screenPos;
-			this.mouseButton = button;
+			this._pixelPosition = pixelPos;
+			this._position = screenPos;
+			this._mouseButton = button;
 		}
 
 
@@ -121,19 +121,19 @@ namespace Ogui.UI {
 			if (tcodMouseData == null)
 				throw new ArgumentNullException("tcodMouseData");
 
-			this.position = new Point(tcodMouseData.CellX,
+			this._position = new Point(tcodMouseData.CellX,
 			                          tcodMouseData.CellY);
 
-			this.pixelPosition = new Point(tcodMouseData.PixelX,
+			this._pixelPosition = new Point(tcodMouseData.PixelX,
 			                               tcodMouseData.PixelY);
 
-			mouseButton = MouseButton.None;
+			_mouseButton = MouseButton.None;
 			if (tcodMouseData.LeftButton)
-				mouseButton = MouseButton.LeftButton;
+				_mouseButton = MouseButton.LeftButton;
 			if (tcodMouseData.MiddleButton)
-				mouseButton = MouseButton.MiddleButton;
+				_mouseButton = MouseButton.MiddleButton;
 			if (tcodMouseData.RightButton)
-				mouseButton = MouseButton.RightButton;
+				_mouseButton = MouseButton.RightButton;
 		}
 
 		#endregion
@@ -146,7 +146,7 @@ namespace Ogui.UI {
 		/// source
 		/// </summary>
 		public Point Position {
-			get { return position; }
+			get { return _position; }
 		}
 
 
@@ -154,7 +154,7 @@ namespace Ogui.UI {
 		/// Get which mouse button, if any, is pressed
 		/// </summary>
 		public MouseButton MouseButton {
-			get { return mouseButton; }
+			get { return _mouseButton; }
 		}
 
 
@@ -163,16 +163,16 @@ namespace Ogui.UI {
 		/// are always in screen space
 		/// </summary>
 		public Point PixelPosition {
-			get { return pixelPosition; }
+			get { return _pixelPosition; }
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private readonly Point position;
-		private readonly MouseButton mouseButton;
-		private readonly Point pixelPosition;
+		private readonly Point _position;
+		private readonly MouseButton _mouseButton;
+		private readonly Point _pixelPosition;
 
 		#endregion
 	}
@@ -194,10 +194,10 @@ namespace Ogui.UI {
 		/// <param name="controlKeys"></param>
 		public KeyboardData(char character, TCODKeyCode keyCode, bool isKeyDown,
 		                    ControlKeys controlKeys) {
-			this.character = character;
-			this.isKeyPress = isKeyDown;
-			this.keyCode = keyCode;
-			this.controlKeys = controlKeys;
+			this._character = character;
+			this._isKeyPress = isKeyDown;
+			this._keyCode = keyCode;
+			this._controlKeys = controlKeys;
 		}
 
 
@@ -209,9 +209,9 @@ namespace Ogui.UI {
 			if (tcodKeys == null)
 				throw new ArgumentNullException("tcodKeys");
 
-			this.character = tcodKeys.Character;
-			this.keyCode = tcodKeys.KeyCode;
-			this.isKeyPress = tcodKeys.Pressed;
+			this._character = tcodKeys.Character;
+			this._keyCode = tcodKeys.KeyCode;
+			this._isKeyPress = tcodKeys.Pressed;
 
 			int f = 0;
 			if (tcodKeys.LeftAlt)
@@ -225,7 +225,7 @@ namespace Ogui.UI {
 			if (tcodKeys.Shift)
 				f |= (int) ControlKeys.Shift;
 
-			this.controlKeys = (ControlKeys) f;
+			this._controlKeys = (ControlKeys) f;
 		}
 
 		#endregion
@@ -236,7 +236,7 @@ namespace Ogui.UI {
 		/// An ASCII character representation of the pressed key, or 0 if none.
 		/// </summary>
 		public char Character {
-			get { return character; }
+			get { return _character; }
 		}
 
 
@@ -244,7 +244,7 @@ namespace Ogui.UI {
 		/// A TCODKeyCode value representing a key press
 		/// </summary>
 		public TCODKeyCode KeyCode {
-			get { return keyCode; }
+			get { return _keyCode; }
 		}
 
 
@@ -252,7 +252,7 @@ namespace Ogui.UI {
 		/// True if the specified key is being pressed, false if released.
 		/// </summary>
 		public bool IsKeyPress {
-			get { return isKeyPress; }
+			get { return _isKeyPress; }
 		}
 
 
@@ -260,17 +260,17 @@ namespace Ogui.UI {
 		/// A ControlKeys bit array representing the current control keys that are being pressed
 		/// </summary>
 		public ControlKeys ControlKeys {
-			get { return controlKeys; }
+			get { return _controlKeys; }
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private ControlKeys controlKeys;
-		private TCODKeyCode keyCode;
-		private readonly bool isKeyPress;
-		private readonly char character;
+		private ControlKeys _controlKeys;
+		private TCODKeyCode _keyCode;
+		private readonly bool _isKeyPress;
+		private readonly char _character;
 
 		#endregion
 	}
@@ -291,17 +291,17 @@ namespace Ogui.UI {
 			if (mouseData == null)
 				throw new ArgumentNullException("mouseData");
 
-			this.mouseData = mouseData;
+			this._mouseData = mouseData;
 		}
 
 		/// <summary>
 		/// Get the mouse state as a MouseData object
 		/// </summary>
 		public MouseData MouseData {
-			get { return mouseData; }
+			get { return _mouseData; }
 		}
 
-		private readonly MouseData mouseData;
+		private readonly MouseData _mouseData;
 	}
 
 	/// <summary>
@@ -316,17 +316,17 @@ namespace Ogui.UI {
 			if (keyboardData == null)
 				throw new ArgumentNullException("keyboardData");
 
-			this.keyboardData = keyboardData;
+			this._keyboardData = keyboardData;
 		}
 
 		/// <summary>
 		/// Get the keyboard state as a KeyboardData object
 		/// </summary>
 		public KeyboardData KeyboardData {
-			get { return keyboardData; }
+			get { return _keyboardData; }
 		}
 
-		private readonly KeyboardData keyboardData;
+		private readonly KeyboardData _keyboardData;
 	}
 
 	/// <summary>

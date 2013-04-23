@@ -13,24 +13,23 @@ namespace Ogui.UI {
 				: base(template) {
 			//OwnerDraw = true;
 			TextSpeed = template.TextSpeed;
+			_buffer = new Queue<Atom>();
 		}
 
 		public int NumberOfLines { get; private set; }
 
 		public int LineLength { get; private set; }
 
-		private uint textSpeed;
-
 		public uint TextSpeed {
-			get { return textSpeed; }
+			get { return _textSpeed; }
 			set {
-				textSpeed = value;
+				_textSpeed = value;
 
-				if (ContainsSchedule(typeSchedule)) {
-					RemoveSchedule(typeSchedule);
+				if (ContainsSchedule(_typeSchedule)) {
+					RemoveSchedule(_typeSchedule);
 
-					typeSchedule = new Schedule(TypeNextChar, textSpeed);
-					AddSchedule(typeSchedule);
+					_typeSchedule = new Schedule(TypeNextChar, _textSpeed);
+					AddSchedule(_typeSchedule);
 				}
 			}
 		}
@@ -41,23 +40,23 @@ namespace Ogui.UI {
 
 			foreach (string word in words)
 				if (!string.IsNullOrEmpty(word)) {
-					if ((currVirtualPos + Canvas.TextLength(word) >= LineLength) &&
+					if ((_currVirtualPos + Canvas.TextLength(word) >= LineLength) &&
 					    (word[0] != '\n')) {
-						buffer.Enqueue(new Atom('\n'));
-						currVirtualPos = 0;
+						_buffer.Enqueue(new Atom('\n'));
+						_currVirtualPos = 0;
 					}
 
 					foreach (char c in word) {
-						buffer.Enqueue(new Atom(c, pigment));
-						currVirtualPos++;
+						_buffer.Enqueue(new Atom(c, pigment));
+						_currVirtualPos++;
 
 						if (c == '\n')
-							currVirtualPos = 0;
+							_currVirtualPos = 0;
 					}
 
-					if (currVirtualPos != 0) {
-						buffer.Enqueue(new Atom(' ', pigment));
-						currVirtualPos++;
+					if (_currVirtualPos != 0) {
+						_buffer.Enqueue(new Atom(' ', pigment));
+						_currVirtualPos++;
 					}
 				}
 		}
@@ -85,25 +84,25 @@ namespace Ogui.UI {
 
 			LineLength = textRect.Size.Width;
 
-			currLine = 0;
-			currPos = 0;
-			currVirtualPos = currPos;
+			_currLine = 0;
+			_currPos = 0;
+			_currVirtualPos = _currPos;
 
-			typeSchedule = new Schedule(TypeNextChar, TextSpeed);
-			AddSchedule(typeSchedule);
+			_typeSchedule = new Schedule(TypeNextChar, TextSpeed);
+			AddSchedule(_typeSchedule);
 
-			textCanvas = new Canvas(textRect.Size);
-			textCanvas.SetDefaultPigment(DetermineMainPigment());
-			textCanvas.Clear();
+			_textCanvas = new Canvas(textRect.Size);
+			_textCanvas.SetDefaultPigment(DetermineMainPigment());
+			_textCanvas.Clear();
 
-			textCanvasPos = textRect.TopLeft;
+			_textCanvasPos = textRect.TopLeft;
 		}
 
 
 		protected override void Redraw() {
 			base.Redraw();
 
-			Canvas.Blit(textCanvas, textCanvasPos);
+			Canvas.Blit(_textCanvas, _textCanvasPos);
 		}
 
 		protected override Pigment DetermineMainPigment() {
@@ -113,35 +112,35 @@ namespace Ogui.UI {
 		protected override void Dispose(bool isDisposing) {
 			base.Dispose(isDisposing);
 
-			if (alreadyDisposed)
+			if (_alreadyDisposed)
 				return;
 			if (isDisposing)
-				if (textCanvas != null)
-					textCanvas.Dispose();
-			alreadyDisposed = true;
+				if (_textCanvas != null)
+					_textCanvas.Dispose();
+			_alreadyDisposed = true;
 		}
 
 		private void TypeNextChar() {
-			if (buffer.Count == 0)
+			if (_buffer.Count == 0)
 				return;
 
-			Atom next = buffer.Dequeue();
+			Atom next = _buffer.Dequeue();
 
 			if (next.c == '\n') {
-				currPos = 0;
-				currLine++;
+				_currPos = 0;
+				_currLine++;
 
-				if (currLine >= NumberOfLines) {
-					this.textCanvas.Scroll(0, -1);
-					currLine--;
-					currPos = 0;
+				if (_currLine >= NumberOfLines) {
+					this._textCanvas.Scroll(0, -1);
+					_currLine--;
+					_currPos = 0;
 				}
 			} else {
-				if (currPos < LineLength && currLine < NumberOfLines) {
-					textCanvas.SetDefaultPigment(DetermineMainPigment());
-					textCanvas.PrintChar(currPos, currLine, next.c, next.pigment);
+				if (_currPos < LineLength && _currLine < NumberOfLines) {
+					_textCanvas.SetDefaultPigment(DetermineMainPigment());
+					_textCanvas.PrintChar(_currPos, _currLine, next.c, next.pigment);
 				}
-				currPos++;
+				_currPos++;
 			}
 		}
 
@@ -159,19 +158,23 @@ namespace Ogui.UI {
 			return Words;
 		}
 
-		private bool alreadyDisposed;
-		private Schedule typeSchedule;
+		#region Private
+		private bool _alreadyDisposed;
+		private Schedule _typeSchedule;
 
-		private int currPos;
-		private int currLine;
+		private int _currPos;
+		private int _currLine;
 
-		private Point textCanvasPos;
+		private Point _textCanvasPos;
 
-		private Canvas textCanvas;
+		private Canvas _textCanvas;
 
-		private int currVirtualPos;
+		private int _currVirtualPos;
 
-		private Queue<Atom> buffer = new Queue<Atom>();
+		private uint _textSpeed;
+		
+		private readonly Queue<Atom> _buffer;
+		#endregion
 
 		private class Atom {
 			public Atom(char c, Pigment pigment = null) {

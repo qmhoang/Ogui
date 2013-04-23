@@ -217,13 +217,13 @@ namespace Ogui.UI {
 			Point fieldPos;
 			if (HasFrame) {
 				if (!string.IsNullOrEmpty(Label)) {
-					labelRect = new Rectangle(new Point(1, 1), new Point(Label.Length + 1, 1));
+					_labelRect = new Rectangle(new Point(1, 1), new Point(Label.Length + 1, 1));
 					fieldPos = new Point(Label.Length + 2, 1);
 				} else
 					fieldPos = new Point(1, 1);
 			} else {
 				if (!string.IsNullOrEmpty(Label)) {
-					labelRect = new Rectangle(new Point(0, 0), new Point(Label.Length + 1, 1));
+					_labelRect = new Rectangle(new Point(0, 0), new Point(Label.Length + 1, 1));
 					fieldPos = new Point(Label.Length + 2, 0);
 				} else
 					fieldPos = new Point(0, 0);
@@ -232,12 +232,12 @@ namespace Ogui.UI {
 
 			int fieldWidth = NumberEntryTemplate.CalculateFieldWidth(MaximumValue, MinimumValue);
 			Size fieldSize = new Size(fieldWidth, 1);
-			fieldRect = new Rectangle(fieldPos, fieldSize);
+			_fieldRect = new Rectangle(fieldPos, fieldSize);
 
 			if (BarPigment == null)
 				BarPigment = DetermineMainPigment();
 
-			numEntry = new NumberEntry(new NumberEntryTemplate()
+			_numEntry = new NumberEntry(new NumberEntryTemplate()
 			                           {
 			                           		HasFrameBorder = false,
 			                           		MinimumValue = this.MinimumValue,
@@ -246,7 +246,7 @@ namespace Ogui.UI {
 			                           		CommitOnLostFocus = true,
 			                           		ReplaceOnFirstKey = true,
 											CanHaveKeyboardFocus = true,
-			                           		TopLeftPos = this.LocalToScreen(fieldRect.TopLeft)
+			                           		TopLeftPos = this.LocalToScreen(_fieldRect.TopLeft)
 			                           });
 
 			int w = 0, h = 0;
@@ -259,7 +259,7 @@ namespace Ogui.UI {
 				w++;
 			}
 			
-			valueBar = new ValueBar(new ValueBarTemplate()
+			_valueBar = new ValueBar(new ValueBarTemplate()
 			                        {
 			                        		TopLeftPos = this.LocalToScreen(new Point(w, h)),
 			                        		Length = this.Size.Width - (HasFrame ? 4 : 2),
@@ -269,7 +269,7 @@ namespace Ogui.UI {
 			                        		BarPigment = this.BarPigment
 			                        });
 
-			leftButton = new EmitterButton(new EmitterButtonTemplate()
+			_leftButton = new EmitterButton(new EmitterButtonTemplate()
 			                               {
 			                               		HasFrameBorder = false,
 			                               		Label = "-",
@@ -277,7 +277,7 @@ namespace Ogui.UI {
 			                               		StartEmittingDelay = SpinDelay,
 			                               		Speed = SpinSpeed
 			                               });
-			rightButton = new EmitterButton(new EmitterButtonTemplate()
+			_rightButton = new EmitterButton(new EmitterButtonTemplate()
 			                                {
 			                                		HasFrameBorder = false,
 			                                		Label = "+",
@@ -286,31 +286,31 @@ namespace Ogui.UI {
 			                                		Speed = SpinSpeed
 			                                });
 			
-			numEntry.EntryChanged += numEntry_EntryChanged;
+			_numEntry.EntryChanged += numEntry_EntryChanged;
 
-			valueBar.MouseMoved += valueBar_MouseMoved;
+			_valueBar.MouseMoved += valueBar_MouseMoved;
 
-			valueBar.MouseButtonDown += valueBar_MouseButtonDown;
+			_valueBar.MouseButtonDown += valueBar_MouseButtonDown;
 			
-			leftButton.Emit += leftButton_Emit;
-			rightButton.Emit += rightButton_Emit;
+			_leftButton.Emit += leftButton_Emit;
+			_rightButton.Emit += rightButton_Emit;
 		}
 
 		protected internal override void OnAdded() {
 			base.OnAdded();
 			if (ShowLabel)
-				ParentWindow.AddControl(numEntry);
-			ParentWindow.AddControls(valueBar);
-			ParentWindow.AddControls(leftButton, rightButton);
+				ParentWindow.AddControl(_numEntry);
+			ParentWindow.AddControls(_valueBar);
+			ParentWindow.AddControls(_leftButton, _rightButton);
 		}
 
 		protected internal override void OnRemoved() {
 			base.OnRemoved();
 
-			ParentWindow.RemoveControl(numEntry);
-			ParentWindow.RemoveControl(valueBar);
-			ParentWindow.RemoveControl(leftButton);
-			ParentWindow.RemoveControl(rightButton);
+			ParentWindow.RemoveControl(_numEntry);
+			ParentWindow.RemoveControl(_valueBar);
+			ParentWindow.RemoveControl(_leftButton);
+			ParentWindow.RemoveControl(_rightButton);
 		}
 
 		/// <summary>
@@ -320,7 +320,7 @@ namespace Ogui.UI {
 			base.Redraw();
 			
 			if (ShowLabel)
-				Canvas.PrintString(labelRect.TopLeft, Label);
+				Canvas.PrintString(_labelRect.TopLeft, Label);
 		}
 
 		#endregion
@@ -331,7 +331,7 @@ namespace Ogui.UI {
 			if (e.MouseData.MouseButton == MouseButton.LeftButton) {
 				int newVal = CalculateValue(e.MouseData.PixelPosition.X);
 
-				numEntry.TrySetValue(newVal);
+				_numEntry.TrySetValue(newVal);
 			}
 		}
 
@@ -339,9 +339,9 @@ namespace Ogui.UI {
 			int charWidth = Canvas.GetCharSize().Width;
 			int currPx = pixelPosX;
 
-			currPx = currPx - (charWidth * valueBar.ScreenRect.Left) - 2 * charWidth;
+			currPx = currPx - (charWidth * _valueBar.ScreenRect.Left) - 2 * charWidth;
 
-			int widthInPx = (valueBar.Size.Width - 4) * charWidth;
+			int widthInPx = (_valueBar.Size.Width - 4) * charWidth;
 
 			float pixposPercent = (float) currPx / (float) widthInPx;
 
@@ -349,11 +349,11 @@ namespace Ogui.UI {
 		}
 
 		private void numEntry_EntryChanged(object sender, EventArgs e) {
-			int value = numEntry.CurrentValue;
+			int value = _numEntry.CurrentValue;
 
 			if (this.CurrentValue != value) {
 				this.CurrentValue = value;
-				valueBar.CurrentValue = this.CurrentValue;				
+				_valueBar.CurrentValue = this.CurrentValue;				
 			}
 		}
 
@@ -361,26 +361,26 @@ namespace Ogui.UI {
 			if (e.MouseData.MouseButton == MouseButton.LeftButton) {
 				int newVal = CalculateValue(e.MouseData.PixelPosition.X);
 
-				numEntry.TrySetValue(newVal);
+				_numEntry.TrySetValue(newVal);
 			}
 		}
 
 		private void leftButton_Emit(object sender, EventArgs e) {
 			if (CurrentValue > MinimumValue)
-				numEntry.TrySetValue(CurrentValue - 1);
+				_numEntry.TrySetValue(CurrentValue - 1);
 		}
 
 		private void rightButton_Emit(object sender, EventArgs e) {
 			if (CurrentValue < MaximumValue)
-				numEntry.TrySetValue(CurrentValue + 1);
+				_numEntry.TrySetValue(CurrentValue + 1);
 		}
 		
-		private NumberEntry numEntry;
-		private ValueBar valueBar;
-		private Rectangle labelRect;
-		private Rectangle fieldRect;
+		private NumberEntry _numEntry;
+		private ValueBar _valueBar;
+		private Rectangle _labelRect;
+		private Rectangle _fieldRect;
 
-		private EmitterButton leftButton, rightButton;
+		private EmitterButton _leftButton, _rightButton;
 
 		#endregion
 
@@ -390,17 +390,17 @@ namespace Ogui.UI {
 			base.Dispose(isDisposing);
 
 			if (isDisposing) {
-				if (numEntry != null)
-					numEntry.Dispose();
+				if (_numEntry != null)
+					_numEntry.Dispose();
 
-				if (valueBar != null)
-					valueBar.Dispose();
+				if (_valueBar != null)
+					_valueBar.Dispose();
 
-				if (leftButton != null)
-					leftButton.Dispose();
+				if (_leftButton != null)
+					_leftButton.Dispose();
 
-				if (rightButton != null)
-					rightButton.Dispose();
+				if (_rightButton != null)
+					_rightButton.Dispose();
 			}
 		}
 

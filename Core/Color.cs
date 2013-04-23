@@ -18,11 +18,11 @@ namespace Ogui.Core {
 			if (tcodColor == null)
 				throw new ArgumentNullException("tcodColor");
 
-			red = tcodColor.Red;
-			green = tcodColor.Green;
-			blue = tcodColor.Blue;
+			_red = tcodColor.Red;
+			_green = tcodColor.Green;
+			_blue = tcodColor.Blue;
 
-			color = new TCODColor(red, green, blue);
+			_color = new TCODColor(_red, _green, _blue);
 		}
 
 		/// <summary>
@@ -32,11 +32,11 @@ namespace Ogui.Core {
 		/// <param name="green"></param>
 		/// <param name="blue"></param>
 		public Color(byte red, byte green, byte blue) {
-			this.red = red;
-			this.green = green;
-			this.blue = blue;
+			this._red = red;
+			this._green = green;
+			this._blue = blue;
 
-			color = new TCODColor(red, green, blue);
+			_color = new TCODColor(red, green, blue);
 		}
 
 		/// <summary>
@@ -54,11 +54,11 @@ namespace Ogui.Core {
 			g = g >> 8;
 
 
-			this.red = (byte) r;
-			this.green = (byte) g;
-			this.blue = (byte) b;
+			this._red = (byte) r;
+			this._green = (byte) g;
+			this._blue = (byte) b;
 
-			color = new TCODColor(red, green, blue);
+			_color = new TCODColor(_red, _green, _blue);
 		}
 
 		#endregion
@@ -69,21 +69,21 @@ namespace Ogui.Core {
 		/// Get the red value of color, 0-255
 		/// </summary>
 		public byte Red {
-			get { return red; }
+			get { return _red; }
 		}
 
 		/// <summary>
 		/// Get the green value of color, 0-255
 		/// </summary>
 		public byte Green {
-			get { return green; }
+			get { return _green; }
 		}
 
 		/// <summary>
 		/// Get the blue value of the color, 0-255
 		/// </summary>
 		public byte Blue {
-			get { return blue; }
+			get { return _blue; }
 		}
 
 		#endregion
@@ -98,7 +98,7 @@ namespace Ogui.Core {
 			TCODColor ret = new TCODColor();
 
 			float h, s, v;
-			color.getHSV(out h, out s, out v);
+			_color.getHSV(out h, out s, out v);
 
 			ret.setHSV(h, s * scale, v);
 
@@ -115,7 +115,7 @@ namespace Ogui.Core {
 			TCODColor ret = new TCODColor();
 
 			float h, s, v;
-			color.getHSV(out h, out s, out v);
+			_color.getHSV(out h, out s, out v);
 
 			ret.setHSV(h, s, v * scale);
 
@@ -132,7 +132,7 @@ namespace Ogui.Core {
 			TCODColor ret = new TCODColor();
 
 			float h, s, v;
-			color.getHSV(out h, out s, out v);
+			_color.getHSV(out h, out s, out v);
 
 			ret.setHSV(hue, s, v);
 
@@ -149,7 +149,7 @@ namespace Ogui.Core {
 			TCODColor ret = new TCODColor();
 
 			float h, s, v;
-			color.getHSV(out h, out s, out v);
+			_color.getHSV(out h, out s, out v);
 
 			ret.setHSV(h, saturation, v);
 
@@ -166,7 +166,7 @@ namespace Ogui.Core {
 			TCODColor ret = new TCODColor();
 
 			float h, s, v;
-			color.getHSV(out h, out s, out v);
+			_color.getHSV(out h, out s, out v);
 
 			ret.setHSV(h, s, value);
 
@@ -179,7 +179,7 @@ namespace Ogui.Core {
 		/// <returns></returns>
 		public float GetHue() {
 			float h, s, v;
-			color.getHSV(out h, out s, out v);
+			_color.getHSV(out h, out s, out v);
 
 			return h;
 		}
@@ -190,7 +190,7 @@ namespace Ogui.Core {
 		/// <returns></returns>
 		public float GetSaturation() {
 			float h, s, v;
-			color.getHSV(out h, out s, out v);
+			_color.getHSV(out h, out s, out v);
 
 			return s;
 		}
@@ -201,7 +201,7 @@ namespace Ogui.Core {
 		/// <returns></returns>
 		public float GetValue() {
 			float h, s, v;
-			color.getHSV(out h, out s, out v);
+			_color.getHSV(out h, out s, out v);
 
 			return v;
 		}
@@ -211,7 +211,7 @@ namespace Ogui.Core {
 		/// </summary>
 		/// <returns></returns>
 		public TCODColor TCODColor {
-			get { return new TCODColor(color.Red, color.Green, color.Blue); }
+			get { return new TCODColor(_color.Red, _color.Green, _color.Blue); }
 		}
 
 		/// <summary>
@@ -240,9 +240,9 @@ namespace Ogui.Core {
 
 		private string CodeString {
 			get {
-				char r = (char) (Math.Max(this.red, (byte) 1));
-				char g = (char) (Math.Max(this.green, (byte) 1));
-				char b = (char) (Math.Max(this.blue, (byte) 1));
+				char r = (char) (Math.Max(this._red, (byte) 1));
+				char g = (char) (Math.Max(this._green, (byte) 1));
+				char b = (char) (Math.Max(this._blue, (byte) 1));
 
 				string str = r.ToString() + g.ToString() + b.ToString();
 
@@ -260,15 +260,15 @@ namespace Ogui.Core {
 		public static readonly string StopColorCode = "\x08";
 
 		public override string ToString() {
-			return red.ToString("x2") + green.ToString("x2") + blue.ToString("x2");
+			return _red.ToString("x2") + _green.ToString("x2") + _blue.ToString("x2");
 		}
 
 		#endregion
 
 		#region Private Fields
 
-		private readonly byte red, green, blue;
-		private readonly TCODColor color;
+		private readonly byte _red, _green, _blue;
+		private readonly TCODColor _color;
 
 		#endregion
 
@@ -317,7 +317,7 @@ namespace Ogui.Core {
 			if (alreadyDisposed)
 				return;
 			if (isDisposing)
-				color.Dispose();
+				_color.Dispose();
 			alreadyDisposed = true;
 		}
 
